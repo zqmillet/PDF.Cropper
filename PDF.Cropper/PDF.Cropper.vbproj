@@ -72,6 +72,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.vb" />
     <Compile Include="Console.vb">
       <SubType>Component</SubType>
     </Compile>
