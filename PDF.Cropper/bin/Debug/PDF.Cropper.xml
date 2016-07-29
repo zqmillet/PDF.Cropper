@@ -6,6 +6,118 @@ PDF.Cropper
 </name>
 </assembly>
 <members>
+<member name="T:PDF.Cropper.RightClickMenu">
+ <summary>
+ This class is the menu which will be shown when the right button of mouse is clicked.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.TopMostMenuItem">
+ <summary>
+ This is a menu item which is used to set whether the "FormMain" is topmost.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.ExitMenuItem">
+ <summary>
+ This is a menu item which is used to exit the program when it is clicked.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.OpacityMenuItem">
+ <summary>
+ This is a memu item which is used to select the opacity of the "FormMain".
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.BackColorMenuItem">
+ <summary>
+ This is a menu item which is used to choose the back color of the "FormMain".
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.ForeColorMenuItem">
+ <summary>
+ This is a menu item which is used to choose the fore color of the "FormMain".
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.ColorList">
+ <summary>
+ This is a string array to store the alternative color names.
+ </summary>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.TopMostMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when "TopMostMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is "TopMostMenuItem" itself.</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.ExitMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when "ExitMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is "ExitMenuItem" itself.</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.OpacityMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the sub item of "OpacityMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is the sub item of "OpacityMenuItem".</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.BackColorMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the sub item of "BackColorMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is the sub item of "BackColorMenuItem".</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.ForeColorMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
+</member>
+<member name="P:PDF.Cropper.RightClickMenu.FormMainTopMost">
+ <summary>
+ This is a writeonly boolean to represent whether the "FormMain" is topmost.
+ When it is assigned a value, its checked state is changed.
+ Then raise the event "TopMostMenuItem_Click".
+ </summary>
+</member>
+<member name="P:PDF.Cropper.RightClickMenu.FormMainOpacity">
+ <summary>
+ This is a writeonly double to represent the opacity of the "FormMain".
+ When it is assigned a value, checked states of the corresponding sub items are changed.
+ Then raise the event "OpacityMenuItem_Click".
+ </summary>
+</member>
+<member name="P:PDF.Cropper.RightClickMenu.FormMainBackColor">
+ <summary>
+ This is a writeonly color to represent the back color of the "FormMain".
+ When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
+ Then raise the event "BackColorMenuItem_Click".
+ </summary>
+</member>
+<member name="P:PDF.Cropper.RightClickMenu.FormMainForeColor">
+ <summary>
+ This is a writeonly color to represent the fore color of the "FormMain".
+ When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
+ Then raise the event "ForeColorMenuItem_Click".
+ </summary>
+</member>
+<member name="M:PDF.Cropper.RightClickMenu.#ctor">
+ <summary>
+ This is the constructor of this class.
+ </summary>
+</member>
+<member name="M:PDF.Cropper.RightClickMenu.GetImageByColor(System.Drawing.Color)">
+ <summary>
+ This function is used to generate a colored image by the paramter color.
+ </summary>
+ <param name="Color">This is the color of the image.</param>
+ <returns>This is an image whose color is equal to the parameter "Color".</returns>
+</member>
+<member name="M:PDF.Cropper.RightClickMenu.Me_Click(System.Object,System.EventArgs)">
+ <summary>
+ When the items of the menu is clicked, this sub will be triggered.
+ </summary>
+ <param name="sender">This is the sender of the event.</param>
+ <param name="e">This is the arguments of the event.</param>
+</member>
 <member name="T:PDF.Cropper.CoverPanel">
  <summary>
  This class is a panel which is tansparent.

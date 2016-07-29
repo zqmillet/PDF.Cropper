@@ -1,20 +1,67 @@
-﻿Public Class RightClickMenu
+﻿''' <summary>
+''' This class is the menu which will be shown when the right button of mouse is clicked.
+''' </summary>
+Public Class RightClickMenu
     Inherits ContextMenuStrip
 
+    ''' <summary>
+    ''' This is a menu item which is used to set whether the "FormMain" is topmost.
+    ''' </summary>
     Public TopMostMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a menu item which is used to exit the program when it is clicked.
+    ''' </summary>
     Public ExitMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a memu item which is used to select the opacity of the "FormMain".
+    ''' </summary>
     Public OpacityMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a menu item which is used to choose the back color of the "FormMain".
+    ''' </summary>
     Public BackColorMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a menu item which is used to choose the fore color of the "FormMain".
+    ''' </summary>
     Public ForeColorMenuItem As ToolStripMenuItem
 
+    ''' <summary>
+    ''' This is a string array to store the alternative color names.
+    ''' </summary>
     Public ColorList() As String = {"Black", "Blue", "Lime", "Cyan", "Red", "Fuchsia", "Yellow", "White", "Navy", "Green", "Teal", "Maroon", "Purple", "Olive", "Gray"}
 
+
+    ''' <summary>
+    ''' This is a event which will be triggered when "TopMostMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is "TopMostMenuItem" itself.</param>
     Public Event TopMostMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when "ExitMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is "ExitMenuItem" itself.</param>
     Public Event ExitMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when the sub item of "OpacityMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is the sub item of "OpacityMenuItem".</param>
     Public Event OpacityMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when the sub item of "BackColorMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is the sub item of "BackColorMenuItem".</param>
     Public Event BackColorMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
     Public Event ForeColorMenuItem_Click(sender As Object)
 
+    ''' <summary>
+    ''' This is a writeonly boolean to represent whether the "FormMain" is topmost.
+    ''' When it is assigned a value, its checked state is changed.
+    ''' Then raise the event "TopMostMenuItem_Click".
+    ''' </summary>
     Public WriteOnly Property FormMainTopMost As Boolean
         Set(Value As Boolean)
             TopMostMenuItem.Checked = Value
@@ -22,28 +69,45 @@
         End Set
     End Property
 
+    ''' <summary>
+    ''' This is a writeonly double to represent the opacity of the "FormMain".
+    ''' When it is assigned a value, checked states of the corresponding sub items are changed.
+    ''' Then raise the event "OpacityMenuItem_Click".
+    ''' </summary>
     Public WriteOnly Property FormMainOpacity As Double
         Set(Value As Double)
             For Each MenuItem As ToolStripMenuItem In OpacityMenuItem.DropDownItems
                 If MenuItem.Tag = Value Then
                     MenuItem.Checked = True
                     RaiseEvent OpacityMenuItem_Click(MenuItem)
+                    Exit Property
                 End If
             Next
         End Set
     End Property
 
+    ''' <summary>
+    ''' This is a writeonly color to represent the back color of the "FormMain".
+    ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
+    ''' Then raise the event "BackColorMenuItem_Click".
+    ''' </summary>
     Public WriteOnly Property FormMainBackColor As Color
         Set(Value As Color)
             For Each MenuItem As ToolStripMenuItem In BackColorMenuItem.DropDownItems
                 If MenuItem.Tag = Value Then
                     BackColorMenuItem.Image = MenuItem.Image
                     RaiseEvent BackColorMenuItem_Click(MenuItem)
+                    Exit Property
                 End If
             Next
         End Set
     End Property
 
+    ''' <summary>
+    ''' This is a writeonly color to represent the fore color of the "FormMain".
+    ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
+    ''' Then raise the event "ForeColorMenuItem_Click".
+    ''' </summary>
     Public WriteOnly Property FormMainForeColor As Color
         Set(Value As Color)
             For Each MenuItem As ToolStripMenuItem In ForeColorMenuItem.DropDownItems
@@ -55,7 +119,11 @@
         End Set
     End Property
 
+    ''' <summary>
+    ''' This is the constructor of this class.
+    ''' </summary>
     Public Sub New()
+        ' Initialize the "TopMostMenuItem"
         TopMostMenuItem = New ToolStripMenuItem
         With TopMostMenuItem
             .Text = "&Top Most"
@@ -64,6 +132,7 @@
             AddHandler .Click, AddressOf Me_Click
         End With
 
+        ' Initialize the "ExitMenuItem"
         ExitMenuItem = New ToolStripMenuItem
         With ExitMenuItem
             .Text = "E&xit"
@@ -71,6 +140,7 @@
             AddHandler .Click, AddressOf Me_Click
         End With
 
+        ' Initialize the "OpacityMenuItem"
         OpacityMenuItem = New ToolStripMenuItem
         With OpacityMenuItem
             .Text = "&Opacity"
@@ -88,6 +158,7 @@
             Next
         End With
 
+        ' Initialize the "BackColorMenuItem"
         BackColorMenuItem = New ToolStripMenuItem
         With BackColorMenuItem
             .Text = "&Back Color"
@@ -105,6 +176,7 @@
             Next
         End With
 
+        ' Initialize the "ForeColorMenuItem"
         ForeColorMenuItem = New ToolStripMenuItem
         With ForeColorMenuItem
             .Text = "&Fore Color"
@@ -122,6 +194,7 @@
             Next
         End With
 
+        ' Add all menu items into the menu.
         With Me
             .Items.Add(TopMostMenuItem)
             .Items.Add(New ToolStripSeparator)
@@ -133,6 +206,11 @@
         End With
     End Sub
 
+    ''' <summary>
+    ''' This function is used to generate a colored image by the paramter color.
+    ''' </summary>
+    ''' <param name="Color">This is the color of the image.</param>
+    ''' <returns>This is an image whose color is equal to the parameter "Color".</returns>
     Private Function GetImageByColor(ByVal Color As Color)
         Dim Image As Image = New Bitmap(20, 20)
         Dim Graphics As Graphics = Graphics.FromImage(Image)
@@ -140,6 +218,11 @@
         Return Image
     End Function
 
+    ''' <summary>
+    ''' When the items of the menu is clicked, this sub will be triggered.
+    ''' </summary>
+    ''' <param name="sender">This is the sender of the event.</param>
+    ''' <param name="e">This is the arguments of the event.</param>
     Private Sub Me_Click(sender As Object, e As EventArgs)
         If sender Is TopMostMenuItem Then
             RaiseEvent TopMostMenuItem_Click(sender)
@@ -175,6 +258,4 @@
             Exit Sub
         End If
     End Sub
-
-
 End Class
