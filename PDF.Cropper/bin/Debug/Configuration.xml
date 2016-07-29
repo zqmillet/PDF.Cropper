@@ -18,7 +18,7 @@
   </xs:schema>
   <Configuration>
     <TagName>TopMostMenuItem</TagName>
-    <TagValue>True</TagValue>
+    <TagValue>False</TagValue>
   </Configuration>
   <Configuration>
     <TagName>OpacityMenuItem_5</TagName>
@@ -26,14 +26,22 @@
   </Configuration>
   <Configuration>
     <TagName>OpacityMenuItem</TagName>
-    <TagValue>0.9</TagValue>
+    <TagValue>1</TagValue>
   </Configuration>
   <Configuration>
     <TagName>BackColorMenuItem</TagName>
-    <TagValue>Gray</TagValue>
+    <TagValue>White</TagValue>
   </Configuration>
   <Configuration>
     <TagName>ForeColorMenuItem</TagName>
-    <TagValue>Cyan</TagValue>
+    <TagValue>Blue</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>FontSizeMenuItem</TagName>
+    <TagValue>9</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>FontNameMenuItem</TagName>
+    <TagValue>Consolas</TagValue>
   </Configuration>
 </NewDataSet>

@@ -6,6 +6,8 @@
     Dim RightClickMenu As RightClickMenu
     Dim Configuration As Configuration
     Dim ConfigurationPath As String = Application.StartupPath & "\Configuration.xml"
+    Dim GhostScripFolderCheckList() As String = {"gswin64.exe", "gsdll64.dll"}
+    Dim OldLocation As New Point
 
     Public Sub New()
         InitializeComponent()
@@ -17,6 +19,9 @@
             AddHandler .OpacityMenuItem_Click, AddressOf OpacityMenuItem_Click
             AddHandler .BackColorMenuItem_Click, AddressOf BackColorMenuItem_Click
             AddHandler .ForeColorMenuItem_Click, AddressOf ForeColorMenuItem_Click
+            AddHandler .FontSizeMenuItem_Click, AddressOf FontSizeMenuItem_Click
+            AddHandler .FontNameMenuItem_Click, AddressOf FontNameMenuItem_Click
+            AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
         End With
 
         Console = New Console
@@ -48,15 +53,22 @@
         RightClickMenu.FormMainOpacity = Val(Configuration.GetTagValue(RightClickMenu.OpacityMenuItem.Name))
         RightClickMenu.FormMainBackColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.BackColorMenuItem.Name))
         RightClickMenu.FormMainForeColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.ForeColorMenuItem.Name))
+        RightClickMenu.FormMainFontSize = Val(Configuration.GetTagValue(RightClickMenu.FontSizeMenuItem.Name))
+        RightClickMenu.FormMainFontName = Configuration.GetTagValue(RightClickMenu.FontNameMenuItem.Name)
     End Sub
 
     Private Sub CoverPanel_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         Me.Cursor = Cursors.SizeAll
         MouseDownPoint = e.Location
+        OldLocation = Me.Location
     End Sub
 
     Private Sub CoverPanel_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         Me.Cursor = Cursors.Default
+
+        If Not Me.Location = OldLocation Then
+            ShowMessage("The form has been moved to (" & Me.Location.X & ", " & Me.Location.Y & ").")
+        End If
     End Sub
 
     Private Sub CoverPanel_MouseMove(sender As Object, e As System.Windows.Forms.MouseEventArgs)
@@ -79,10 +91,18 @@
             Me.TopMost = .Checked
             Configuration.SetTagValue(.Name, .Checked)
         End With
+
+        If Me.TopMost Then
+            ShowMessage("The form is topmost.")
+        Else
+            ShowMessage("The form is not topmost.")
+        End If
     End Sub
 
     Private Sub ExitMenuItem_Click(sender As Object)
         Configuration.Save()
+        ShowMessage("The configuration has been saved.")
+        Threading.Thread.Sleep(1000)
         End
     End Sub
 
@@ -91,12 +111,21 @@
             Me.Opacity = .Tag
             Configuration.SetTagValue(.Name, .Tag)
         End With
+        ShowMessage("The opacity of the form is changed to " & Me.Opacity * 100 & "%.")
     End Sub
 
     Private Sub BackColorMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
             Console.BackColor = .Tag
             Configuration.SetTagValue(.Name, .Tag.Name)
+        End With
+
+        With Console.BackColor
+            Dim ColorName As String = ""
+            If .IsNamedColor Then
+                ColorName = .Name
+            End If
+            ShowMessage("The back color of the form is change to " & ColorName & "(" & .R & ", " & .G & ", " & .B & ").")
         End With
     End Sub
 
@@ -105,5 +134,74 @@
             Console.ForeColor = .Tag
             Configuration.SetTagValue(.Name, .Tag.Name)
         End With
+
+        With Console.ForeColor
+            Dim ColorName As String = ""
+            If .IsNamedColor Then
+                ColorName = .Name
+            End If
+            ShowMessage("The fore color of the form is change to " & ColorName & "(" & .R & ", " & .G & ", " & .B & ").")
+        End With
+    End Sub
+
+    Private Sub FontSizeMenuItem_Click(sender As Object)
+        With CType(sender, ToolStripMenuItem)
+            Console.Font = New Font(Console.Font.FontFamily, .Tag)
+            Configuration.SetTagValue(.Name, .Tag)
+        End With
+        ShowMessage("The font size of the message is changed to " & Console.Font.Size & "pt.")
+    End Sub
+
+    Private Sub FontNameMenuItem_Click(sender As Object)
+        With CType(sender, ToolStripMenuItem)
+            Console.Font = New Font(.Tag.Name.ToString, Console.Font.Size)
+            Configuration.SetTagValue(.Name, .Tag.Name.ToString)
+        End With
+        ShowMessage("The font name of the message is changed to " & Console.Font.Name & ".")
+    End Sub
+
+    Private Sub GhostScriptPathMenuItem_Click(sender As Object)
+        Dim FolderBrowserDialog As New FolderBrowserDialog
+        With FolderBrowserDialog
+            .ShowNewFolderButton = False
+            .Description = "23333"
+            .SelectedPath = sender.Tag
+        End With
+
+        With CType(sender, ToolStripMenuItem)
+            ShowMessage("Please select the Bin folder of the GhostScript.")
+            If Not FolderBrowserDialog.ShowDialog = DialogResult.OK Then
+                .Checked = IsGhostScripBinFolder(sender.Tag)
+                ShowMessage("You selected nothing.")
+                Exit Sub
+            End If
+
+            If IsGhostScripBinFolder(FolderBrowserDialog.SelectedPath) Then
+                .Checked = True
+                .Tag = FolderBrowserDialog.SelectedPath
+                ShowMessage("The Bin folder of the GhostScript is """ & FolderBrowserDialog.SelectedPath & """.")
+            Else
+                .Checked = False
+                ShowMessage("This is not the Bin folder of the GhostScript.")
+            End If
+        End With
+    End Sub
+
+    Private Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
+        If Not My.Computer.FileSystem.DirectoryExists(Path) Then
+            Return False
+        End If
+
+        For Each FileName In GhostScripFolderCheckList
+            If Not My.Computer.FileSystem.FileExists(Path.Trim("\") & "\" & FileName) Then
+                Return False
+            End If
+        Next
+
+        Return True
+    End Function
+
+    Private Sub ShowMessage(ByVal Message As String)
+        Me.Console.AppendText(Message & vbCrLf)
     End Sub
 End Class

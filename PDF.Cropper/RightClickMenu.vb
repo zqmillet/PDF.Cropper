@@ -24,12 +24,22 @@ Public Class RightClickMenu
     ''' This is a menu item which is used to choose the fore color of the "FormMain".
     ''' </summary>
     Public ForeColorMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a menu item which is used to choose the font size of the "FormMain".
+    ''' </summary>
+    Public FontSizeMenuItem As ToolStripMenuItem
+    ''' <summary>
+    ''' This is a menu item which is used to choose the font name of the "FormMain".
+    ''' </summary>
+    Public FontNameMenuItem As ToolStripMenuItem
+
+    Public GhostScriptPathMenuItem As ToolStripMenuItem
 
     ''' <summary>
     ''' This is a string array to store the alternative color names.
     ''' </summary>
     Public ColorList() As String = {"Black", "Blue", "Lime", "Cyan", "Red", "Fuchsia", "Yellow", "White", "Navy", "Green", "Teal", "Maroon", "Purple", "Olive", "Gray"}
-
+    Public FontSizeList() As Integer = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 
     ''' <summary>
     ''' This is a event which will be triggered when "TopMostMenuItem" is clicked.
@@ -56,6 +66,18 @@ Public Class RightClickMenu
     ''' </summary>
     ''' <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
     Public Event ForeColorMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when the sub item of "FontSizeMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is the sub item of "FontSizeMenuItem".</param>
+    Public Event FontSizeMenuItem_Click(sender As Object)
+    ''' <summary>
+    ''' This is a event which will be triggered when the sub item of "FontNameMenuItem" is clicked.
+    ''' </summary>
+    ''' <param name="sender">It is the sub item of "FontNameMenuItem".</param>
+    Public Event FontNameMenuItem_Click(sender As Object)
+    Public Event GhostScriptPathMenuItem_Click(sender As Object)
+
 
     ''' <summary>
     ''' This is a writeonly boolean to represent whether the "FormMain" is topmost.
@@ -114,6 +136,28 @@ Public Class RightClickMenu
                 If MenuItem.Tag = Value Then
                     ForeColorMenuItem.Image = MenuItem.Image
                     RaiseEvent ForeColorMenuItem_Click(MenuItem)
+                End If
+            Next
+        End Set
+    End Property
+
+    Public WriteOnly Property FormMainFontSize As Integer
+        Set(Value As Integer)
+            For Each MenuItem As ToolStripMenuItem In FontSizeMenuItem.DropDownItems
+                MenuItem.Checked = MenuItem.Tag = Value
+                If MenuItem.Tag = Value Then
+                    RaiseEvent FontSizeMenuItem_Click(MenuItem)
+                End If
+            Next
+        End Set
+    End Property
+
+    Public WriteOnly Property FormMainFontName As String
+        Set(Value As String)
+            For Each MenuItem As ToolStripMenuItem In FontNameMenuItem.DropDownItems
+                MenuItem.Checked = MenuItem.Tag.Name = Value
+                If MenuItem.Tag.Name = Value Then
+                    RaiseEvent FontNameMenuItem_Click(MenuItem)
                 End If
             Next
         End Set
@@ -194,6 +238,48 @@ Public Class RightClickMenu
             Next
         End With
 
+        FontSizeMenuItem = New ToolStripMenuItem
+        With FontSizeMenuItem
+            .Text = "Font &Size"
+            .Name = NameOf(FontSizeMenuItem)
+            For Each FontSize As Integer In FontSizeList
+                Dim MenuItem As New ToolStripMenuItem
+                With MenuItem
+                    .Text = FontSize & "pt"
+                    .CheckOnClick = True
+                    .Name = NameOf(FontSizeMenuItem)
+                    .Tag = FontSize
+                    AddHandler .Click, AddressOf Me_Click
+                End With
+                .DropDownItems.Add(MenuItem)
+            Next
+        End With
+
+        FontNameMenuItem = New ToolStripMenuItem
+        With FontNameMenuItem
+            .Text = "Font &Name"
+            .Name = NameOf(FontNameMenuItem)
+            For Each FontFamily As FontFamily In System.Drawing.FontFamily.Families
+                Dim MenuItem As New ToolStripMenuItem
+                With MenuItem
+                    .Text = FontFamily.Name
+                    .CheckOnClick = True
+                    .Name = NameOf(FontNameMenuItem)
+                    .Tag = FontFamily
+                    AddHandler .Click, AddressOf Me_Click
+                End With
+                .DropDownItems.Add(MenuItem)
+            Next
+        End With
+
+        GhostScriptPathMenuItem = New ToolStripMenuItem
+        With GhostScriptPathMenuItem
+            .Text = "GhostScript Bin Folder"
+            .Name = NameOf(FontNameMenuItem)
+            .CheckOnClick = True
+            AddHandler .Click, AddressOf Me_Click
+        End With
+
         ' Add all menu items into the menu.
         With Me
             .Items.Add(TopMostMenuItem)
@@ -201,6 +287,10 @@ Public Class RightClickMenu
             .Items.Add(OpacityMenuItem)
             .Items.Add(BackColorMenuItem)
             .Items.Add(ForeColorMenuItem)
+            .Items.Add(FontSizeMenuItem)
+            .Items.Add(FontNameMenuItem)
+            .Items.Add(New ToolStripSeparator)
+            .Items.Add(GhostScriptPathMenuItem)
             .Items.Add(New ToolStripSeparator)
             .Items.Add(ExitMenuItem)
         End With
@@ -234,6 +324,11 @@ Public Class RightClickMenu
             Exit Sub
         End If
 
+        If sender Is GhostScriptPathMenuItem Then
+            RaiseEvent GhostScriptPathMenuItem_Click(sender)
+            Exit Sub
+        End If
+
         If sender.Name = OpacityMenuItem.Name Then
             For Each MenuItem As ToolStripMenuItem In OpacityMenuItem.DropDownItems
                 MenuItem.Checked = MenuItem Is sender
@@ -255,6 +350,22 @@ Public Class RightClickMenu
                 ForeColorMenuItem.Image = sender.Image
             Next
             RaiseEvent ForeColorMenuItem_Click(sender)
+            Exit Sub
+        End If
+
+        If sender.Name = FontSizeMenuItem.Name Then
+            For Each MenuItem As ToolStripMenuItem In FontSizeMenuItem.DropDownItems
+                MenuItem.Checked = MenuItem Is sender
+            Next
+            RaiseEvent FontSizeMenuItem_Click(sender)
+            Exit Sub
+        End If
+
+        If sender.Name = FontNameMenuItem.Name Then
+            For Each MenuItem As ToolStripMenuItem In FontNameMenuItem.DropDownItems
+                MenuItem.Checked = MenuItem Is sender
+            Next
+            RaiseEvent FontNameMenuItem_Click(sender)
             Exit Sub
         End If
     End Sub

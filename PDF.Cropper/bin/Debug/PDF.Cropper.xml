@@ -36,6 +36,16 @@ PDF.Cropper
  This is a menu item which is used to choose the fore color of the "FormMain".
  </summary>
 </member>
+<member name="F:PDF.Cropper.RightClickMenu.FontSizeMenuItem">
+ <summary>
+ This is a menu item which is used to choose the font size of the "FormMain".
+ </summary>
+</member>
+<member name="F:PDF.Cropper.RightClickMenu.FontNameMenuItem">
+ <summary>
+ This is a menu item which is used to choose the font name of the "FormMain".
+ </summary>
+</member>
 <member name="F:PDF.Cropper.RightClickMenu.ColorList">
  <summary>
  This is a string array to store the alternative color names.
@@ -70,6 +80,18 @@ PDF.Cropper
  This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.FontSizeMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the sub item of "FontSizeMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is the sub item of "FontSizeMenuItem".</param>
+</member>
+<member name="E:PDF.Cropper.RightClickMenu.FontNameMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the sub item of "FontNameMenuItem" is clicked.
+ </summary>
+ <param name="sender">It is the sub item of "FontNameMenuItem".</param>
 </member>
 <member name="P:PDF.Cropper.RightClickMenu.FormMainTopMost">
  <summary>
