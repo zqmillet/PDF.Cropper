@@ -76,6 +76,7 @@
     <Compile Include="Console.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Functions.vb" />
     <Compile Include="RightClickMenu.vb">
       <SubType>Component</SubType>
     </Compile>

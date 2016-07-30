@@ -38,10 +38,10 @@
   </Configuration>
   <Configuration>
     <TagName>FontSizeMenuItem</TagName>
-    <TagValue>9</TagValue>
+    <TagValue>8</TagValue>
   </Configuration>
   <Configuration>
     <TagName>FontNameMenuItem</TagName>
-    <TagValue>Consolas</TagValue>
+    <TagValue>C:\Program Files\gs\gs9.19\bin</TagValue>
   </Configuration>
 </NewDataSet>

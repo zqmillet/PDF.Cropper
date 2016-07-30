@@ -1,5 +1,5 @@
 ﻿Public Class Console
-    Inherits TextBox
+    Inherits RichTextBox
 
     Public Sub New()
         With Me

@@ -6,8 +6,8 @@
     Dim RightClickMenu As RightClickMenu
     Dim Configuration As Configuration
     Dim ConfigurationPath As String = Application.StartupPath & "\Configuration.xml"
-    Dim GhostScripFolderCheckList() As String = {"gswin64.exe", "gsdll64.dll"}
     Dim OldLocation As New Point
+    Dim GhostScriptBinFolder As String
 
     Public Sub New()
         InitializeComponent()
@@ -49,12 +49,15 @@
             Exit Sub
         End If
 
+        GhostScriptBinFolder = Configuration.GetTagValue(RightClickMenu.GhostScriptPathMenuItem.Name)
+
         RightClickMenu.FormMainTopMost = Configuration.GetTagValue(RightClickMenu.TopMostMenuItem.Name)
         RightClickMenu.FormMainOpacity = Val(Configuration.GetTagValue(RightClickMenu.OpacityMenuItem.Name))
         RightClickMenu.FormMainBackColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.BackColorMenuItem.Name))
         RightClickMenu.FormMainForeColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.ForeColorMenuItem.Name))
         RightClickMenu.FormMainFontSize = Val(Configuration.GetTagValue(RightClickMenu.FontSizeMenuItem.Name))
         RightClickMenu.FormMainFontName = Configuration.GetTagValue(RightClickMenu.FontNameMenuItem.Name)
+        RightClickMenu.GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
     End Sub
 
     Private Sub CoverPanel_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs)
@@ -164,35 +167,49 @@
         Dim FolderBrowserDialog As New FolderBrowserDialog
         With FolderBrowserDialog
             .ShowNewFolderButton = False
-            .Description = "23333"
-            .SelectedPath = sender.Tag
+            .Description = "Please Select the Bin folder Of the GhostScript."
+            .SelectedPath = GhostScriptBinFolder
         End With
 
         With CType(sender, ToolStripMenuItem)
-            ShowMessage("Please select the Bin folder of the GhostScript.")
+            ShowMessage(FolderBrowserDialog.Description)
             If Not FolderBrowserDialog.ShowDialog = DialogResult.OK Then
-                .Checked = IsGhostScripBinFolder(sender.Tag)
+                .Checked = IsGhostScripBinFolder(GhostScriptBinFolder)
                 ShowMessage("You selected nothing.")
                 Exit Sub
             End If
 
-            If IsGhostScripBinFolder(FolderBrowserDialog.SelectedPath) Then
-                .Checked = True
-                .Tag = FolderBrowserDialog.SelectedPath
-                ShowMessage("The Bin folder of the GhostScript is """ & FolderBrowserDialog.SelectedPath & """.")
-            Else
-                .Checked = False
-                ShowMessage("This is not the Bin folder of the GhostScript.")
+            .Checked = IsGhostScripBinFolder(FolderBrowserDialog.SelectedPath)
+            Dim NotString As String = ""
+            If Not .Checked Then
+                NotString = "not"
             End If
+            ShowMessage("The Bin folder of the GhostScript is change to """ & FolderBrowserDialog.SelectedPath & """. And it is " & NotString & " the Bin Folder of the GhostScript.")
+            GhostScriptBinFolder = FolderBrowserDialog.SelectedPath
+            Configuration.SetTagValue(sender.Name, FolderBrowserDialog.SelectedPath)
         End With
     End Sub
 
-    Private Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
+
+
+    Private Sub ShowMessage(ByVal Message As String)
+        Me.Console.SelectionStart = Me.Console.TextLength
+        Me.Console.AppendText(Message)
+        Me.Console.SelectionLength = Message.Length
+        Me.Console.SelectionBullet = True
+        Me.Console.SelectionHangingIndent = 15
+        Me.Console.AppendText(vbCrLf)
+        Me.Console.SelectionStart = Me.Console.TextLength
+        Me.Console.SelectionLength = 0
+        Me.Console.SelectionBullet = False
+    End Sub
+
+    Public Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
         If Not My.Computer.FileSystem.DirectoryExists(Path) Then
             Return False
         End If
 
-        For Each FileName In GhostScripFolderCheckList
+        For Each FileName In {"gswin64.exe", "gsdll64.dll"}
             If Not My.Computer.FileSystem.FileExists(Path.Trim("\") & "\" & FileName) Then
                 Return False
             End If
@@ -200,8 +217,4 @@
 
         Return True
     End Function
-
-    Private Sub ShowMessage(ByVal Message As String)
-        Me.Console.AppendText(Message & vbCrLf)
-    End Sub
 End Class

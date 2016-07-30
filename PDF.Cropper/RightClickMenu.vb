@@ -39,7 +39,7 @@ Public Class RightClickMenu
     ''' This is a string array to store the alternative color names.
     ''' </summary>
     Public ColorList() As String = {"Black", "Blue", "Lime", "Cyan", "Red", "Fuchsia", "Yellow", "White", "Navy", "Green", "Teal", "Maroon", "Purple", "Olive", "Gray"}
-    Public FontSizeList() As Integer = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+    Public FontSizeList() As Integer = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 
     ''' <summary>
     ''' This is a event which will be triggered when "TopMostMenuItem" is clicked.
@@ -162,6 +162,13 @@ Public Class RightClickMenu
             Next
         End Set
     End Property
+
+    Public WriteOnly Property GhostScriptBinFolder As Boolean
+        Set(Value As Boolean)
+            GhostScriptPathMenuItem.Checked = Value
+        End Set
+    End Property
+
 
     ''' <summary>
     ''' This is the constructor of this class.
