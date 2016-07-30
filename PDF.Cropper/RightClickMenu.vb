@@ -282,7 +282,7 @@ Public Class RightClickMenu
         GhostScriptPathMenuItem = New ToolStripMenuItem
         With GhostScriptPathMenuItem
             .Text = "GhostScript Bin Folder"
-            .Name = NameOf(FontNameMenuItem)
+            .Name = NameOf(GhostScriptPathMenuItem)
             .CheckOnClick = True
             AddHandler .Click, AddressOf Me_Click
         End With

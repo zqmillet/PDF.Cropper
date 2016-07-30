@@ -18,7 +18,7 @@
   </xs:schema>
   <Configuration>
     <TagName>TopMostMenuItem</TagName>
-    <TagValue>False</TagValue>
+    <TagValue>True</TagValue>
   </Configuration>
   <Configuration>
     <TagName>OpacityMenuItem_5</TagName>
@@ -42,6 +42,10 @@
   </Configuration>
   <Configuration>
     <TagName>FontNameMenuItem</TagName>
+    <TagValue>Consolas</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>GhostScriptPathMenuItem</TagName>
     <TagValue>C:\Program Files\gs\gs9.19\bin</TagValue>
   </Configuration>
 </NewDataSet>

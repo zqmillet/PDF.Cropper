@@ -1,4 +1,8 @@
-﻿Public Class FormMain
+﻿Imports System.IO
+Imports iTextSharp.text
+Imports iTextSharp.text.pdf
+
+Public Class FormMain
 
     Dim Console As Console
     Dim CoverPanel As CoverPanel
@@ -8,6 +12,8 @@
     Dim ConfigurationPath As String = Application.StartupPath & "\Configuration.xml"
     Dim OldLocation As New Point
     Dim GhostScriptBinFolder As String
+    Dim CropPDFThread As Threading.Thread
+    Dim PDFFileArrayList As ArrayList
 
     Public Sub New()
         InitializeComponent()
@@ -31,17 +37,21 @@
 
         CoverPanel = New CoverPanel
         With CoverPanel
+            .AllowDrop = True
             AddHandler .MouseDown, AddressOf CoverPanel_MouseDown
             AddHandler .MouseUp, AddressOf CoverPanel_MouseUp
             AddHandler .MouseMove, AddressOf CoverPanel_MouseMove
             AddHandler .MouseClick, AddressOf CoverPanel_MouseClick
+            AddHandler .DragEnter, AddressOf CoverPanel_DragEnter
+            AddHandler .DragDrop, AddressOf CoverPanel_DragDrop
         End With
 
         With Me
-            .Opacity = 1
             .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
             .Controls.Add(CoverPanel)
             .Controls.Add(Console)
+            .CheckForIllegalCrossThreadCalls = False
+            PDFFileArrayList = New ArrayList
         End With
 
         Configuration = New Configuration
@@ -58,6 +68,9 @@
         RightClickMenu.FormMainFontSize = Val(Configuration.GetTagValue(RightClickMenu.FontSizeMenuItem.Name))
         RightClickMenu.FormMainFontName = Configuration.GetTagValue(RightClickMenu.FontNameMenuItem.Name)
         RightClickMenu.GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+        If IsGhostScripBinFolder(GhostScriptBinFolder) Then
+            ShowMessage("The Bin folder of the GhostScript has been changed to """ & GhostScriptBinFolder & """ successfully.")
+        End If
     End Sub
 
     Private Sub CoverPanel_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs)
@@ -149,7 +162,7 @@
 
     Private Sub FontSizeMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.Font = New Font(Console.Font.FontFamily, .Tag)
+            Console.Font = New Drawing.Font(Console.Font.FontFamily, .Tag)
             Configuration.SetTagValue(.Name, .Tag)
         End With
         ShowMessage("The font size of the message is changed to " & Console.Font.Size & "pt.")
@@ -157,7 +170,7 @@
 
     Private Sub FontNameMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.Font = New Font(.Tag.Name.ToString, Console.Font.Size)
+            Console.Font = New Drawing.Font(.Tag.Name.ToString, Console.Font.Size)
             Configuration.SetTagValue(.Name, .Tag.Name.ToString)
         End With
         ShowMessage("The font name of the message is changed to " & Console.Font.Name & ".")
@@ -190,8 +203,6 @@
         End With
     End Sub
 
-
-
     Private Sub ShowMessage(ByVal Message As String)
         Me.Console.SelectionStart = Me.Console.TextLength
         Me.Console.AppendText(Message)
@@ -202,9 +213,10 @@
         Me.Console.SelectionStart = Me.Console.TextLength
         Me.Console.SelectionLength = 0
         Me.Console.SelectionBullet = False
+        Me.Console.ScrollToCaret()
     End Sub
 
-    Public Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
+    Private Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
         If Not My.Computer.FileSystem.DirectoryExists(Path) Then
             Return False
         End If
@@ -217,4 +229,102 @@
 
         Return True
     End Function
+
+    Private Sub CoverPanel_DragEnter(sender As Object, e As DragEventArgs)
+        Dim FileList() As String = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+        If Not FileList Is Nothing Then
+            e.Effect = DragDropEffects.All
+        End If
+    End Sub
+
+    Private Sub CoverPanel_DragDrop(sender As Object, e As DragEventArgs)
+        For Each FilePath As String In CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+            If Not My.Computer.FileSystem.FileExists(FilePath) Then
+                Continue For
+            End If
+
+            If Not FilePath.Remove(0, FilePath.LastIndexOf(".") + 1).ToLower.Trim = "pdf" Then
+                Continue For
+            End If
+
+
+            PDFFileArrayList.Add(FilePath)
+        Next
+
+        If CropPDFThread Is Nothing Then
+            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
+            CropPDFThread.Start()
+            Exit Sub
+        End If
+
+        If CropPDFThread.ThreadState = Threading.ThreadState.Stopped Then
+            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
+            CropPDFThread.Start()
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub CropPDF()
+        If Not IsGhostScripBinFolder(GhostScriptBinFolder) Then
+            ShowMessage("The Bin folder of the GhostScript is not correct!")
+            Exit Sub
+        End If
+
+        Dim GhostScriptExeFilePaths() As String = System.IO.Directory.GetFiles(GhostScriptBinFolder, "gswin??c.exe")
+        If GhostScriptExeFilePaths.Length = 0 Then
+            Exit Sub
+        End If
+        Dim GhostScriptExeFilePath As String = GhostScriptExeFilePaths(0)
+
+        While PDFFileArrayList.Count > 0
+            Dim PDFFile As String = PDFFileArrayList.Item(0)
+            PDFFileArrayList.RemoveAt(0)
+
+            Dim Process As New Process
+            With Process
+                .StartInfo.FileName = """" & GhostScriptExeFilePath & """"
+                .StartInfo.Arguments = " -q -dBATCH -dNOPAUSE -sDEVICE=bbox -f """ & PDFFile & """"
+                .StartInfo.UseShellExecute = False
+                .StartInfo.RedirectStandardError = True
+                .StartInfo.CreateNoWindow = True
+                .Start()
+
+                Dim Output As String = .StandardError.ReadToEnd
+                Dim FlagString As String = "%%HiResBoundingBox:"
+                Output = Output.Remove(0, Output.LastIndexOf(FlagString) + FlagString.Length).Trim
+                Dim PDFRectangle As PdfRectangle = GetPDFRectangle(Output, 10)
+
+                Dim NewPDFFile As String = PDFFile & "2"
+                Dim PDFReader As PdfReader = New PdfReader(PDFFile)
+                Dim PDFPage As PdfDictionary = PDFReader.GetPageN(1)
+                PDFPage.Put(PdfName.CROPBOX, PDFRectangle)
+                Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(NewPDFFile, FileMode.Create, FileAccess.Write))
+                PDFStamper.Close()
+                PDFReader.Close()
+                ShowMessage("The file """ & PDFFile & """ has been cropped.")
+            End With
+        End While
+    End Sub
+
+    Private Function GetPDFRectangle(ByVal BoundingBox As String) As PdfRectangle
+        Dim Parameters() As String = BoundingBox.Split(" ")
+        If Parameters.Length = 4 Then
+            Return New PdfRectangle(Parameters(0), Parameters(1), Parameters(2), Parameters(3))
+        Else
+            Return New PdfRectangle(0, 0, 0, 0)
+        End If
+    End Function
+
+    Private Function GetPDFRectangle(ByVal BoundingBox As String, ByVal MarginWidth As Integer) As PdfRectangle
+        Dim Parameters() As String = BoundingBox.Split(" ")
+        If Parameters.Length = 4 Then
+            Return New PdfRectangle(Parameters(0) - MarginWidth,
+                                    Parameters(1) - MarginWidth,
+                                    Parameters(2) + MarginWidth,
+                                    Parameters(3) + MarginWidth)
+        Else
+            Return New PdfRectangle(0, 0, 0, 0)
+        End If
+    End Function
+
 End Class

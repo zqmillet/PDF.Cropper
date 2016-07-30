@@ -1,4 +1,0 @@
-﻿Class Functions
-
-
-End Class
