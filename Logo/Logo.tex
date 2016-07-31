@@ -1,0 +1,19 @@
+%!TEX program = xelatex
+%!TEX builder = latexmk
+
+\documentclass[10pt,openany,landscape]{ctexbook}
+\usepackage[hmargin={0cm},vmargin={0cm}]{geometry}%
+\usepackage{tikz}
+\usepackage[active,tightpage]{preview}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{0pt}
+\setmonofont{Consolas}
+
+\begin{document}
+\begin{tikzpicture}[line width = 1pt]
+  \node[align = left, inner sep = 0.1pt, fill = black] at (0, 0) {\tt PDF\\[-7pt]\tt Cropper};
+\end{tikzpicture}
+\end{document}
