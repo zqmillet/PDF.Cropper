@@ -4,16 +4,23 @@
 \documentclass[10pt,openany,landscape]{ctexbook}
 \usepackage[hmargin={0cm},vmargin={0cm}]{geometry}%
 \usepackage{tikz}
+\usetikzlibrary{positioning}
 \usepackage[active,tightpage]{preview}
-\usepackage{amsfonts}
-\usepackage{dsfont}
 
 \PreviewEnvironment{tikzpicture}
 \setlength\PreviewBorder{0pt}
 \setmonofont{Consolas}
 
 \begin{document}
-\begin{tikzpicture}[line width = 1pt]
-  \node[align = left, inner sep = 0.1pt, fill = black] at (0, 0) {\tt PDF\\[-7pt]\tt Cropper};
-\end{tikzpicture}
+  \begin{tikzpicture}[block/.style = {minimum size = 2cm, rotate = 2, inner sep = 0pt}]
+    \begin{scope}[fill = white]
+      \fill[clip] (-1cm, -0.7cm) rectangle (1cm, 0.7cm);
+      \node[fill = black, minimum height = 0.55cm, minimum width = 1.36cm, fill = black] (LOGO) at (0, 0) {};
+      \node[align = left, inner sep = 0pt, text = white] at (0, 0) {\tt PDF\\[-8pt]\tt CROPPER};
+      \node[above right = 1.8pt and 1pt of LOGO.north east, block, anchor = north west, fill = red] {};
+      \node[below right = 1.0pt and 1pt of LOGO.south east, block, anchor = north east, fill = blue] {};
+      \node[below left  = 1.8pt and 1pt of LOGO.south west, block, anchor = south east, fill = green] {};
+      \node[above left  = 1.0pt and 1pt of LOGO.north west, block, anchor = south west, fill = yellow] {};
+    \end{scope} 
+  \end{tikzpicture}
 \end{document}
