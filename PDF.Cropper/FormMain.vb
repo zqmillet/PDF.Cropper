@@ -51,6 +51,8 @@ Public Class FormMain
             .Controls.Add(CoverPanel)
             .Controls.Add(Console)
             .CheckForIllegalCrossThreadCalls = False
+            .Text = "PDF Cropper"
+            .Icon = New Icon(Application.StartupPath & "\Icon.ico")
             PDFFileArrayList = New ArrayList
         End With
 

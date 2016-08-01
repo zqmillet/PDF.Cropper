@@ -6,21 +6,23 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usepackage[active,tightpage]{preview}
+\usepackage{fontspec}
+% \defaultfontfeatures{LetterSpace=-20}
 
 \PreviewEnvironment{tikzpicture}
 \setlength\PreviewBorder{0pt}
 \setmonofont{Consolas}
 
 \begin{document}
-  \begin{tikzpicture}[block/.style = {minimum size = 2cm, rotate = 2, inner sep = 0pt}]
+  \begin{tikzpicture}[block/.style = {minimum size = 2cm, rotate = 2, inner sep = 0pt},
+                      cutline/.style = {draw = white, double=red, double distance = 2pt, line width = 0.5pt}]
     \begin{scope}[fill = white]
-      \fill[clip] (-1cm, -0.6cm) rectangle (1cm, 0.6cm);
-      \node[fill = black, minimum height = 0.55cm, minimum width = 1.36cm, fill = black] (LOGO) at (0, 0) {};
-      \node[align = left, inner sep = 0pt, text = white] at (0, 0) {\tt PDF\\[-8pt]\tt CROPPER};
-      \node[above right = 1.8pt and 1pt of LOGO.north east, block, anchor = north west, fill = red] {};
-      \node[below right = 1.0pt and 1pt of LOGO.south east, block, anchor = north east, fill = blue] {};
-      \node[below left  = 1.8pt and 1pt of LOGO.south west, block, anchor = south east, fill = green] {};
-      \node[above left  = 1.0pt and 1pt of LOGO.north west, block, anchor = south west, fill = yellow] {};
+      \fill[clip] (-0.64cm, -0.5cm) rectangle (0.64cm, 0.5cm);
+      \node[fill = black, fill = black, align = center, inner sep = 0pt, text = white, minimum width = 1.08cm, minimum height = 0.8cm] (LOGO) at (0, 0) {\tt \resizebox{1cm}{!}{PDF}\\[-9pt]\tt \resizebox{0.94cm}{!}{CROPPER}};
+      \draw[cutline] (LOGO.north west) -- (LOGO.south west) -- (LOGO.south east) --++ (0:0.1cm)
+                     (LOGO.north west) --++ (90:0.1cm);
+      \draw[cutline] (LOGO.north west) -- (LOGO.north east) -- (LOGO.south east) --++ (-90:0.1cm)
+                     (LOGO.north west) -- ++ (180:0.1cm);      
     \end{scope} 
   \end{tikzpicture}
 \end{document}
