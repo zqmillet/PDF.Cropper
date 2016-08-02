@@ -15,6 +15,9 @@ Public Class FormMain
     Dim CropPDFThread As Threading.Thread
     Dim PDFFileArrayList As ArrayList
 
+    Private Delegate Sub DelegateShowMessage(ByVal Message As String)
+    Dim ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
+
     Public Sub New()
         InitializeComponent()
 
@@ -50,7 +53,6 @@ Public Class FormMain
             .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
             .Controls.Add(CoverPanel)
             .Controls.Add(Console)
-            .CheckForIllegalCrossThreadCalls = False
             .Text = "PDF Cropper"
             .Icon = New Icon(Application.StartupPath & "\Icon.ico")
             PDFFileArrayList = New ArrayList
@@ -70,8 +72,11 @@ Public Class FormMain
         RightClickMenu.FormMainFontSize = Val(Configuration.GetTagValue(RightClickMenu.FontSizeMenuItem.Name))
         RightClickMenu.FormMainFontName = Configuration.GetTagValue(RightClickMenu.FontNameMenuItem.Name)
         RightClickMenu.GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+
         If IsGhostScripBinFolder(GhostScriptBinFolder) Then
             ShowMessage("The Bin folder of the GhostScript has been changed to """ & GhostScriptBinFolder & """ successfully.")
+        Else
+            ShowMessage("The Bin folder of the GhostScript is not correct.")
         End If
     End Sub
 
@@ -197,9 +202,9 @@ Public Class FormMain
             .Checked = IsGhostScripBinFolder(FolderBrowserDialog.SelectedPath)
             Dim NotString As String = ""
             If Not .Checked Then
-                NotString = "not"
+                NotString = " not"
             End If
-            ShowMessage("The Bin folder of the GhostScript is change to """ & FolderBrowserDialog.SelectedPath & """. And it is " & NotString & " the Bin Folder of the GhostScript.")
+            ShowMessage("The Bin folder of the GhostScript is change to """ & FolderBrowserDialog.SelectedPath & """. And it is" & NotString & " the Bin Folder of the GhostScript.")
             GhostScriptBinFolder = FolderBrowserDialog.SelectedPath
             Configuration.SetTagValue(sender.Name, FolderBrowserDialog.SelectedPath)
         End With
@@ -291,22 +296,41 @@ Public Class FormMain
                 .StartInfo.CreateNoWindow = True
                 .Start()
 
-                Dim Output As String = .StandardError.ReadToEnd
-                Dim FlagString As String = "%%HiResBoundingBox:"
-                Output = Output.Remove(0, Output.LastIndexOf(FlagString) + FlagString.Length).Trim
-                Dim PDFRectangle As PdfRectangle = GetPDFRectangle(Output, 10)
-
-                Dim NewPDFFile As String = PDFFile & "2"
+                Dim Rectangles As ArrayList = GetPDFRectangles(.StandardError.ReadToEnd)
+                Dim NewPDFFile As String = PDFFile.Trim(".pdf") & "2.pdf"
                 Dim PDFReader As PdfReader = New PdfReader(PDFFile)
-                Dim PDFPage As PdfDictionary = PDFReader.GetPageN(1)
-                PDFPage.Put(PdfName.CROPBOX, PDFRectangle)
+                If Not Rectangles.Count = PDFReader.NumberOfPages Then
+                    Me.Invoke(ShowMessageForInvocation, "There are something wrong in the file """ & PDFFile & """.")
+                    Continue While
+                End If
+
+                For PageNumber As Integer = 1 To PDFReader.NumberOfPages
+                    PDFReader.GetPageN(PageNumber).Put(PdfName.CROPBOX, Rectangles.Item(PageNumber - 1))
+                Next
+
                 Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(NewPDFFile, FileMode.Create, FileAccess.Write))
                 PDFStamper.Close()
                 PDFReader.Close()
-                ShowMessage("The file """ & PDFFile & """ has been cropped.")
+                Me.Invoke(ShowMessageForInvocation, "The file """ & PDFFile & """ has been cropped.")
             End With
         End While
     End Sub
+
+    Private Function GetPDFRectangles(ByVal OutputString As String, Optional ByVal MarginWidth As Integer = 0) As ArrayList
+        Dim Rectangles As New ArrayList
+        Dim FlagString As String = "%%HiResBoundingBox:"
+        Dim StringList() As String = OutputString.Split(vbLf)
+
+        For Each Line As String In StringList
+            If Not Line.Trim.IndexOf(FlagString) = 0 Then
+                Continue For
+            End If
+
+            Rectangles.Add(GetPDFRectangle(Line.Remove(0, FlagString.Length), MarginWidth))
+        Next
+
+        Return Rectangles
+    End Function
 
     Private Function GetPDFRectangle(ByVal BoundingBox As String) As PdfRectangle
         Dim Parameters() As String = BoundingBox.Split(" ")
@@ -318,7 +342,7 @@ Public Class FormMain
     End Function
 
     Private Function GetPDFRectangle(ByVal BoundingBox As String, ByVal MarginWidth As Integer) As PdfRectangle
-        Dim Parameters() As String = BoundingBox.Split(" ")
+        Dim Parameters() As String = BoundingBox.Trim.Split(" ")
         If Parameters.Length = 4 Then
             Return New PdfRectangle(Parameters(0) - MarginWidth,
                                     Parameters(1) - MarginWidth,
