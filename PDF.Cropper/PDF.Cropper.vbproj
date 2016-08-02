@@ -75,14 +75,14 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration.vb" />
-    <Compile Include="Console.vb">
+    <Compile Include="Controls\Configuration.vb" />
+    <Compile Include="Controls\RichTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="RightClickMenu.vb">
+    <Compile Include="Controls\ContextMenuStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CoverPanel.vb">
+    <Compile Include="Controls\CoverPanel.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormMain.vb">

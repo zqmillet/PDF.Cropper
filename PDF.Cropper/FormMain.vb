@@ -4,25 +4,25 @@ Imports iTextSharp.text.pdf
 
 Public Class FormMain
 
-    Dim Console As Console
-    Dim CoverPanel As CoverPanel
-    Dim MouseDownPoint As Point
-    Dim RightClickMenu As RightClickMenu
-    Dim Configuration As Configuration
-    Dim ConfigurationPath As String = Application.StartupPath & "\Configuration.xml"
-    Dim OldLocation As New Point
-    Dim GhostScriptBinFolder As String
-    Dim CropPDFThread As Threading.Thread
-    Dim PDFFileArrayList As ArrayList
+    Private RichTextBox As PDFCropper.RichTextBox
+    Private TransparentPanel As PDFCropper.TransparentPanel
+    Private MouseDownPoint As Point
+    Shadows ContextMenuStrip As PDFCropper.ContextMenuStrip
+    Private Configuration As PDFCropper.Configuration
+    Private ConfigurationPath As String = Application.StartupPath & "\Configuration.xml"
+    Private OldLocation As New Point
+    Private GhostScriptBinFolder As String
+    Private CropPDFThread As Threading.Thread
+    Private PDFFileArrayList As ArrayList
 
     Private Delegate Sub DelegateShowMessage(ByVal Message As String)
-    Dim ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
+    Private ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
 
     Public Sub New()
         InitializeComponent()
 
-        RightClickMenu = New RightClickMenu
-        With RightClickMenu
+        ContextMenuStrip = New PDFCropper.ContextMenuStrip
+        With ContextMenuStrip
             AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
             AddHandler .ExitMenuItem_Click, AddressOf ExitMenuItem_Click
             AddHandler .OpacityMenuItem_Click, AddressOf OpacityMenuItem_Click
@@ -33,45 +33,48 @@ Public Class FormMain
             AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
         End With
 
-        Console = New Console
-        With Console
+        RichTextBox = New PDFCropper.RichTextBox
+        With RichTextBox
             .AppendText("This is PDF Cropper made by Qiqi." & vbCrLf & "Please drag .pdf files into this form." & vbCrLf & vbCrLf)
         End With
 
-        CoverPanel = New CoverPanel
-        With CoverPanel
+        TransparentPanel = New PDFCropper.TransparentPanel
+        With TransparentPanel
             .AllowDrop = True
-            AddHandler .MouseDown, AddressOf CoverPanel_MouseDown
-            AddHandler .MouseUp, AddressOf CoverPanel_MouseUp
-            AddHandler .MouseMove, AddressOf CoverPanel_MouseMove
-            AddHandler .MouseClick, AddressOf CoverPanel_MouseClick
-            AddHandler .DragEnter, AddressOf CoverPanel_DragEnter
-            AddHandler .DragDrop, AddressOf CoverPanel_DragDrop
+            AddHandler .MouseDown, AddressOf TransparentPanel_MouseDown
+            AddHandler .MouseUp, AddressOf TransparentPanel_MouseUp
+            AddHandler .MouseMove, AddressOf TransparentPanel_MouseMove
+            AddHandler .MouseClick, AddressOf TransparentPanel_MouseClick
+            AddHandler .DragEnter, AddressOf TransparentPanel_DragEnter
+            AddHandler .DragDrop, AddressOf TransparentPanel_DragDrop
         End With
 
         With Me
             .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-            .Controls.Add(CoverPanel)
-            .Controls.Add(Console)
+            .Controls.Add(TransparentPanel)
+            .Controls.Add(RichTextBox)
             .Text = "PDF Cropper"
             .Icon = New Icon(Application.StartupPath & "\Icon.ico")
             PDFFileArrayList = New ArrayList
         End With
 
-        Configuration = New Configuration
+        Configuration = New PDFCropper.Configuration
         If Not Configuration.Load(ConfigurationPath) Then
             Exit Sub
         End If
 
-        GhostScriptBinFolder = Configuration.GetTagValue(RightClickMenu.GhostScriptPathMenuItem.Name)
+        With ContextMenuStrip
+            GhostScriptBinFolder = Configuration.GetTagValue(ContextMenuStrip.GhostScriptPathMenuItem.Name)
 
-        RightClickMenu.FormMainTopMost = Configuration.GetTagValue(RightClickMenu.TopMostMenuItem.Name)
-        RightClickMenu.FormMainOpacity = Val(Configuration.GetTagValue(RightClickMenu.OpacityMenuItem.Name))
-        RightClickMenu.FormMainBackColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.BackColorMenuItem.Name))
-        RightClickMenu.FormMainForeColor = Color.FromName(Configuration.GetTagValue(RightClickMenu.ForeColorMenuItem.Name))
-        RightClickMenu.FormMainFontSize = Val(Configuration.GetTagValue(RightClickMenu.FontSizeMenuItem.Name))
-        RightClickMenu.FormMainFontName = Configuration.GetTagValue(RightClickMenu.FontNameMenuItem.Name)
-        RightClickMenu.GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+            .FormMainTopMost = Configuration.GetTagValue(.TopMostMenuItem.Name)
+            .FormMainOpacity = Val(Configuration.GetTagValue(.OpacityMenuItem.Name))
+            .FormMainBackColor = Color.FromName(Configuration.GetTagValue(.BackColorMenuItem.Name))
+            .FormMainForeColor = Color.FromName(Configuration.GetTagValue(.ForeColorMenuItem.Name))
+            .FormMainFontSize = Val(Configuration.GetTagValue(.FontSizeMenuItem.Name))
+            .FormMainFontName = Configuration.GetTagValue(.FontNameMenuItem.Name)
+            .GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+        End With
+
 
         If IsGhostScripBinFolder(GhostScriptBinFolder) Then
             ShowMessage("The Bin folder of the GhostScript has been changed to """ & GhostScriptBinFolder & """ successfully.")
@@ -80,13 +83,13 @@ Public Class FormMain
         End If
     End Sub
 
-    Private Sub CoverPanel_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub TransparentPanel_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         Me.Cursor = Cursors.SizeAll
         MouseDownPoint = e.Location
         OldLocation = Me.Location
     End Sub
 
-    Private Sub CoverPanel_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub TransparentPanel_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         Me.Cursor = Cursors.Default
 
         If Not Me.Location = OldLocation Then
@@ -94,7 +97,7 @@ Public Class FormMain
         End If
     End Sub
 
-    Private Sub CoverPanel_MouseMove(sender As Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub TransparentPanel_MouseMove(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         If Not Me.Cursor Is Cursors.SizeAll Then
             Exit Sub
         End If
@@ -103,9 +106,9 @@ Public Class FormMain
                                 Me.Location.Y - MouseDownPoint.Y + e.Location.Y)
     End Sub
 
-    Private Sub CoverPanel_MouseClick(sender As Object, e As MouseEventArgs)
+    Private Sub TransparentPanel_MouseClick(sender As Object, e As MouseEventArgs)
         If e.Button = MouseButtons.Right Then
-            RightClickMenu.Show(CoverPanel, e.X, e.Y)
+            ContextMenuStrip.Show(TransparentPanel, e.X, e.Y)
         End If
     End Sub
 
@@ -139,11 +142,11 @@ Public Class FormMain
 
     Private Sub BackColorMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.BackColor = .Tag
+            RichTextBox.BackColor = .Tag
             Configuration.SetTagValue(.Name, .Tag.Name)
         End With
 
-        With Console.BackColor
+        With RichTextBox.BackColor
             Dim ColorName As String = ""
             If .IsNamedColor Then
                 ColorName = .Name
@@ -154,11 +157,11 @@ Public Class FormMain
 
     Private Sub ForeColorMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.ForeColor = .Tag
+            RichTextBox.ForeColor = .Tag
             Configuration.SetTagValue(.Name, .Tag.Name)
         End With
 
-        With Console.ForeColor
+        With RichTextBox.ForeColor
             Dim ColorName As String = ""
             If .IsNamedColor Then
                 ColorName = .Name
@@ -169,18 +172,18 @@ Public Class FormMain
 
     Private Sub FontSizeMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.Font = New Drawing.Font(Console.Font.FontFamily, .Tag)
+            RichTextBox.Font = New Drawing.Font(RichTextBox.Font.FontFamily, .Tag)
             Configuration.SetTagValue(.Name, .Tag)
         End With
-        ShowMessage("The font size of the message is changed to " & Console.Font.Size & "pt.")
+        ShowMessage("The font size of the message is changed to " & RichTextBox.Font.Size & "pt.")
     End Sub
 
     Private Sub FontNameMenuItem_Click(sender As Object)
         With CType(sender, ToolStripMenuItem)
-            Console.Font = New Drawing.Font(.Tag.Name.ToString, Console.Font.Size)
+            RichTextBox.Font = New Drawing.Font(.Tag.Name.ToString, RichTextBox.Font.Size)
             Configuration.SetTagValue(.Name, .Tag.Name.ToString)
         End With
-        ShowMessage("The font name of the message is changed to " & Console.Font.Name & ".")
+        ShowMessage("The font name of the message is changed to " & RichTextBox.Font.Name & ".")
     End Sub
 
     Private Sub GhostScriptPathMenuItem_Click(sender As Object)
@@ -211,16 +214,18 @@ Public Class FormMain
     End Sub
 
     Private Sub ShowMessage(ByVal Message As String)
-        Me.Console.SelectionStart = Me.Console.TextLength
-        Me.Console.AppendText(Message)
-        Me.Console.SelectionLength = Message.Length
-        Me.Console.SelectionBullet = True
-        Me.Console.SelectionHangingIndent = 15
-        Me.Console.AppendText(vbCrLf)
-        Me.Console.SelectionStart = Me.Console.TextLength
-        Me.Console.SelectionLength = 0
-        Me.Console.SelectionBullet = False
-        Me.Console.ScrollToCaret()
+        With Me.RichTextBox
+            .SelectionStart = .TextLength
+            .AppendText(Message)
+            .SelectionLength = Message.Length
+            .SelectionBullet = True
+            .SelectionHangingIndent = 15
+            .AppendText(vbCrLf)
+            .SelectionStart = .TextLength
+            .SelectionLength = 0
+            .SelectionBullet = False
+            .ScrollToCaret()
+        End With
     End Sub
 
     Private Function IsGhostScripBinFolder(ByVal Path As String) As Boolean
@@ -237,14 +242,14 @@ Public Class FormMain
         Return True
     End Function
 
-    Private Sub CoverPanel_DragEnter(sender As Object, e As DragEventArgs)
+    Private Sub TransparentPanel_DragEnter(sender As Object, e As DragEventArgs)
         Dim FileList() As String = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
         If Not FileList Is Nothing Then
             e.Effect = DragDropEffects.All
         End If
     End Sub
 
-    Private Sub CoverPanel_DragDrop(sender As Object, e As DragEventArgs)
+    Private Sub TransparentPanel_DragDrop(sender As Object, e As DragEventArgs)
         For Each FilePath As String In CType(e.Data.GetData(DataFormats.FileDrop, False), String())
             If Not My.Computer.FileSystem.FileExists(FilePath) Then
                 Continue For

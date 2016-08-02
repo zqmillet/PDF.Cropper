@@ -6,147 +6,147 @@ PDF.Cropper
 </name>
 </assembly>
 <members>
-<member name="T:PDF.Cropper.RightClickMenu">
+<member name="T:PDF.Cropper.PDFCropper.ContextMenuStrip">
  <summary>
  This class is the menu which will be shown when the right button of mouse is clicked.
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.TopMostMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.TopMostMenuItem">
  <summary>
  This is a menu item which is used to set whether the "FormMain" is topmost.
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.ExitMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ExitMenuItem">
  <summary>
  This is a menu item which is used to exit the program when it is clicked.
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.OpacityMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.OpacityMenuItem">
  <summary>
  This is a memu item which is used to select the opacity of the "FormMain".
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.BackColorMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.BackColorMenuItem">
  <summary>
  This is a menu item which is used to choose the back color of the "FormMain".
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.ForeColorMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem">
  <summary>
  This is a menu item which is used to choose the fore color of the "FormMain".
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.FontSizeMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem">
  <summary>
  This is a menu item which is used to choose the font size of the "FormMain".
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.FontNameMenuItem">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontNameMenuItem">
  <summary>
  This is a menu item which is used to choose the font name of the "FormMain".
  </summary>
 </member>
-<member name="F:PDF.Cropper.RightClickMenu.ColorList">
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ColorList">
  <summary>
  This is a string array to store the alternative color names.
  </summary>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.TopMostMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.TopMostMenuItem_Click">
  <summary>
  This is a event which will be triggered when "TopMostMenuItem" is clicked.
  </summary>
  <param name="sender">It is "TopMostMenuItem" itself.</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.ExitMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.ExitMenuItem_Click">
  <summary>
  This is a event which will be triggered when "ExitMenuItem" is clicked.
  </summary>
  <param name="sender">It is "ExitMenuItem" itself.</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.OpacityMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.OpacityMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "OpacityMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "OpacityMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.BackColorMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.BackColorMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "BackColorMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "BackColorMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.ForeColorMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.FontSizeMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "FontSizeMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "FontSizeMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.RightClickMenu.FontNameMenuItem_Click">
+<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.FontNameMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "FontNameMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "FontNameMenuItem".</param>
 </member>
-<member name="P:PDF.Cropper.RightClickMenu.FormMainTopMost">
+<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainTopMost">
  <summary>
  This is a writeonly boolean to represent whether the "FormMain" is topmost.
  When it is assigned a value, its checked state is changed.
  Then raise the event "TopMostMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.RightClickMenu.FormMainOpacity">
+<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainOpacity">
  <summary>
  This is a writeonly double to represent the opacity of the "FormMain".
  When it is assigned a value, checked states of the corresponding sub items are changed.
  Then raise the event "OpacityMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.RightClickMenu.FormMainBackColor">
+<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainBackColor">
  <summary>
  This is a writeonly color to represent the back color of the "FormMain".
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "BackColorMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.RightClickMenu.FormMainForeColor">
+<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainForeColor">
  <summary>
  This is a writeonly color to represent the fore color of the "FormMain".
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "ForeColorMenuItem_Click".
  </summary>
 </member>
-<member name="M:PDF.Cropper.RightClickMenu.#ctor">
+<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.#ctor">
  <summary>
  This is the constructor of this class.
  </summary>
 </member>
-<member name="M:PDF.Cropper.RightClickMenu.GetImageByColor(System.Drawing.Color)">
+<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.GetImageByColor(System.Drawing.Color)">
  <summary>
  This function is used to generate a colored image by the paramter color.
  </summary>
  <param name="Color">This is the color of the image.</param>
  <returns>This is an image whose color is equal to the parameter "Color".</returns>
 </member>
-<member name="M:PDF.Cropper.RightClickMenu.Me_Click(System.Object,System.EventArgs)">
+<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.Me_Click(System.Object,System.EventArgs)">
  <summary>
  When the items of the menu is clicked, this sub will be triggered.
  </summary>
  <param name="sender">This is the sender of the event.</param>
  <param name="e">This is the arguments of the event.</param>
 </member>
-<member name="T:PDF.Cropper.CoverPanel">
+<member name="T:PDF.Cropper.PDFCropper.TransparentPanel">
  <summary>
  This class is a panel which is tansparent.
  This class is used to cover the other control, which should be click by mouse.
  </summary>
 </member>
-<member name="P:PDF.Cropper.CoverPanel.CreateParams">
+<member name="P:PDF.Cropper.PDFCropper.TransparentPanel.CreateParams">
  <summary>
  CreateParams is a property of Control object.
  CreateParams is used to gets the required creation parameters when the control handle is created.
@@ -155,7 +155,7 @@ PDF.Cropper
  </summary>
  <returns></returns>
 </member>
-<member name="M:PDF.Cropper.CoverPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
+<member name="M:PDF.Cropper.PDFCropper.TransparentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
  <summary>
  We override the sub OnPaintBackground to prevent the background of this panel from being painted.
  </summary>
