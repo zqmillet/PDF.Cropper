@@ -161,6 +161,205 @@ PDF.Cropper
  </summary>
  <param name="e"></param>
 </member>
+<member name="F:PDF.Cropper.FormMain.RichTextBox">
+ <summary>
+ This RichTextBox is used to show the message of the software.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.TransparentPanel">
+ <summary>
+ This TransparentPanel is used to prevent the RichTextBox from being clicked by mouse.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.ContextMenuStrip">
+ <summary>
+ This ContextMenuStrip is shown when the right mouse button is clicked.
+ </summary> 
+</member>
+<member name="F:PDF.Cropper.FormMain.MouseDownLocation">
+ <summary>
+ This Point is used to record the location where mouse button is pressed down.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.FormLastLocation">
+ <summary>
+ This Point is used to record the last location of the FormMain.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.Configuration">
+ <summary>
+ This Configuration is used to read and to save the configuration of the software.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.ConfigurationPath">
+ <summary>
+ This constant string is used to save the configuration file path.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.GhostScriptBinFolder">
+ <summary>
+ This variable string is used to save the bin folder path of the GhostScript.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.PDFFilePool">
+ <summary>
+ This ArrayList is the pool of PDF files which will be cropped by this software.
+ If the PDF file in this pool has been cropped by this software, it will be removed from this pool.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.FormMain.CropPDFThread">
+ <summary>
+ This Thread is used to crop the PDF files which are in the "PDFFilePool".
+ </summary>
+</member>
+<member name="T:PDF.Cropper.FormMain.DelegateShowMessage">
+ <summary>
+ This Delegate is the object that refer to method "ShowMessage".
+ </summary>
+ <param name="Message"></param>
+</member>
+<member name="F:PDF.Cropper.FormMain.ShowMessageForInvocation">
+ <summary>
+ This DelegateShowMessage is used to be invoked to show the message from another thread.
+ </summary>
+</member>
+<member name="M:PDF.Cropper.FormMain.#ctor">
+ <summary>
+ This is the constructor of FormMain.
+ </summary>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ This event is triggered when mouse button is pressed.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseUp(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ This event is triggered when mouse button is popped.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ This event is triggered when mouse is moving over the TransparentPanel
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseClick(System.Object,System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ This event is triggered when mouse is clicked.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.TopMostMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when TopMostMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.ExitMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when ExitMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.OpacityMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when OpacityMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.BackColorMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when BackColorMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.ForeColorMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when ForeColorMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.FontSizeMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when FontSizeMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.FontNameMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when FontNameMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.GhostScriptPathMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when GhostScriptPathMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.ShowMessage(System.String)">
+ <summary>
+ This sub is used to show message on the RichTextBox.
+ </summary>
+ <param name="Message"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.IsGhostScripBinFolder(System.String)">
+ <summary>
+ This function is used to judge whether the Path is the bin folder of the GhostScript.
+ </summary>
+ <param name="Path"></param>
+ <returns>If the Path is the bin folder of the GhostScript, return true, else return false.</returns>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+ <summary>
+ This sub is triggered when something are dragged into the TransparentPanel.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.TransparentPanel_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
+ <summary>
+ This sub is triggered when something are dropped into the TransparentPanel.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDF.Cropper.FormMain.CropPDF">
+ <summary>
+ This sub is used to crop the PDF files which are in the "PDFFilePool".
+ </summary>
+</member>
+<member name="M:PDF.Cropper.FormMain.GetPDFRectangles(System.String,System.Int32)">
+ <summary>
+ This function is used to get the rectangle list from the output string of the GhostScript.
+ </summary>
+ <param name="OutputString">The output string of the GhostScript.</param>
+ <param name="MarginWidth">The width of margin which you want to keep.</param>
+ <returns>The return is an ArrayList. Assuming that there are N pages in the PDF file, the length of the ArrayList is N.</returns>
+</member>
+<member name="M:PDF.Cropper.FormMain.GetPDFRectangle(System.String)">
+ <summary>
+ This function is used to get the rectangle from the BoundingBox string.
+ For example, the BoundingBox string is "0 0 100 100", this function will return a new rectangle with these for parameters.
+ </summary>
+ <param name="BoundingBox">The string of BoundingBox.</param>
+ <returns></returns>
+</member>
+<member name="M:PDF.Cropper.FormMain.GetPDFRectangle(System.String,System.Int32)">
+ <summary>
+ This function is used to get the rectangle from the BoundingBox string.
+ </summary>
+ <param name="BoundingBox">The string of BoundingBox.</param>
+ <param name="MarginWidth">The width of margin which you want to keep.</param>
+ <returns></returns>
+</member>
 <member name="T:PDF.Cropper.My.Resources.Resources">
 <summary>
   A strongly-typed resource class, for looking up localized strings, etc.
