@@ -7,6 +7,7 @@
                 .Multiline = True
                 .Dock = DockStyle.Fill
                 .BorderStyle = BorderStyle.None
+                .ScrollBars = RichTextBoxScrollBars.None
                 .Font = New Font("Consolas", 10, FontStyle.Bold)
             End With
         End Sub

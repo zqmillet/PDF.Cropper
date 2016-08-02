@@ -5,6 +5,8 @@
     Public Class ContextMenuStrip
         Inherits System.Windows.Forms.ContextMenuStrip
 
+        Public OpenFilesMenuItem As ToolStripMenuItem
+
         ''' <summary>
         ''' This is a menu item which is used to set whether the FormMain is topmost.
         ''' </summary>
@@ -47,6 +49,8 @@
         Public ColorList() As String = {"Black", "Blue", "Lime", "Cyan", "Red", "Fuchsia", "Yellow", "White", "Navy", "Green", "Teal", "Maroon", "Purple", "Olive", "Gray"}
         Public FontSizeList() As Integer = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 
+
+        Public Event OpenFilesMenuItem_Click(sender As Object)
         ''' <summary>
         ''' This is a event which will be triggered when "TopMostMenuItem" is clicked.
         ''' </summary>
@@ -193,6 +197,13 @@
         ''' This is the constructor of this class.
         ''' </summary>
         Public Sub New()
+            OpenFilesMenuItem = New ToolStripMenuItem
+            With OpenFilesMenuItem
+                .Text = "&Open Files ..."
+                .Name = NameOf(OpenFilesMenuItem)
+                AddHandler .Click, AddressOf Me_Click
+            End With
+
             ' Initialize the "TopMostMenuItem"
             TopMostMenuItem = New ToolStripMenuItem
             With TopMostMenuItem
@@ -314,6 +325,8 @@
 
             ' Add all menu items into the menu.
             With Me
+                .Items.Add(OpenFilesMenuItem)
+                .Items.Add(New ToolStripSeparator)
                 .Items.Add(TopMostMenuItem)
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(OpacityMenuItem)
@@ -348,6 +361,11 @@
         ''' <param name="sender">This is the sender of the event.</param>
         ''' <param name="e">This is the arguments of the event.</param>
         Private Sub Me_Click(sender As Object, e As EventArgs)
+            If sender Is OpenFilesMenuItem Then
+                RaiseEvent OpenFilesMenuItem_Click(sender)
+                Exit Sub
+            End If
+
             If sender Is TopMostMenuItem Then
                 RaiseEvent TopMostMenuItem_Click(sender)
                 Exit Sub

@@ -71,6 +71,7 @@ Public Class FormMain
         ' Initialize the ContextMenuStrip.
         ContextMenuStrip = New PDFCropper.ContextMenuStrip
         With ContextMenuStrip
+            AddHandler .OpenFilesMenuItem_Click, AddressOf OpenFilesMenuItem_Click
             AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
             AddHandler .ExitMenuItem_Click, AddressOf ExitMenuItem_Click
             AddHandler .OpacityMenuItem_Click, AddressOf OpacityMenuItem_Click
@@ -370,7 +371,7 @@ Public Class FormMain
         Configuration.SetTagValue(sender.Name & "Value", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).Value)
         Configuration.SetTagValue(sender.Name & "UnitIndex", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).UnitIndex)
         MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
-        ShowMessage("The margin width is changed to " & MarginWidth & "pt.")
+        ShowMessage("The margin width has been changed to " & MarginWidth & "pt.")
 
     End Sub
 
@@ -463,6 +464,42 @@ Public Class FormMain
 
         ' If the CropPDFThread is running, do nothing.
     End Sub
+
+    Private Sub OpenFilesMenuItem_Click()
+        Dim OpenFileDialog As New OpenFileDialog
+        With OpenFileDialog
+            .Filter = "PDF File|*.pdf"
+            .FileName = ""
+            .Multiselect = True
+        End With
+
+        ShowMessage("Please select the PDF files that you want to crop.")
+        If Not OpenFileDialog.ShowDialog = DialogResult.OK Then
+            ShowMessage("You selected nothing.")
+            Exit Sub
+        End If
+
+        For Each FileName As String In OpenFileDialog.FileNames
+            PDFFilePool.Add(FileName)
+        Next
+
+        ' If there does not exist the CropPDFThread, create a new one, start it, and exit the sub.
+        If CropPDFThread Is Nothing Then
+            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
+            CropPDFThread.Start()
+            Exit Sub
+        End If
+
+        ' If the CropPDFThread has stopped, create a new one, start it, and exit the sub.
+        If CropPDFThread.ThreadState = Threading.ThreadState.Stopped Then
+            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
+            CropPDFThread.Start()
+            Exit Sub
+        End If
+
+        ' If the CropPDFThread is running, do nothing.
+    End Sub
+
 
     ''' <summary>
     ''' This sub is used to crop the PDF files which are in the "PDFFilePool".

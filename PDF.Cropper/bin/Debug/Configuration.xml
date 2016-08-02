@@ -21,12 +21,8 @@
     <TagValue>True</TagValue>
   </Configuration>
   <Configuration>
-    <TagName>OpacityMenuItem_5</TagName>
-    <TagValue>0.5</TagValue>
-  </Configuration>
-  <Configuration>
     <TagName>OpacityMenuItem</TagName>
-    <TagValue>1</TagValue>
+    <TagValue>0.6</TagValue>
   </Configuration>
   <Configuration>
     <TagName>BackColorMenuItem</TagName>
