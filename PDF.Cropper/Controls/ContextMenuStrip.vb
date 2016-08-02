@@ -6,7 +6,7 @@
         Inherits System.Windows.Forms.ContextMenuStrip
 
         ''' <summary>
-        ''' This is a menu item which is used to set whether the "FormMain" is topmost.
+        ''' This is a menu item which is used to set whether the FormMain is topmost.
         ''' </summary>
         Public TopMostMenuItem As ToolStripMenuItem
         ''' <summary>
@@ -14,25 +14,30 @@
         ''' </summary>
         Public ExitMenuItem As ToolStripMenuItem
         ''' <summary>
-        ''' This is a memu item which is used to select the opacity of the "FormMain".
+        ''' This is a memu item which is used to select the opacity of the FormMain.
         ''' </summary>
         Public OpacityMenuItem As ToolStripMenuItem
         ''' <summary>
-        ''' This is a menu item which is used to choose the back color of the "FormMain".
+        ''' This is a menu item which is used to choose the back color of the FormMain.
         ''' </summary>
         Public BackColorMenuItem As ToolStripMenuItem
         ''' <summary>
-        ''' This is a menu item which is used to choose the fore color of the "FormMain".
+        ''' This is a menu item which is used to choose the fore color of the FormMain.
         ''' </summary>
         Public ForeColorMenuItem As ToolStripMenuItem
         ''' <summary>
-        ''' This is a menu item which is used to choose the font size of the "FormMain".
+        ''' This is a menu item which is used to choose the font size of the FormMain.
         ''' </summary>
         Public FontSizeMenuItem As ToolStripMenuItem
         ''' <summary>
-        ''' This is a menu item which is used to choose the font name of the "FormMain".
+        ''' This is a menu item which is used to choose the font name of the FormMain.
         ''' </summary>
         Public FontNameMenuItem As ToolStripMenuItem
+        ''' <summary>
+        ''' This is a menu item which is used to choose the margin width of the output PDF file.
+        ''' </summary>
+        Public MarginWidthMenuItem As PDFCropper.ToolStripMarginWidthTextBox
+
 
         Public GhostScriptPathMenuItem As ToolStripMenuItem
 
@@ -77,11 +82,12 @@
         ''' </summary>
         ''' <param name="sender">It is the sub item of "FontNameMenuItem".</param>
         Public Event FontNameMenuItem_Click(sender As Object)
+        ' Public Event MarginWidthMenuItem_Click(sender As Object)
         Public Event GhostScriptPathMenuItem_Click(sender As Object)
-
+        Public Event MarginWidthMenuItem_ValueChanged(sender As Object)
 
         ''' <summary>
-        ''' This is a writeonly boolean to represent whether the "FormMain" is topmost.
+        ''' This is a writeonly boolean to represent whether the FormMain is topmost.
         ''' When it is assigned a value, its checked state is changed.
         ''' Then raise the event "TopMostMenuItem_Click".
         ''' </summary>
@@ -93,7 +99,7 @@
         End Property
 
         ''' <summary>
-        ''' This is a writeonly double to represent the opacity of the "FormMain".
+        ''' This is a writeonly double to represent the opacity of the FormMain.
         ''' When it is assigned a value, checked states of the corresponding sub items are changed.
         ''' Then raise the event "OpacityMenuItem_Click".
         ''' </summary>
@@ -110,7 +116,7 @@
         End Property
 
         ''' <summary>
-        ''' This is a writeonly color to represent the back color of the "FormMain".
+        ''' This is a writeonly color to represent the back color of the FormMain.
         ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
         ''' Then raise the event "BackColorMenuItem_Click".
         ''' </summary>
@@ -127,7 +133,7 @@
         End Property
 
         ''' <summary>
-        ''' This is a writeonly color to represent the fore color of the "FormMain".
+        ''' This is a writeonly color to represent the fore color of the FormMain.
         ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
         ''' Then raise the event "ForeColorMenuItem_Click".
         ''' </summary>
@@ -167,6 +173,18 @@
         Public WriteOnly Property GhostScriptBinFolder As Boolean
             Set(Value As Boolean)
                 GhostScriptPathMenuItem.Checked = Value
+            End Set
+        End Property
+
+        Public WriteOnly Property MarginWidthValue As Double
+            Set(Value As Double)
+                MarginWidthMenuItem.Value = Value
+            End Set
+        End Property
+
+        Public WriteOnly Property MarginWidthUnitIndex As Integer
+            Set(Value As Integer)
+                MarginWidthMenuItem.UnitIndex = Value
             End Set
         End Property
 
@@ -288,6 +306,12 @@
                 AddHandler .Click, AddressOf Me_Click
             End With
 
+            MarginWidthMenuItem = New PDFCropper.ToolStripMarginWidthTextBox
+            With MarginWidthMenuItem
+                .Name = NameOf(MarginWidthMenuItem)
+                AddHandler .ValueChanged, AddressOf Me_Click
+            End With
+
             ' Add all menu items into the menu.
             With Me
                 .Items.Add(TopMostMenuItem)
@@ -297,6 +321,8 @@
                 .Items.Add(ForeColorMenuItem)
                 .Items.Add(FontSizeMenuItem)
                 .Items.Add(FontNameMenuItem)
+                .Items.Add(New ToolStripSeparator)
+                .Items.Add(MarginWidthMenuItem)
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(GhostScriptPathMenuItem)
                 .Items.Add(New ToolStripSeparator)
@@ -374,6 +400,11 @@
                     MenuItem.Checked = MenuItem Is sender
                 Next
                 RaiseEvent FontNameMenuItem_Click(sender)
+                Exit Sub
+            End If
+
+            If sender Is MarginWidthMenuItem Then
+                RaiseEvent MarginWidthMenuItem_ValueChanged(sender)
                 Exit Sub
             End If
         End Sub

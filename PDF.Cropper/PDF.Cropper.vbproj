@@ -82,7 +82,10 @@
     <Compile Include="Controls\ContextMenuStrip.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\CoverPanel.vb">
+    <Compile Include="Controls\ToolStripMarginWidthTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TransparentPanel.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormMain.vb">
@@ -90,6 +93,12 @@
     </Compile>
     <Compile Include="FormMain.Designer.vb">
       <DependentUpon>FormMain.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTest.Designer.vb">
+      <DependentUpon>FormTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormTest.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />

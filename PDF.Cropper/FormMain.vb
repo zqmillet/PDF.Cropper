@@ -56,10 +56,15 @@ Public Class FormMain
     ''' </summary>
     Private ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
 
+    Private HasInitialized As Boolean
+    Private MarginWidth As Integer
+
     ''' <summary>
     ''' This is the constructor of FormMain.
     ''' </summary>
     Public Sub New()
+        HasInitialized = False
+
         ' This call is required by the designer.
         InitializeComponent()
 
@@ -74,6 +79,7 @@ Public Class FormMain
             AddHandler .FontSizeMenuItem_Click, AddressOf FontSizeMenuItem_Click
             AddHandler .FontNameMenuItem_Click, AddressOf FontNameMenuItem_Click
             AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
+            AddHandler .MarginWidthMenuItem_ValueChanged, AddressOf MarginWidthMenuItem_ValueChanged
         End With
 
         ' Initialize the RichTextBox.
@@ -100,7 +106,7 @@ Public Class FormMain
             .Controls.Add(TransparentPanel)
             .Controls.Add(RichTextBox)
             .Text = "PDF Cropper"
-            .Icon = New Icon(Application.StartupPath & "\Icon.ico")
+            .Icon = New Icon(Application.StartupPath & "\Icon\FormMain.ico")
             PDFFilePool = New ArrayList
         End With
 
@@ -122,6 +128,10 @@ Public Class FormMain
             .FormMainFontSize = Val(Configuration.GetTagValue(.FontSizeMenuItem.Name))
             .FormMainFontName = Configuration.GetTagValue(.FontNameMenuItem.Name)
             .GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+            .MarginWidthValue = Val(Configuration.GetTagValue(.MarginWidthMenuItem.Name & "Value"))
+            .MarginWidthUnitIndex = Val(Configuration.GetTagValue(.MarginWidthMenuItem.Name & "UnitIndex"))
+            MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
+            ShowMessage("The margin width is " & MarginWidth & "pt.")
         End With
 
         If IsGhostScripBinFolder(GhostScriptBinFolder) Then
@@ -129,6 +139,8 @@ Public Class FormMain
         Else
             ShowMessage("The Bin folder of the GhostScript is not correct.")
         End If
+
+        HasInitialized = True
     End Sub
 
     ''' <summary>
@@ -350,6 +362,18 @@ Public Class FormMain
         End With
     End Sub
 
+    Private Sub MarginWidthMenuItem_ValueChanged(sender As Object)
+        If Not HasInitialized Then
+            Exit Sub
+        End If
+
+        Configuration.SetTagValue(sender.Name & "Value", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).Value)
+        Configuration.SetTagValue(sender.Name & "UnitIndex", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).UnitIndex)
+        MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
+        ShowMessage("The margin width is changed to " & MarginWidth & "pt.")
+
+    End Sub
+
     ''' <summary>
     ''' This sub is used to show message on the RichTextBox.
     ''' </summary>
@@ -474,7 +498,7 @@ Public Class FormMain
             Process.Start()
 
             ' Get all BoundingBox of all pages of the PDF file.
-            Dim Rectangles As ArrayList = GetPDFRectangles(Process.StandardError.ReadToEnd)
+            Dim Rectangles As ArrayList = GetPDFRectangles(Process.StandardError.ReadToEnd, MarginWidth)
             ' Read the PDF file which need to be cropped.
             Dim PDFReader As PdfReader = New PdfReader(PDFFile)
             ' If the number of pages is not correct, show the message, and continue the loop.
@@ -489,11 +513,14 @@ Public Class FormMain
             Next
 
             ' Set the name of the new PDF file.
-            Dim NewPDFFile As String = PDFFile.Trim(".pdf") & "2.pdf"
+            Dim NewPDFFile As String = Application.StartupPath & "\Temp" & PDFFile.Remove(0, PDFFile.LastIndexOf("\"))
             ' Save the new PDF file.
             Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(NewPDFFile, FileMode.Create, FileAccess.Write))
             PDFStamper.Close()
             PDFReader.Close()
+
+            ' Replace the old PDF file by new PDF file.
+            My.Computer.FileSystem.MoveFile(NewPDFFile, PDFFile, True)
 
             ' Show the message.
             Me.Invoke(ShowMessageForInvocation, "The file """ & PDFFile & """ has been cropped.")

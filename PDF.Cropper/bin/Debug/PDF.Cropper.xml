@@ -13,7 +13,7 @@ PDF.Cropper
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.TopMostMenuItem">
  <summary>
- This is a menu item which is used to set whether the "FormMain" is topmost.
+ This is a menu item which is used to set whether the FormMain is topmost.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ExitMenuItem">
@@ -23,27 +23,32 @@ PDF.Cropper
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.OpacityMenuItem">
  <summary>
- This is a memu item which is used to select the opacity of the "FormMain".
+ This is a memu item which is used to select the opacity of the FormMain.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.BackColorMenuItem">
  <summary>
- This is a menu item which is used to choose the back color of the "FormMain".
+ This is a menu item which is used to choose the back color of the FormMain.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem">
  <summary>
- This is a menu item which is used to choose the fore color of the "FormMain".
+ This is a menu item which is used to choose the fore color of the FormMain.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem">
  <summary>
- This is a menu item which is used to choose the font size of the "FormMain".
+ This is a menu item which is used to choose the font size of the FormMain.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontNameMenuItem">
  <summary>
- This is a menu item which is used to choose the font name of the "FormMain".
+ This is a menu item which is used to choose the font name of the FormMain.
+ </summary>
+</member>
+<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.MarginWidthMenuItem">
+ <summary>
+ This is a menu item which is used to choose the margin width of the output PDF file.
  </summary>
 </member>
 <member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ColorList">
@@ -95,28 +100,28 @@ PDF.Cropper
 </member>
 <member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainTopMost">
  <summary>
- This is a writeonly boolean to represent whether the "FormMain" is topmost.
+ This is a writeonly boolean to represent whether the FormMain is topmost.
  When it is assigned a value, its checked state is changed.
  Then raise the event "TopMostMenuItem_Click".
  </summary>
 </member>
 <member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainOpacity">
  <summary>
- This is a writeonly double to represent the opacity of the "FormMain".
+ This is a writeonly double to represent the opacity of the FormMain.
  When it is assigned a value, checked states of the corresponding sub items are changed.
  Then raise the event "OpacityMenuItem_Click".
  </summary>
 </member>
 <member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainBackColor">
  <summary>
- This is a writeonly color to represent the back color of the "FormMain".
+ This is a writeonly color to represent the back color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "BackColorMenuItem_Click".
  </summary>
 </member>
 <member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainForeColor">
  <summary>
- This is a writeonly color to represent the fore color of the "FormMain".
+ This is a writeonly color to represent the fore color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "ForeColorMenuItem_Click".
  </summary>

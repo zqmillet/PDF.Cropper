@@ -30,7 +30,7 @@
   </Configuration>
   <Configuration>
     <TagName>BackColorMenuItem</TagName>
-    <TagValue>White</TagValue>
+    <TagValue>Red</TagValue>
   </Configuration>
   <Configuration>
     <TagName>ForeColorMenuItem</TagName>
@@ -47,5 +47,13 @@
   <Configuration>
     <TagName>GhostScriptPathMenuItem</TagName>
     <TagValue>C:\Program Files\gs\gs9.19\bin</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>MarginWidthMenuItemUnitIndex</TagName>
+    <TagValue>0</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>MarginWidthMenuItemValue</TagName>
+    <TagValue>0</TagValue>
   </Configuration>
 </NewDataSet>
