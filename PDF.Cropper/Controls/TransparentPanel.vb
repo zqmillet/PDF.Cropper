@@ -35,5 +35,12 @@
         Protected Overrides Sub OnPaintBackground(ByVal e As System.Windows.Forms.PaintEventArgs)
             ' Do nothing.
         End Sub
+        '        Protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+        '  If (keyData == (Keys.Control | Keys.F)) {
+        '    MessageBox.Show("What the Ctrl+F?");
+        '    Return True;
+        '  }
+        '  Return base.ProcessCmdKey(ref msg, keyData);
+        '}
     End Class
 End Namespace

@@ -142,6 +142,47 @@ Public Class FormMain
         End If
 
         HasInitialized = True
+        Me.KeyPreview = True
+        AddHandler Me.KeyDown, AddressOf FormMain_KeyDown
+    End Sub
+
+    Private Sub FormMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
+        If (e.Control AndAlso (e.KeyCode = Keys.P)) Then
+
+            MsgBox("2333")
+        End If
+
+        Dim KeyCode As New Keys
+        If e.Control Then
+            KeyCode = KeyCode Or Keys.Control
+        End If
+
+        If e.Alt Then
+            KeyCode = KeyCode Or Keys.Alt
+        End If
+
+        If e.Shift Then
+            KeyCode = KeyCode Or Keys.Shift
+        End If
+
+        KeyCode = KeyCode Or e.KeyCode
+
+        For Each MenuItem As Object In ContextMenuStrip.Items
+            If Not TypeOf MenuItem Is ToolStripMenuItem Then
+                Continue For
+            End If
+
+            If Not CType(MenuItem, ToolStripMenuItem).ShortcutKeys = KeyCode Then
+                Continue For
+            End If
+
+            If MenuItem Is ContextMenuStrip.TopMostMenuItem Then
+                ContextMenuStrip.TopMostMenuItem.Checked = Not ContextMenuStrip.TopMostMenuItem.Checked
+            End If
+
+            ContextMenuStrip.Me_Click(MenuItem, e)
+        Next
+
     End Sub
 
     ''' <summary>

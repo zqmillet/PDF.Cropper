@@ -199,7 +199,8 @@
         Public Sub New()
             OpenFilesMenuItem = New ToolStripMenuItem
             With OpenFilesMenuItem
-                .Text = "&Open Files ..."
+                .Text = "Open Files ..."
+                .ShortcutKeys = Keys.Control Or Keys.O
                 .Name = NameOf(OpenFilesMenuItem)
                 AddHandler .Click, AddressOf Me_Click
             End With
@@ -207,7 +208,8 @@
             ' Initialize the "TopMostMenuItem"
             TopMostMenuItem = New ToolStripMenuItem
             With TopMostMenuItem
-                .Text = "&Top Most"
+                .Text = "Top Most"
+                .ShortcutKeys = Keys.Control Or Keys.T
                 .Name = NameOf(TopMostMenuItem)
                 .CheckOnClick = True
                 AddHandler .Click, AddressOf Me_Click
@@ -216,7 +218,8 @@
             ' Initialize the "ExitMenuItem"
             ExitMenuItem = New ToolStripMenuItem
             With ExitMenuItem
-                .Text = "E&xit"
+                .Text = "Exit"
+                .ShortcutKeys = Keys.Alt Or Keys.X
                 .Name = NameOf(ExitMenuItem)
                 AddHandler .Click, AddressOf Me_Click
             End With
@@ -224,7 +227,7 @@
             ' Initialize the "OpacityMenuItem"
             OpacityMenuItem = New ToolStripMenuItem
             With OpacityMenuItem
-                .Text = "&Opacity"
+                .Text = "Opacity"
                 .Name = NameOf(OpacityMenuItem)
                 For Index As Integer = 1 To 10
                     Dim MenuItem As New ToolStripMenuItem
@@ -242,7 +245,7 @@
             ' Initialize the "BackColorMenuItem"
             BackColorMenuItem = New ToolStripMenuItem
             With BackColorMenuItem
-                .Text = "&Back Color"
+                .Text = "Back Color"
                 .Name = NameOf(BackColorMenuItem)
                 For Each ColorName As String In ColorList
                     Dim MenuItem As New ToolStripMenuItem
@@ -260,7 +263,7 @@
             ' Initialize the "ForeColorMenuItem"
             ForeColorMenuItem = New ToolStripMenuItem
             With ForeColorMenuItem
-                .Text = "&Fore Color"
+                .Text = "Fore Color"
                 .Name = NameOf(ForeColorMenuItem)
                 For Each ColorName As String In ColorList
                     Dim MenuItem As New ToolStripMenuItem
@@ -277,7 +280,7 @@
 
             FontSizeMenuItem = New ToolStripMenuItem
             With FontSizeMenuItem
-                .Text = "Font &Size"
+                .Text = "Font Size"
                 .Name = NameOf(FontSizeMenuItem)
                 For Each FontSize As Integer In FontSizeList
                     Dim MenuItem As New ToolStripMenuItem
@@ -294,7 +297,7 @@
 
             FontNameMenuItem = New ToolStripMenuItem
             With FontNameMenuItem
-                .Text = "Font &Name"
+                .Text = "Font Name"
                 .Name = NameOf(FontNameMenuItem)
                 For Each FontFamily As FontFamily In System.Drawing.FontFamily.Families
                     Dim MenuItem As New ToolStripMenuItem
@@ -312,6 +315,7 @@
             GhostScriptPathMenuItem = New ToolStripMenuItem
             With GhostScriptPathMenuItem
                 .Text = "GhostScript Bin Folder"
+                .ShortcutKeys = Keys.Control Or Keys.G
                 .Name = NameOf(GhostScriptPathMenuItem)
                 .CheckOnClick = True
                 AddHandler .Click, AddressOf Me_Click
@@ -360,7 +364,7 @@
         ''' </summary>
         ''' <param name="sender">This is the sender of the event.</param>
         ''' <param name="e">This is the arguments of the event.</param>
-        Private Sub Me_Click(sender As Object, e As EventArgs)
+        Public Sub Me_Click(sender As Object, e As EventArgs)
             If sender Is OpenFilesMenuItem Then
                 RaiseEvent OpenFilesMenuItem_Click(sender)
                 Exit Sub
