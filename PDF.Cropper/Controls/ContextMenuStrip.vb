@@ -5,6 +5,7 @@
     Public Class ContextMenuStrip
         Inherits System.Windows.Forms.ContextMenuStrip
 
+#Region "Menu Items"
         Public OpenFilesMenuItem As ToolStripMenuItem
 
         ''' <summary>
@@ -39,17 +40,18 @@
         ''' This is a menu item which is used to choose the margin width of the output PDF file.
         ''' </summary>
         Public MarginWidthMenuItem As PDFCropper.ToolStripMarginWidthTextBox
-
-
+        Public NewFileNamePrefixMenuItem As PDFCropper.ToolStripTextBox
+        Public NewFileNameSuffixMenuItem As PDFCropper.ToolStripTextBox
         Public GhostScriptPathMenuItem As ToolStripMenuItem
-
+        Public AutoOverwriteMenuItem As ToolStripMenuItem
+#End Region
         ''' <summary>
         ''' This is a string array to store the alternative color names.
         ''' </summary>
         Public ColorList() As String = {"Black", "Blue", "Lime", "Cyan", "Red", "Fuchsia", "Yellow", "White", "Navy", "Green", "Teal", "Maroon", "Purple", "Olive", "Gray"}
         Public FontSizeList() As Integer = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 
-
+#Region "Menu Events"
         Public Event OpenFilesMenuItem_Click(sender As Object)
         ''' <summary>
         ''' This is a event which will be triggered when "TopMostMenuItem" is clicked.
@@ -89,7 +91,12 @@
         ' Public Event MarginWidthMenuItem_Click(sender As Object)
         Public Event GhostScriptPathMenuItem_Click(sender As Object)
         Public Event MarginWidthMenuItem_ValueChanged(sender As Object)
+        Public Event NewFileNamePrefixMenuItem_TextChanged(sender As Object)
+        Public Event NewFileNameSuffixMenuItem_TextChanged(sender As Object)
+        Public Event AutoOverwriteMenuItem_Click(sender As Object)
+#End Region
 
+#Region "Menu Properties"
         ''' <summary>
         ''' This is a writeonly boolean to represent whether the FormMain is topmost.
         ''' When it is assigned a value, its checked state is changed.
@@ -192,6 +199,33 @@
             End Set
         End Property
 
+        Public Property NewFileNamePrefix As String
+            Get
+                Return NewFileNamePrefixMenuItem.Text
+            End Get
+            Set(Value As String)
+                NewFileNamePrefixMenuItem.Text = Value
+            End Set
+        End Property
+
+        Public Property NewFileNameSuffix As String
+            Get
+                Return NewFileNameSuffixMenuItem.Text
+            End Get
+            Set(Value As String)
+                NewFileNameSuffixMenuItem.Text = Value
+            End Set
+        End Property
+
+        Public Property AutoOverwrite As Boolean
+            Get
+                Return AutoOverwriteMenuItem.Checked
+            End Get
+            Set(Value As Boolean)
+                AutoOverwriteMenuItem.Checked = Value
+            End Set
+        End Property
+#End Region
 
         ''' <summary>
         ''' This is the constructor of this class.
@@ -327,6 +361,29 @@
                 AddHandler .ValueChanged, AddressOf Me_Click
             End With
 
+            NewFileNamePrefixMenuItem = New PDFCropper.ToolStripTextBox
+            With NewFileNamePrefixMenuItem
+                .Name = NameOf(NewFileNamePrefixMenuItem)
+                .LabelText = "Prefix of New File Name"
+                AddHandler .TextChanged, AddressOf Me_Click
+            End With
+
+            NewFileNameSuffixMenuItem = New PDFCropper.ToolStripTextBox
+            With NewFileNameSuffixMenuItem
+                .Name = NameOf(NewFileNameSuffixMenuItem)
+                .LabelText = "Suffix of New File Name"
+                AddHandler .TextChanged, AddressOf Me_Click
+            End With
+
+            AutoOverwriteMenuItem = New ToolStripMenuItem
+            With AutoOverwriteMenuItem
+                .Name = NameOf(AutoOverwriteMenuItem)
+                .Text = "Auto Overwrite Files"
+                .CheckOnClick = True
+                .ShortcutKeys = Keys.Control Or Keys.W
+                AddHandler .Click, AddressOf Me_Click
+            End With
+
             ' Add all menu items into the menu.
             With Me
                 .Items.Add(OpenFilesMenuItem)
@@ -340,6 +397,9 @@
                 .Items.Add(FontNameMenuItem)
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(MarginWidthMenuItem)
+                .Items.Add(NewFileNamePrefixMenuItem)
+                .Items.Add(NewFileNameSuffixMenuItem)
+                .Items.Add(AutoOverwriteMenuItem)
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(GhostScriptPathMenuItem)
                 .Items.Add(New ToolStripSeparator)
@@ -427,6 +487,21 @@
 
             If sender Is MarginWidthMenuItem Then
                 RaiseEvent MarginWidthMenuItem_ValueChanged(sender)
+                Exit Sub
+            End If
+
+            If sender Is NewFileNamePrefixMenuItem Then
+                RaiseEvent NewFileNamePrefixMenuItem_TextChanged(sender)
+                Exit Sub
+            End If
+
+            If sender Is NewFileNameSuffixMenuItem Then
+                RaiseEvent NewFileNameSuffixMenuItem_TextChanged(sender)
+                Exit Sub
+            End If
+
+            If sender Is AutoOverwriteMenuItem Then
+                RaiseEvent AutoOverwriteMenuItem_Click(sender)
                 Exit Sub
             End If
         End Sub

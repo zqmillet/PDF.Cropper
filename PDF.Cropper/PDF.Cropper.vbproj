@@ -82,10 +82,16 @@
     <Compile Include="Controls\ContextMenuStrip.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ToolStripTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ToolStripMarginWidthTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TransparentPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\WaterMarkTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormMain.vb">

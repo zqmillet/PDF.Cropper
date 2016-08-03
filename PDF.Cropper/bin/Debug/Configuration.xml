@@ -18,15 +18,15 @@
   </xs:schema>
   <Configuration>
     <TagName>TopMostMenuItem</TagName>
-    <TagValue>False</TagValue>
+    <TagValue>True</TagValue>
   </Configuration>
   <Configuration>
     <TagName>OpacityMenuItem</TagName>
-    <TagValue>0.6</TagValue>
+    <TagValue>1</TagValue>
   </Configuration>
   <Configuration>
     <TagName>BackColorMenuItem</TagName>
-    <TagValue>Red</TagValue>
+    <TagValue>White</TagValue>
   </Configuration>
   <Configuration>
     <TagName>ForeColorMenuItem</TagName>
@@ -50,6 +50,18 @@
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemValue</TagName>
-    <TagValue>0</TagValue>
+    <TagValue>20</TagValue>
+  </Configuration>
+  <Configuration>
+    <TagName>NewFileNamePrefixMenuItem</TagName>
+    <TagValue />
+  </Configuration>
+  <Configuration>
+    <TagName>NewFileNameSuffixMenuItem</TagName>
+    <TagValue />
+  </Configuration>
+  <Configuration>
+    <TagName>AutoOverwriteMenuItem</TagName>
+    <TagValue>True</TagValue>
   </Configuration>
 </NewDataSet>

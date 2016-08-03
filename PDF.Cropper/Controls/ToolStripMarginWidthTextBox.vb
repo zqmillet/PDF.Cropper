@@ -47,7 +47,7 @@
         Public Class ControlPanel
             Inherits Panel
 
-            Friend WithEvents TextBox As New TextBox
+            Friend WithEvents TextBox As New PDFCropper.WaterMarkTextBox
             Friend WithEvents Label As New Label
             Friend WithEvents ComboBox As New ComboBox
 
@@ -112,12 +112,13 @@
                 End With
 
                 With TextBox
+                    .WaterMarkText = "0"
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Top
                     .AutoSize = False
                     .Width = Me.Width - Label.Width - 12 - ComboBox.Width - 4
                     .Height = ComboBox.Height
                     .Location = New Point(Label.Width + 12, 2)
-                    .Font = Label.Font
+                    ' .Font = Label.Font
                     .Text = ""
                     .Parent = Me
                     .Padding = New Padding(0, 3, 0, 0)
@@ -130,6 +131,7 @@
                 With Me
                     .BackColor = Color.Transparent
                     .Height = 20
+                    .Dock = DockStyle.Fill
                     .Padding = New Padding(0)
                     .Margin = New Padding(0)
                 End With

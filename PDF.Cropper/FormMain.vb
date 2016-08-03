@@ -81,6 +81,9 @@ Public Class FormMain
             AddHandler .FontNameMenuItem_Click, AddressOf FontNameMenuItem_Click
             AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
             AddHandler .MarginWidthMenuItem_ValueChanged, AddressOf MarginWidthMenuItem_ValueChanged
+            AddHandler .NewFileNamePrefixMenuItem_TextChanged, AddressOf NewFileNamePrefixMenuItem_TextChanged
+            AddHandler .NewFileNameSuffixMenuItem_TextChanged, AddressOf NewFileNameSuffixMenuItem_TextChanged
+            AddHandler .AutoOverwriteMenuItem_Click, AddressOf AutoOverwriteMenuItem_Click
         End With
 
         ' Initialize the RichTextBox.
@@ -133,6 +136,9 @@ Public Class FormMain
             .MarginWidthUnitIndex = Val(Configuration.GetTagValue(.MarginWidthMenuItem.Name & "UnitIndex"))
             MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
             ShowMessage("The margin width is " & MarginWidth & "pt.")
+            .NewFileNamePrefix = Configuration.GetTagValue(.NewFileNamePrefixMenuItem.Name)
+            .NewFileNameSuffix = Configuration.GetTagValue(.NewFileNameSuffixMenuItem.Name)
+            .AutoOverwrite = Configuration.GetTagValue(.AutoOverwriteMenuItem.Name)
         End With
 
         If IsGhostScripBinFolder(GhostScriptBinFolder) Then
@@ -147,11 +153,6 @@ Public Class FormMain
     End Sub
 
     Private Sub FormMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
-        If (e.Control AndAlso (e.KeyCode = Keys.P)) Then
-
-            MsgBox("2333")
-        End If
-
         Dim KeyCode As New Keys
         If e.Control Then
             KeyCode = KeyCode Or Keys.Control
@@ -180,9 +181,12 @@ Public Class FormMain
                 ContextMenuStrip.TopMostMenuItem.Checked = Not ContextMenuStrip.TopMostMenuItem.Checked
             End If
 
+            If MenuItem Is ContextMenuStrip.AutoOverwriteMenuItem Then
+                ContextMenuStrip.AutoOverwriteMenuItem.Checked = Not ContextMenuStrip.AutoOverwriteMenuItem.Checked
+            End If
+
             ContextMenuStrip.Me_Click(MenuItem, e)
         Next
-
     End Sub
 
     ''' <summary>
@@ -416,6 +420,27 @@ Public Class FormMain
 
     End Sub
 
+    Private Sub NewFileNamePrefixMenuItem_TextChanged(sender As Object)
+        Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
+        ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" &
+                    ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+    End Sub
+
+    Private Sub NewFileNameSuffixMenuItem_TextChanged(sender As Object)
+        Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
+        ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" &
+                    ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+    End Sub
+
+    Private Sub AutoOverwriteMenuItem_Click(sender As Object)
+        Configuration.SetTagValue(sender.Name, CType(sender, ToolStripMenuItem).Checked)
+        Dim OnOff As String = "off"
+        If CType(sender, ToolStripMenuItem).Checked Then
+            OnOff = "on"
+        End If
+        ShowMessage("Auto overwriting mode is turned " & OnOff & ".")
+    End Sub
+
     ''' <summary>
     ''' This sub is used to show message on the RichTextBox.
     ''' </summary>
@@ -591,14 +616,23 @@ Public Class FormMain
             Next
 
             ' Set the name of the new PDF file.
-            Dim NewPDFFile As String = Application.StartupPath & "\Temp" & PDFFile.Remove(0, PDFFile.LastIndexOf("\"))
+            Dim TempPDFFile As String = Application.StartupPath & "\Temp" & PDFFile.Remove(0, PDFFile.LastIndexOf("\"))
             ' Save the new PDF file.
-            Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(NewPDFFile, FileMode.Create, FileAccess.Write))
+            Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(TempPDFFile, FileMode.Create, FileAccess.Write))
             PDFStamper.Close()
             PDFReader.Close()
 
             ' Replace the old PDF file by new PDF file.
-            My.Computer.FileSystem.MoveFile(NewPDFFile, PDFFile, True)
+            Dim NewFileName As String = GetNewFileName(PDFFile)
+            If Not ContextMenuStrip.AutoOverwrite Then
+                If My.Computer.FileSystem.FileExists(NewFileName) Then
+                    If Not MsgBox("Thie file" & vbCrLf & """" & NewFileName & """" & vbCrLf & "does exist. Do you want to overwrite it?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                        Continue While
+                    End If
+                End If
+            End If
+
+            My.Computer.FileSystem.MoveFile(TempPDFFile, GetNewFileName(PDFFile), True)
 
             ' Show the message.
             Me.Invoke(ShowMessageForInvocation, "The file """ & PDFFile & """ has been cropped.")
@@ -658,5 +692,22 @@ Public Class FormMain
         Else
             Return New PdfRectangle(0, 0, 0, 0)
         End If
+    End Function
+
+    Private Function GetNewFileName(ByVal FileFullPath As String) As String
+        Dim IllegalCharacters As String = "\/:*?""<>|"
+        For Each c As Char In ContextMenuStrip.NewFileNamePrefix & ContextMenuStrip.NewFileNameSuffix
+            If IllegalCharacters.Contains(c) Then
+                Return FileFullPath
+            End If
+        Next
+
+        Dim Directory As String = FileFullPath.Remove(FileFullPath.LastIndexOf("\")) & "\"
+        Dim FileName As String = FileFullPath
+        FileName = FileName.Remove(0, FileName.LastIndexOf("\") + 1)
+        FileName = FileName.Remove(FileName.LastIndexOf("."))
+        Dim Extension As String = FileFullPath.Remove(0, FileFullPath.LastIndexOf("."))
+
+        Return Directory & ContextMenuStrip.NewFileNamePrefix & FileName & ContextMenuStrip.NewFileNameSuffix & Extension
     End Function
 End Class
