@@ -49,7 +49,7 @@
 
             Friend WithEvents TextBox As New PDFCropper.WaterMarkTextBox
             Friend WithEvents Label As New Label
-            Friend WithEvents ComboBox As New ComboBox
+            Friend WithEvents ComboBox As New PDFCropper.ComboBox
 
             Public Event ValueChanged()
 
@@ -82,58 +82,59 @@
             Public Sub New()
                 Dim ToolTip As System.Windows.Forms.ToolTip = New System.Windows.Forms.ToolTip()
 
+                With Me
+                    .BackColor = Color.Transparent
+                    .Height = 22
+                    .Dock = DockStyle.Fill
+                    .Padding = New Padding(0)
+                    .Margin = New Padding(0)
+                End With
+
                 With Label
                     .Text = "Margin Width"
                     .AutoSize = True
+                    .Height = Me.Height
                     .TextAlign = ContentAlignment.MiddleLeft
                     .Location = New Point(0, 2)
                     .BackColor = Color.Transparent
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Top
                     .Parent = Me
-                    .Padding = New Padding(0, 1, 0, 0)
+                    .Padding = New Padding(0, 2, 0, 0)
                     .Margin = New Padding(0)
                 End With
 
                 With ComboBox
-                    .DropDownStyle = ComboBoxStyle.DropDownList
                     .Width = 50
+                    .Height = Me.Height
                     .Location = New Point(Me.Width - .Width, 2)
                     .Anchor = AnchorStyles.Top Or AnchorStyles.Right
                     .Parent = Me
-                    .Font = Label.Font
+                    .Font = (New ToolStripMenuItem).Font
                     .Margin = New Padding(0)
+                    .Padding = New Padding(0, 1, 0, 0)
                     Dim UnitList() As String = {"pt", "mm", "cm", "inch"}
                     For Each Unit As String In UnitList
                         .Items.Add(Unit)
                     Next
-                    AddHandler .MouseLeave, AddressOf Control_MouseLeave
-                    AddHandler .MouseEnter, AddressOf Control_MouseEnter
                     AddHandler .SelectedIndexChanged, AddressOf Control_ValueChanged
+                    'AddHandler .MouseLeave, AddressOf Control_MouseLeave
+                    'AddHandler .MouseEnter, AddressOf Control_MouseEnter
                 End With
 
                 With TextBox
-                    .WaterMarkText = "0"
+                    .WaterMark = "0"
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Top
                     .AutoSize = False
                     .Width = Me.Width - Label.Width - 12 - ComboBox.Width - 4
-                    .Height = ComboBox.Height
+                    .Height = Me.Height
                     .Location = New Point(Label.Width + 12, 2)
-                    ' .Font = Label.Font
+                    .Font = (New ToolStripMenuItem).Font
                     .Text = ""
                     .Parent = Me
-                    .Padding = New Padding(0, 3, 0, 0)
                     .Margin = New Padding(0)
                     AddHandler .MouseLeave, AddressOf Control_MouseLeave
                     AddHandler .MouseEnter, AddressOf Control_MouseEnter
                     AddHandler .TextChanged, AddressOf Control_ValueChanged
-                End With
-
-                With Me
-                    .BackColor = Color.Transparent
-                    .Height = 20
-                    .Dock = DockStyle.Fill
-                    .Padding = New Padding(0)
-                    .Margin = New Padding(0)
                 End With
 
             End Sub
@@ -179,7 +180,7 @@
                     Return 0
                 End If
 
-                Return Val(TextBox.Text) / Proportion(ComboBox.SelectedIndex)
+                Return 1.0F / Proportion(ComboBox.SelectedIndex) * Val(TextBox.Text)
             End Function
         End Class
     End Class

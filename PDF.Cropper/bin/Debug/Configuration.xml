@@ -22,11 +22,11 @@
   </Configuration>
   <Configuration>
     <TagName>OpacityMenuItem</TagName>
-    <TagValue>1</TagValue>
+    <TagValue>0.7</TagValue>
   </Configuration>
   <Configuration>
     <TagName>BackColorMenuItem</TagName>
-    <TagValue>White</TagValue>
+    <TagValue>Lime</TagValue>
   </Configuration>
   <Configuration>
     <TagName>ForeColorMenuItem</TagName>
@@ -46,19 +46,19 @@
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemUnitIndex</TagName>
-    <TagValue>0</TagValue>
+    <TagValue>3</TagValue>
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemValue</TagName>
-    <TagValue>20</TagValue>
+    <TagValue>1</TagValue>
   </Configuration>
   <Configuration>
     <TagName>NewFileNamePrefixMenuItem</TagName>
-    <TagValue />
+    <TagValue>1</TagValue>
   </Configuration>
   <Configuration>
     <TagName>NewFileNameSuffixMenuItem</TagName>
-    <TagValue />
+    <TagValue>2</TagValue>
   </Configuration>
   <Configuration>
     <TagName>AutoOverwriteMenuItem</TagName>

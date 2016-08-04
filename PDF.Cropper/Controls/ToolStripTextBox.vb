@@ -63,14 +63,21 @@
             Public Sub New()
                 Dim ToolTip As System.Windows.Forms.ToolTip = New System.Windows.Forms.ToolTip()
 
+                With Me
+                    .BackColor = Color.Transparent
+                    .Height = 22
+                    .Padding = New Padding(0)
+                    .Margin = New Padding(0)
+                End With
+
                 With TextBox
                     .AutoSize = False
                     .Width = 50
                     .Height = (New ComboBox).Height
                     .Location = New Point(Me.Width - .Width, 0)
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Top Or AnchorStyles.Right
-                    .Padding = New Padding(0, 3, 0, 0)
                     .Margin = New Padding(0)
+                    .Font = (New ToolStripMenuItem).Font
                     AddHandler .TextChanged, AddressOf TextBox_TextChanged
                     AddHandler .MouseEnter, AddressOf TextBox_MouseEnter
                     AddHandler .MouseLeave, AddressOf TextBox_MouseLeave
@@ -78,19 +85,12 @@
 
                 With Label
                     .Text = ""
-                    ' .Width = Me.Width - TextBox.Width - 4
+                    .Height = Me.Height
                     .AutoSize = True
                     .Location = New Point(0, 0)
-                    .Padding = New Padding(0, 1, 0, 0)
+                    .Padding = New Padding(0, 3, 0, 0)
                     .Margin = New Padding(0)
                     .Anchor = AnchorStyles.Top Or AnchorStyles.Left
-                End With
-
-                With Me
-                    .BackColor = Color.Transparent
-                    .Height = 20
-                    .Padding = New Padding(0)
-                    .Margin = New Padding(0)
                 End With
 
                 Me.Controls.Add(Label)

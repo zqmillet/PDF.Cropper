@@ -1,14 +1,20 @@
 ﻿Public Class FormTest
-    Shadows menu As MenuStrip
+    Private Sub FormTest_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        With mText
+            .Padding = New Padding(0, 3, 0, 0)
+            .Margin = New Padding(0)
+            .Text = "2333333"
 
-    Public Sub New()
-
-        InitializeComponent()
-
-        Dim textbox As New PDFCropper.WaterMarkTextBox
-        textbox.WaterMarkText = "23333"
-
-        Me.Controls.Add(textbox)
-        textbox.SelectAll()
+        End With
     End Sub
+
+
+
+
+
+    Private Sub mText_TextChanged(sender As Object, e As EventArgs) Handles mText.TextChanged
+
+    End Sub
+
+
 End Class

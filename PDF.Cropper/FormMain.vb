@@ -56,35 +56,14 @@ Public Class FormMain
     ''' </summary>
     Private ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
 
-    Private HasInitialized As Boolean
     Private MarginWidth As Integer
 
     ''' <summary>
     ''' This is the constructor of FormMain.
     ''' </summary>
     Public Sub New()
-        HasInitialized = False
-
         ' This call is required by the designer.
         InitializeComponent()
-
-        ' Initialize the ContextMenuStrip.
-        ContextMenuStrip = New PDFCropper.ContextMenuStrip
-        With ContextMenuStrip
-            AddHandler .OpenFilesMenuItem_Click, AddressOf OpenFilesMenuItem_Click
-            AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
-            AddHandler .ExitMenuItem_Click, AddressOf ExitMenuItem_Click
-            AddHandler .OpacityMenuItem_Click, AddressOf OpacityMenuItem_Click
-            AddHandler .BackColorMenuItem_Click, AddressOf BackColorMenuItem_Click
-            AddHandler .ForeColorMenuItem_Click, AddressOf ForeColorMenuItem_Click
-            AddHandler .FontSizeMenuItem_Click, AddressOf FontSizeMenuItem_Click
-            AddHandler .FontNameMenuItem_Click, AddressOf FontNameMenuItem_Click
-            AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
-            AddHandler .MarginWidthMenuItem_ValueChanged, AddressOf MarginWidthMenuItem_ValueChanged
-            AddHandler .NewFileNamePrefixMenuItem_TextChanged, AddressOf NewFileNamePrefixMenuItem_TextChanged
-            AddHandler .NewFileNameSuffixMenuItem_TextChanged, AddressOf NewFileNameSuffixMenuItem_TextChanged
-            AddHandler .AutoOverwriteMenuItem_Click, AddressOf AutoOverwriteMenuItem_Click
-        End With
 
         ' Initialize the RichTextBox.
         RichTextBox = New PDFCropper.RichTextBox
@@ -104,16 +83,6 @@ Public Class FormMain
             AddHandler .DragDrop, AddressOf TransparentPanel_DragDrop
         End With
 
-        ' Initialize the FormMain.
-        With Me
-            .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-            .Controls.Add(TransparentPanel)
-            .Controls.Add(RichTextBox)
-            .Text = "PDF Cropper"
-            .Icon = New Icon(Application.StartupPath & "\Icon\FormMain.ico")
-            PDFFilePool = New ArrayList
-        End With
-
         ' Create and load the Configuration'
         Configuration = New PDFCropper.Configuration
         ' If there anything wrong in the Configuration, exit this sub.
@@ -121,36 +90,91 @@ Public Class FormMain
             Exit Sub
         End If
 
-        ' Configure the ContextMenuStrip according to the Configuration.
-        With ContextMenuStrip
-            GhostScriptBinFolder = Configuration.GetTagValue(ContextMenuStrip.GhostScriptPathMenuItem.Name)
+        ' Initialize the ContextMenuStrip.
+        InitializeContextMenuStrip()
+        InitializeMainInterface()
 
+        ' AddItemIntoWindowsContextMenu()
+    End Sub
+
+    Private Sub InitializeContextMenuStrip()
+        ContextMenuStrip = New PDFCropper.ContextMenuStrip
+        With ContextMenuStrip
             .FormMainTopMost = Configuration.GetTagValue(.TopMostMenuItem.Name)
             .FormMainOpacity = Val(Configuration.GetTagValue(.OpacityMenuItem.Name))
             .FormMainBackColor = Color.FromName(Configuration.GetTagValue(.BackColorMenuItem.Name))
             .FormMainForeColor = Color.FromName(Configuration.GetTagValue(.ForeColorMenuItem.Name))
             .FormMainFontSize = Val(Configuration.GetTagValue(.FontSizeMenuItem.Name))
             .FormMainFontName = Configuration.GetTagValue(.FontNameMenuItem.Name)
-            .GhostScriptBinFolder = IsGhostScripBinFolder(GhostScriptBinFolder)
+            .GhostScriptBinFolder = IsGhostScripBinFolder(Configuration.GetTagValue(.GhostScriptPathMenuItem.Name))
             .MarginWidthValue = Val(Configuration.GetTagValue(.MarginWidthMenuItem.Name & "Value"))
             .MarginWidthUnitIndex = Val(Configuration.GetTagValue(.MarginWidthMenuItem.Name & "UnitIndex"))
-            MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
-            ShowMessage("The margin width is " & MarginWidth & "pt.")
             .NewFileNamePrefix = Configuration.GetTagValue(.NewFileNamePrefixMenuItem.Name)
             .NewFileNameSuffix = Configuration.GetTagValue(.NewFileNameSuffixMenuItem.Name)
             .AutoOverwrite = Configuration.GetTagValue(.AutoOverwriteMenuItem.Name)
+
+            AddHandler .OpenFilesMenuItem_Click, AddressOf OpenFilesMenuItem_Click
+            AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
+            AddHandler .ExitMenuItem_Click, AddressOf ExitMenuItem_Click
+            AddHandler .OpacityMenuItem_Click, AddressOf OpacityMenuItem_Click
+            AddHandler .BackColorMenuItem_Click, AddressOf BackColorMenuItem_Click
+            AddHandler .ForeColorMenuItem_Click, AddressOf ForeColorMenuItem_Click
+            AddHandler .FontSizeMenuItem_Click, AddressOf FontSizeMenuItem_Click
+            AddHandler .FontNameMenuItem_Click, AddressOf FontNameMenuItem_Click
+            AddHandler .GhostScriptPathMenuItem_Click, AddressOf GhostScriptPathMenuItem_Click
+            AddHandler .MarginWidthMenuItem_ValueChanged, AddressOf MarginWidthMenuItem_ValueChanged
+            AddHandler .NewFileNamePrefixMenuItem_TextChanged, AddressOf NewFileNamePrefixMenuItem_TextChanged
+            AddHandler .NewFileNameSuffixMenuItem_TextChanged, AddressOf NewFileNameSuffixMenuItem_TextChanged
+            AddHandler .AutoOverwriteMenuItem_Click, AddressOf AutoOverwriteMenuItem_Click
+        End With
+    End Sub
+
+    Private Sub InitializeMainInterface()
+        With ContextMenuStrip
+            Me.TopMost = .FormMainTopMost
+            Me.Opacity = .FormMainOpacity
+            RichTextBox.ForeColor = .FormMainForeColor
+            RichTextBox.BackColor = .FormMainBackColor
+            RichTextBox.Font = New System.Drawing.Font(.FormMainFontName, .FormMainFontSize)
         End With
 
-        If IsGhostScripBinFolder(GhostScriptBinFolder) Then
-            ShowMessage("The Bin folder of the GhostScript has been changed to """ & GhostScriptBinFolder & """ successfully.")
-        Else
-            ShowMessage("The Bin folder of the GhostScript is not correct.")
-        End If
+        With Me
+            .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+            .Controls.Add(TransparentPanel)
+            .Controls.Add(RichTextBox)
+            .Text = "PDF Cropper"
+            .Icon = New Icon(Application.StartupPath & "\Icon\FormMain.ico")
+            .PDFFilePool = New ArrayList
+        End With
 
-        HasInitialized = True
+        MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
+        GhostScriptBinFolder = Configuration.GetTagValue(ContextMenuStrip.GhostScriptPathMenuItem.Name)
         Me.KeyPreview = True
         AddHandler Me.KeyDown, AddressOf FormMain_KeyDown
     End Sub
+
+    Private Sub AddItemIntoWindowsContextMenu()
+        'Dim regmenu As Microsoft.Win32.RegistryKey
+        'Dim regcmd As Microsoft.Win32.RegistryKey
+
+        'Try
+        '    regmenu = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("HKEY_CLASSES_ROOT\*\shell\your custom app")
+        '    regmenu.SetValue("", "23333")
+        '    regmenu.SetValue("AppliesTo", ".pdf")
+        '    regcmd = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("HKEY_CLASSES_ROOT\*\shell\your custom app\command")
+        '    regcmd.SetValue("", "cmd")
+        'Catch ex As Exception
+        '    MessageBox.Show(Me, ex.ToString())
+        'Finally
+        '    If Not regmenu Is Nothing Then
+        '        regmenu.Close()
+        '    End If
+        '    If Not regcmd Is Nothing Then
+        '        regcmd.Close()
+        '    End If
+        'End Try
+    End Sub
+
 
     Private Sub FormMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
         Dim KeyCode As New Keys
@@ -409,15 +433,10 @@ Public Class FormMain
     End Sub
 
     Private Sub MarginWidthMenuItem_ValueChanged(sender As Object)
-        If Not HasInitialized Then
-            Exit Sub
-        End If
-
         Configuration.SetTagValue(sender.Name & "Value", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).Value)
         Configuration.SetTagValue(sender.Name & "UnitIndex", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).UnitIndex)
         MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
         ShowMessage("The margin width has been changed to " & MarginWidth & "pt.")
-
     End Sub
 
     Private Sub NewFileNamePrefixMenuItem_TextChanged(sender As Object)

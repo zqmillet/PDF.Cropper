@@ -102,7 +102,10 @@
         ''' When it is assigned a value, its checked state is changed.
         ''' Then raise the event "TopMostMenuItem_Click".
         ''' </summary>
-        Public WriteOnly Property FormMainTopMost As Boolean
+        Public Property FormMainTopMost As Boolean
+            Get
+                Return TopMostMenuItem.Checked
+            End Get
             Set(Value As Boolean)
                 TopMostMenuItem.Checked = Value
                 RaiseEvent TopMostMenuItem_Click(TopMostMenuItem)
@@ -114,7 +117,15 @@
         ''' When it is assigned a value, checked states of the corresponding sub items are changed.
         ''' Then raise the event "OpacityMenuItem_Click".
         ''' </summary>
-        Public WriteOnly Property FormMainOpacity As Double
+        Public Property FormMainOpacity As Double
+            Get
+                For Each MenuItem As ToolStripMenuItem In OpacityMenuItem.DropDownItems
+                    If MenuItem.Checked Then
+                        Return MenuItem.Tag
+                    End If
+                Next
+                Return 1
+            End Get
             Set(Value As Double)
                 For Each MenuItem As ToolStripMenuItem In OpacityMenuItem.DropDownItems
                     If MenuItem.Tag = Value Then
@@ -131,11 +142,19 @@
         ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
         ''' Then raise the event "BackColorMenuItem_Click".
         ''' </summary>
-        Public WriteOnly Property FormMainBackColor As Color
+        Public Property FormMainBackColor As Color
+            Get
+                If Not BackColorMenuItem.Tag Is Nothing Then
+                    Return BackColorMenuItem.Tag
+                Else
+                    Return Color.Black
+                End If
+            End Get
             Set(Value As Color)
                 For Each MenuItem As ToolStripMenuItem In BackColorMenuItem.DropDownItems
                     If MenuItem.Tag = Value Then
                         BackColorMenuItem.Image = MenuItem.Image
+                        BackColorMenuItem.Tag = Value
                         RaiseEvent BackColorMenuItem_Click(MenuItem)
                         Exit Property
                     End If
@@ -148,18 +167,34 @@
         ''' When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
         ''' Then raise the event "ForeColorMenuItem_Click".
         ''' </summary>
-        Public WriteOnly Property FormMainForeColor As Color
+        Public Property FormMainForeColor As Color
+            Get
+                If Not ForeColorMenuItem.Tag Is Nothing Then
+                    Return ForeColorMenuItem.Tag
+                Else
+                    Return Color.White
+                End If
+            End Get
             Set(Value As Color)
                 For Each MenuItem As ToolStripMenuItem In ForeColorMenuItem.DropDownItems
                     If MenuItem.Tag = Value Then
                         ForeColorMenuItem.Image = MenuItem.Image
+                        ForeColorMenuItem.Tag = Value
                         RaiseEvent ForeColorMenuItem_Click(MenuItem)
                     End If
                 Next
             End Set
         End Property
 
-        Public WriteOnly Property FormMainFontSize As Integer
+        Public Property FormMainFontSize As Integer
+            Get
+                For Each MenuItem As ToolStripMenuItem In FontSizeMenuItem.DropDownItems
+                    If MenuItem.Checked Then
+                        Return MenuItem.Tag
+                    End If
+                Next
+                Return Me.Font.Size
+            End Get
             Set(Value As Integer)
                 For Each MenuItem As ToolStripMenuItem In FontSizeMenuItem.DropDownItems
                     MenuItem.Checked = MenuItem.Tag = Value
@@ -170,7 +205,15 @@
             End Set
         End Property
 
-        Public WriteOnly Property FormMainFontName As String
+        Public Property FormMainFontName As String
+            Get
+                For Each MenuItem As ToolStripMenuItem In FontNameMenuItem.DropDownItems
+                    If MenuItem.Checked Then
+                        Return MenuItem.Tag.Name
+                    End If
+                Next
+                Return Me.Font.SystemFontName
+            End Get
             Set(Value As String)
                 For Each MenuItem As ToolStripMenuItem In FontNameMenuItem.DropDownItems
                     MenuItem.Checked = MenuItem.Tag.Name = Value
@@ -225,6 +268,8 @@
                 AutoOverwriteMenuItem.Checked = Value
             End Set
         End Property
+
+
 #End Region
 
         ''' <summary>
