@@ -46,17 +46,11 @@ Public Class FormMain
     ''' </summary>
     Private CropPDFThread As Threading.Thread
 
-    ''' <summary>
-    ''' This Delegate is the object that refer to method "ShowMessage".
-    ''' </summary>
-    ''' <param name="Message"></param>
-    Private Delegate Sub DelegateShowMessage(ByVal Message As String)
-    ''' <summary>
-    ''' This DelegateShowMessage is used to be invoked to show the message from another thread.
-    ''' </summary>
-    Private ShowMessageForInvocation As New DelegateShowMessage(AddressOf ShowMessage)
+    Private Delegate Sub DelegateDisplayMessage(ByVal Message As MessageType)
+    Private DisplayMessageForInvocation As New DelegateDisplayMessage(AddressOf DisplayMessage)
 
-    Private MarginWidth As Integer
+    Private MarginWidth As Double
+    Private CurrentPDFFile As String = ""
 
     ''' <summary>
     ''' This is the constructor of FormMain.
@@ -238,7 +232,7 @@ Public Class FormMain
 
         ' If the location of FormMain is changed, show the message.
         If Not Me.Location = FormLastLocation Then
-            ShowMessage("The form has been moved to (" & Me.Location.X & ", " & Me.Location.Y & ").")
+            DisplayMessage(MessageType.FormLocationChanged)
         End If
     End Sub
 
@@ -282,11 +276,8 @@ Public Class FormMain
         End With
 
         ' Show the message.
-        If Me.TopMost Then
-            ShowMessage("The form is topmost.")
-        Else
-            ShowMessage("The form is not topmost.")
-        End If
+        DisplayMessage(MessageType.FormTopMostChanged)
+
     End Sub
 
     ''' <summary>
@@ -297,7 +288,7 @@ Public Class FormMain
         ' Save the configuration to the file.
         Configuration.Save()
         ' Show the message.
-        ShowMessage("The configuration has been saved.")
+        DisplayMessage(MessageType.ConfigurationSaved)
         ' Wait for one second.
         Threading.Thread.Sleep(1000)
         ' Exit the program.
@@ -316,7 +307,7 @@ Public Class FormMain
         End With
 
         ' Show the message.
-        ShowMessage("The opacity of the form is changed to " & Me.Opacity * 100 & "%.")
+        DisplayMessage(MessageType.FormOpacityChanged)
     End Sub
 
     ''' <summary>
@@ -331,13 +322,7 @@ Public Class FormMain
         End With
 
         ' Shown the message.
-        With RichTextBox.BackColor
-            Dim ColorName As String = ""
-            If .IsNamedColor Then
-                ColorName = .Name
-            End If
-            ShowMessage("The back color of the form is change to " & ColorName & "(" & .R & ", " & .G & ", " & .B & ").")
-        End With
+        DisplayMessage(MessageType.FormBackColorChanged)
     End Sub
 
     ''' <summary>
@@ -351,14 +336,8 @@ Public Class FormMain
             Configuration.SetTagValue(.Name, .Tag.Name)
         End With
 
-        ' Show the message.
-        With RichTextBox.ForeColor
-            Dim ColorName As String = ""
-            If .IsNamedColor Then
-                ColorName = .Name
-            End If
-            ShowMessage("The fore color of the form is change to " & ColorName & "(" & .R & ", " & .G & ", " & .B & ").")
-        End With
+        ' Shown the message.
+        DisplayMessage(MessageType.FormForeColorChanged)
     End Sub
 
     ''' <summary>
@@ -373,7 +352,7 @@ Public Class FormMain
         End With
 
         ' Show the message.
-        ShowMessage("The font size of the message is changed to " & RichTextBox.Font.Size & "pt.")
+        DisplayMessage(MessageType.FormFontSizeChanged)
     End Sub
 
     ''' <summary>
@@ -388,7 +367,7 @@ Public Class FormMain
         End With
 
         ' Show the message.
-        ShowMessage("The font name of the message is changed to " & RichTextBox.Font.Name & ".")
+        DisplayMessage(MessageType.FormFontNameChanged)
     End Sub
 
     ''' <summary>
@@ -412,21 +391,17 @@ Public Class FormMain
             ' show the message, and exit the sub.
             If Not FolderBrowserDialog.ShowDialog = DialogResult.OK Then
                 .Checked = IsGhostScripBinFolder(GhostScriptBinFolder)
-                ShowMessage("You selected nothing.")
+                DisplayMessage(MessageType.NothingSelected)
                 Exit Sub
             End If
 
             ' If the dialog result is OK, update the checked attribute of the GhostScriptPathMenuItem,
             ' and show the message.
             .Checked = IsGhostScripBinFolder(FolderBrowserDialog.SelectedPath)
-            Dim NotString As String = ""
-            If Not .Checked Then
-                NotString = " not"
-            End If
-            ShowMessage("The Bin folder of the GhostScript is change to """ & FolderBrowserDialog.SelectedPath & """. And it is" & NotString & " the Bin Folder of the GhostScript.")
-
             ' Update the variable GhostScriptBinFolder.
             GhostScriptBinFolder = FolderBrowserDialog.SelectedPath
+            DisplayMessage(MessageType.GhostScriptBinFolderChanged)
+
             ' Update the configuration.
             Configuration.SetTagValue(sender.Name, FolderBrowserDialog.SelectedPath)
         End With
@@ -436,28 +411,22 @@ Public Class FormMain
         Configuration.SetTagValue(sender.Name & "Value", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).Value)
         Configuration.SetTagValue(sender.Name & "UnitIndex", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).UnitIndex)
         MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
-        ShowMessage("The margin width has been changed to " & MarginWidth & "pt.")
+        DisplayMessage(MessageType.MarginWidthChanged)
     End Sub
 
     Private Sub NewFileNamePrefixMenuItem_TextChanged(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
-        ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" &
-                    ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+        DisplayMessage(MessageType.NewFileNameChanged)
     End Sub
 
     Private Sub NewFileNameSuffixMenuItem_TextChanged(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
-        ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" &
-                    ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+        DisplayMessage(MessageType.NewFileNameChanged)
     End Sub
 
     Private Sub AutoOverwriteMenuItem_Click(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, ToolStripMenuItem).Checked)
-        Dim OnOff As String = "off"
-        If CType(sender, ToolStripMenuItem).Checked Then
-            OnOff = "on"
-        End If
-        ShowMessage("Auto overwriting mode is turned " & OnOff & ".")
+        DisplayMessage(MessageType.AutoOverwritingModeChanged)
     End Sub
 
     ''' <summary>
@@ -558,9 +527,9 @@ Public Class FormMain
             .Multiselect = True
         End With
 
-        ShowMessage("Please select the PDF files that you want to crop.")
+        DisplayMessage(MessageType.PleaseSelectPDFFile)
         If Not OpenFileDialog.ShowDialog = DialogResult.OK Then
-            ShowMessage("You selected nothing.")
+            DisplayMessage(MessageType.NothingSelected)
             Exit Sub
         End If
 
@@ -592,7 +561,7 @@ Public Class FormMain
     Private Sub CropPDF()
         ' If the bin folder is not correct, show the message, and exit the sub.
         If Not IsGhostScripBinFolder(GhostScriptBinFolder) Then
-            ShowMessage("The Bin folder of the GhostScript is not correct!")
+            DisplayMessage(MessageType.GhostScriptBinFolderIsNotCorrect)
             Exit Sub
         End If
 
@@ -606,14 +575,14 @@ Public Class FormMain
         ' If there is PDF file in the PDFFilePool, run this loop.
         While PDFFilePool.Count > 0
             ' Get a PDF file in the PDFFilePool.
-            Dim PDFFile As String = PDFFilePool.Item(0)
+            CurrentPDFFile = PDFFilePool.Item(0)
             ' Remove this PDF file from the PDFFilePool.
             PDFFilePool.RemoveAt(0)
 
             ' Initialize a process to obtain the BoundingBox of the PDF file.
             Dim Process As New Process
             Process.StartInfo.FileName = """" & GhostScriptExeFilePath & """"
-            Process.StartInfo.Arguments = " -q -dBATCH -dNOPAUSE -sDEVICE=bbox -f """ & PDFFile & """"
+            Process.StartInfo.Arguments = " -q -dBATCH -dNOPAUSE -sDEVICE=bbox -f """ & CurrentPDFFile & """"
             Process.StartInfo.UseShellExecute = False
             Process.StartInfo.RedirectStandardError = True
             Process.StartInfo.CreateNoWindow = True
@@ -622,10 +591,10 @@ Public Class FormMain
             ' Get all BoundingBox of all pages of the PDF file.
             Dim Rectangles As ArrayList = GetPDFRectangles(Process.StandardError.ReadToEnd, MarginWidth)
             ' Read the PDF file which need to be cropped.
-            Dim PDFReader As PdfReader = New PdfReader(PDFFile)
+            Dim PDFReader As PdfReader = New PdfReader(CurrentPDFFile)
             ' If the number of pages is not correct, show the message, and continue the loop.
             If Not Rectangles.Count = PDFReader.NumberOfPages Then
-                Me.Invoke(ShowMessageForInvocation, "There are something wrong in the file """ & PDFFile & """.")
+                Me.Invoke(DisplayMessageForInvocation, MessageType.PDFFileIsNotCorrect)
                 Continue While
             End If
 
@@ -635,14 +604,14 @@ Public Class FormMain
             Next
 
             ' Set the name of the new PDF file.
-            Dim TempPDFFile As String = Application.StartupPath & "\Temp" & PDFFile.Remove(0, PDFFile.LastIndexOf("\"))
+            Dim TempPDFFile As String = Application.StartupPath & "\Temp" & CurrentPDFFile.Remove(0, CurrentPDFFile.LastIndexOf("\"))
             ' Save the new PDF file.
             Dim PDFStamper As PdfStamper = New PdfStamper(PDFReader, New FileStream(TempPDFFile, FileMode.Create, FileAccess.Write))
             PDFStamper.Close()
             PDFReader.Close()
 
             ' Replace the old PDF file by new PDF file.
-            Dim NewFileName As String = GetNewFileName(PDFFile)
+            Dim NewFileName As String = GetNewFileName(CurrentPDFFile)
             If Not ContextMenuStrip.AutoOverwrite Then
                 If My.Computer.FileSystem.FileExists(NewFileName) Then
                     If Not MsgBox("Thie file" & vbCrLf & """" & NewFileName & """" & vbCrLf & "does exist. Do you want to overwrite it?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
@@ -651,10 +620,10 @@ Public Class FormMain
                 End If
             End If
 
-            My.Computer.FileSystem.MoveFile(TempPDFFile, GetNewFileName(PDFFile), True)
+            My.Computer.FileSystem.MoveFile(TempPDFFile, GetNewFileName(CurrentPDFFile), True)
 
             ' Show the message.
-            Me.Invoke(ShowMessageForInvocation, "The file """ & PDFFile & """ has been cropped.")
+            Me.Invoke(DisplayMessageForInvocation, MessageType.PDFFileIsCropped)
         End While
     End Sub
 
@@ -729,4 +698,65 @@ Public Class FormMain
 
         Return Directory & ContextMenuStrip.NewFileNamePrefix & FileName & ContextMenuStrip.NewFileNameSuffix & Extension
     End Function
+
+    Private Sub DisplayMessage(ByVal MessageType As MessageType)
+        Select Case MessageType
+            Case MessageType.FormLocationChanged
+                ShowMessage("The form has been moved to (" & Me.Location.X & ", " & Me.Location.Y & ").")
+            Case MessageType.FormTopMostChanged
+                ShowMessage("The form is " & If(Me.TopMost, "", "not ") & "topmost.")
+            Case MessageType.MarginWidthChanged
+                ShowMessage("The margin width has been changed to " & ContextMenuStrip.MarginWidthMenuItem.Value & ContextMenuStrip.MarginWidthMenuItem.Unit & ".")
+            Case MessageType.ConfigurationSaved
+                ShowMessage("The configuration has been saved.")
+            Case MessageType.FormOpacityChanged
+                ShowMessage("The opacity of the form is changed to " & Me.Opacity * 100 & "%.")
+            Case MessageType.FormBackColorChanged
+                ShowMessage("The back color of the form is change to " & If(RichTextBox.BackColor.IsNamedColor, RichTextBox.BackColor.Name, "") & "(" & RichTextBox.BackColor.R & ", " & RichTextBox.BackColor.G & ", " & RichTextBox.BackColor.B & ").")
+            Case MessageType.FormForeColorChanged
+                ShowMessage("The fore color of the form is change to " & If(RichTextBox.ForeColor.IsNamedColor, RichTextBox.ForeColor.Name, "") & "(" & RichTextBox.ForeColor.R & ", " & RichTextBox.ForeColor.G & ", " & RichTextBox.ForeColor.B & ").")
+            Case MessageType.FormFontSizeChanged
+                ShowMessage("The font size of the message is changed to " & RichTextBox.Font.Size & "pt.")
+            Case MessageType.FormFontNameChanged
+                ShowMessage("The font name of the message is changed to " & RichTextBox.Font.Name & ".")
+            Case MessageType.GhostScriptBinFolderChanged
+                ShowMessage("The Bin folder of the GhostScript is change to """ & GhostScriptBinFolder & """. And it is " & If(ContextMenuStrip.GhostScriptPathMenuItem.Checked, "", "not ") & "the Bin Folder of the GhostScript.")
+            Case MessageType.NewFileNameChanged
+                ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" & ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+            Case MessageType.AutoOverwritingModeChanged
+                ShowMessage("Auto overwriting mode is turned" & If(ContextMenuStrip.AutoOverwriteMenuItem.Checked, "on", "off") & ".")
+            Case MessageType.PleaseSelectPDFFile
+                ShowMessage("Please select the PDF files that you want to crop.")
+            Case MessageType.NothingSelected
+                ShowMessage("You selected nothing.")
+            Case MessageType.GhostScriptBinFolderIsNotCorrect
+                ShowMessage("The Bin folder of the GhostScript is not correct!")
+            Case MessageType.PDFFileIsNotCorrect
+                ShowMessage("There are something wrong in the file """ & CurrentPDFFile & """.")
+            Case MessageType.PDFFileIsCropped
+                ShowMessage("The file """ & CurrentPDFFile & """ has been cropped.")
+        End Select
+    End Sub
+
+    Private Enum MessageType
+        FormLocationChanged
+        FormTopMostChanged
+        FormOpacityChanged
+        FormBackColorChanged
+        FormForeColorChanged
+        FormFontSizeChanged
+        FormFontNameChanged
+        GhostScriptBinFolderChanged
+        GhostScriptBinFolderIsNotCorrect
+        PDFFileIsNotCorrect
+        MarginWidthChanged
+        ConfigurationSaved
+        AutoOverwritingModeChanged
+        PleaseSelectPDFFile
+        NothingSelected
+        NewFileNameChanged
+        PDFFileIsCropped
+    End Enum
 End Class
+
+

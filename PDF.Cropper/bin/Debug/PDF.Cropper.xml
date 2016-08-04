@@ -217,17 +217,6 @@ PDF.Cropper
  This Thread is used to crop the PDF files which are in the "PDFFilePool".
  </summary>
 </member>
-<member name="T:PDF.Cropper.FormMain.DelegateShowMessage">
- <summary>
- This Delegate is the object that refer to method "ShowMessage".
- </summary>
- <param name="Message"></param>
-</member>
-<member name="F:PDF.Cropper.FormMain.ShowMessageForInvocation">
- <summary>
- This DelegateShowMessage is used to be invoked to show the message from another thread.
- </summary>
-</member>
 <member name="M:PDF.Cropper.FormMain.#ctor">
  <summary>
  This is the constructor of FormMain.

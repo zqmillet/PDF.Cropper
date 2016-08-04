@@ -13,6 +13,12 @@
             End Set
         End Property
 
+        Public ReadOnly Property Unit As String
+            Get
+                Return CType(Me.Control, ControlPanel).Unit
+            End Get
+        End Property
+
         Public Property UnitIndex As Integer
             Get
                 Return CType(Me.Control, ControlPanel).UnitIndex
@@ -77,6 +83,16 @@
                 Set(Value As Integer)
                     ComboBox.SelectedIndex = Value
                 End Set
+            End Property
+
+            Public ReadOnly Property Unit As String
+                Get
+                    If ComboBox.SelectedIndex < 0 Then
+                        Return ComboBox.Items(0)
+                    Else
+                        Return ComboBox.Items(ComboBox.SelectedIndex)
+                    End If
+                End Get
             End Property
 
             Public Sub New()
