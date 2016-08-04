@@ -84,7 +84,7 @@
 
                 With Me
                     .BackColor = Color.Transparent
-                    .Height = 22
+                    .Height = 20
                     .Dock = DockStyle.Fill
                     .Padding = New Padding(0)
                     .Margin = New Padding(0)
@@ -109,9 +109,7 @@
                     .Location = New Point(Me.Width - .Width, 2)
                     .Anchor = AnchorStyles.Top Or AnchorStyles.Right
                     .Parent = Me
-                    .Font = (New ToolStripMenuItem).Font
                     .Margin = New Padding(0)
-                    .Padding = New Padding(0, 1, 0, 0)
                     Dim UnitList() As String = {"pt", "mm", "cm", "inch"}
                     For Each Unit As String In UnitList
                         .Items.Add(Unit)

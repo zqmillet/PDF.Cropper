@@ -50,7 +50,7 @@
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemValue</TagName>
-    <TagValue>1</TagValue>
+    <TagValue>0</TagValue>
   </Configuration>
   <Configuration>
     <TagName>NewFileNamePrefixMenuItem</TagName>

@@ -88,7 +88,7 @@
                     .Height = Me.Height
                     .AutoSize = True
                     .Location = New Point(0, 0)
-                    .Padding = New Padding(0, 3, 0, 0)
+                    .Padding = New Padding(0, 2, 0, 0)
                     .Margin = New Padding(0)
                     .Anchor = AnchorStyles.Top Or AnchorStyles.Left
                 End With
