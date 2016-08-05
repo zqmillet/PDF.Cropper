@@ -2,156 +2,156 @@
 <doc>
 <assembly>
 <name>
-PDF.Cropper
+PDFCropper
 </name>
 </assembly>
 <members>
-<member name="T:PDF.Cropper.PDFCropper.ContextMenuStrip">
+<member name="T:PDFCropper.PDFCropper.ContextMenuStrip">
  <summary>
  This class is the menu which will be shown when the right button of mouse is clicked.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.TopMostMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.TopMostMenuItem">
  <summary>
  This is a menu item which is used to set whether the FormMain is topmost.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ExitMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.ExitMenuItem">
  <summary>
  This is a menu item which is used to exit the program when it is clicked.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.OpacityMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.OpacityMenuItem">
  <summary>
  This is a memu item which is used to select the opacity of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.BackColorMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.BackColorMenuItem">
  <summary>
  This is a menu item which is used to choose the back color of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem">
  <summary>
  This is a menu item which is used to choose the fore color of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem">
  <summary>
  This is a menu item which is used to choose the font size of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.FontNameMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.FontNameMenuItem">
  <summary>
  This is a menu item which is used to choose the font name of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.MarginWidthMenuItem">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.MarginWidthMenuItem">
  <summary>
  This is a menu item which is used to choose the margin width of the output PDF file.
  </summary>
 </member>
-<member name="F:PDF.Cropper.PDFCropper.ContextMenuStrip.ColorList">
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.ColorList">
  <summary>
  This is a string array to store the alternative color names.
  </summary>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.TopMostMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.TopMostMenuItem_Click">
  <summary>
  This is a event which will be triggered when "TopMostMenuItem" is clicked.
  </summary>
  <param name="sender">It is "TopMostMenuItem" itself.</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.ExitMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.ExitMenuItem_Click">
  <summary>
  This is a event which will be triggered when "ExitMenuItem" is clicked.
  </summary>
  <param name="sender">It is "ExitMenuItem" itself.</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.OpacityMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.OpacityMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "OpacityMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "OpacityMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.BackColorMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.BackColorMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "BackColorMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "BackColorMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "FontSizeMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "FontSizeMenuItem".</param>
 </member>
-<member name="E:PDF.Cropper.PDFCropper.ContextMenuStrip.FontNameMenuItem_Click">
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.FontNameMenuItem_Click">
  <summary>
  This is a event which will be triggered when the sub item of "FontNameMenuItem" is clicked.
  </summary>
  <param name="sender">It is the sub item of "FontNameMenuItem".</param>
 </member>
-<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainTopMost">
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainTopMost">
  <summary>
  This is a writeonly boolean to represent whether the FormMain is topmost.
  When it is assigned a value, its checked state is changed.
  Then raise the event "TopMostMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainOpacity">
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainOpacity">
  <summary>
  This is a writeonly double to represent the opacity of the FormMain.
  When it is assigned a value, checked states of the corresponding sub items are changed.
  Then raise the event "OpacityMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainBackColor">
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainBackColor">
  <summary>
  This is a writeonly color to represent the back color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "BackColorMenuItem_Click".
  </summary>
 </member>
-<member name="P:PDF.Cropper.PDFCropper.ContextMenuStrip.FormMainForeColor">
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainForeColor">
  <summary>
  This is a writeonly color to represent the fore color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
  Then raise the event "ForeColorMenuItem_Click".
  </summary>
 </member>
-<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.#ctor">
+<member name="M:PDFCropper.PDFCropper.ContextMenuStrip.#ctor">
  <summary>
  This is the constructor of this class.
  </summary>
 </member>
-<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.GetImageByColor(System.Drawing.Color)">
+<member name="M:PDFCropper.PDFCropper.ContextMenuStrip.GetImageByColor(System.Drawing.Color)">
  <summary>
  This function is used to generate a colored image by the paramter color.
  </summary>
  <param name="Color">This is the color of the image.</param>
  <returns>This is an image whose color is equal to the parameter "Color".</returns>
 </member>
-<member name="M:PDF.Cropper.PDFCropper.ContextMenuStrip.Me_Click(System.Object,System.EventArgs)">
+<member name="M:PDFCropper.PDFCropper.ContextMenuStrip.Me_Click(System.Object,System.EventArgs)">
  <summary>
  When the items of the menu is clicked, this sub will be triggered.
  </summary>
  <param name="sender">This is the sender of the event.</param>
  <param name="e">This is the arguments of the event.</param>
 </member>
-<member name="T:PDF.Cropper.PDFCropper.TransparentPanel">
+<member name="T:PDFCropper.PDFCropper.TransparentPanel">
  <summary>
  This class is a panel which is tansparent.
  This class is used to cover the other control, which should be click by mouse.
  </summary>
 </member>
-<member name="P:PDF.Cropper.PDFCropper.TransparentPanel.CreateParams">
+<member name="P:PDFCropper.PDFCropper.TransparentPanel.CreateParams">
  <summary>
  CreateParams is a property of Control object.
  CreateParams is used to gets the required creation parameters when the control handle is created.
@@ -160,177 +160,177 @@ PDF.Cropper
  </summary>
  <returns></returns>
 </member>
-<member name="M:PDF.Cropper.PDFCropper.TransparentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
+<member name="M:PDFCropper.PDFCropper.TransparentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
  <summary>
  We override the sub OnPaintBackground to prevent the background of this panel from being painted.
  </summary>
  <param name="e"></param>
 </member>
-<member name="F:PDF.Cropper.FormMain.RichTextBox">
+<member name="F:PDFCropper.FormMain.RichTextBox">
  <summary>
  This RichTextBox is used to show the message of the software.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.TransparentPanel">
+<member name="F:PDFCropper.FormMain.TransparentPanel">
  <summary>
  This TransparentPanel is used to prevent the RichTextBox from being clicked by mouse.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.ContextMenuStrip">
+<member name="F:PDFCropper.FormMain.ContextMenuStrip">
  <summary>
  This ContextMenuStrip is shown when the right mouse button is clicked.
  </summary> 
 </member>
-<member name="F:PDF.Cropper.FormMain.MouseDownLocation">
+<member name="F:PDFCropper.FormMain.MouseDownLocation">
  <summary>
  This Point is used to record the location where mouse button is pressed down.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.FormLastLocation">
+<member name="F:PDFCropper.FormMain.FormLastLocation">
  <summary>
  This Point is used to record the last location of the FormMain.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.Configuration">
+<member name="F:PDFCropper.FormMain.Configuration">
  <summary>
  This Configuration is used to read and to save the configuration of the software.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.ConfigurationPath">
+<member name="F:PDFCropper.FormMain.ConfigurationPath">
  <summary>
  This constant string is used to save the configuration file path.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.GhostScriptBinFolder">
+<member name="F:PDFCropper.FormMain.GhostScriptBinFolder">
  <summary>
  This variable string is used to save the bin folder path of the GhostScript.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.PDFFilePool">
+<member name="F:PDFCropper.FormMain.PDFFilePool">
  <summary>
  This ArrayList is the pool of PDF files which will be cropped by this software.
  If the PDF file in this pool has been cropped by this software, it will be removed from this pool.
  </summary>
 </member>
-<member name="F:PDF.Cropper.FormMain.CropPDFThread">
+<member name="F:PDFCropper.FormMain.CropPDFThread">
  <summary>
  This Thread is used to crop the PDF files which are in the "PDFFilePool".
  </summary>
 </member>
-<member name="M:PDF.Cropper.FormMain.#ctor">
+<member name="M:PDFCropper.FormMain.#ctor">
  <summary>
  This is the constructor of FormMain.
  </summary>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
  <summary>
  This event is triggered when mouse button is pressed.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseUp(System.Object,System.Windows.Forms.MouseEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_MouseUp(System.Object,System.Windows.Forms.MouseEventArgs)">
  <summary>
  This event is triggered when mouse button is popped.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_MouseMove(System.Object,System.Windows.Forms.MouseEventArgs)">
  <summary>
  This event is triggered when mouse is moving over the TransparentPanel
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_MouseClick(System.Object,System.Windows.Forms.MouseEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_MouseClick(System.Object,System.Windows.Forms.MouseEventArgs)">
  <summary>
  This event is triggered when mouse is clicked.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.TopMostMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.TopMostMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when TopMostMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.ExitMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.ExitMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when ExitMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.OpacityMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.OpacityMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when OpacityMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.BackColorMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.BackColorMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when BackColorMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.ForeColorMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.ForeColorMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when ForeColorMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.FontSizeMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.FontSizeMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when FontSizeMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.FontNameMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.FontNameMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when FontNameMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.GhostScriptPathMenuItem_Click(System.Object)">
+<member name="M:PDFCropper.FormMain.GhostScriptPathMenuItem_Click(System.Object)">
  <summary>
  This event is triggered when GhostScriptPathMenuItem of the ContextMenuStrip is clicked.
  </summary>
  <param name="sender"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.ShowMessage(System.String)">
+<member name="M:PDFCropper.FormMain.ShowMessage(System.String)">
  <summary>
  This sub is used to show message on the RichTextBox.
  </summary>
  <param name="Message"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.IsGhostScripBinFolder(System.String)">
+<member name="M:PDFCropper.FormMain.IsGhostScripBinFolder(System.String)">
  <summary>
  This function is used to judge whether the Path is the bin folder of the GhostScript.
  </summary>
  <param name="Path"></param>
  <returns>If the Path is the bin folder of the GhostScript, return true, else return false.</returns>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
  <summary>
  This sub is triggered when something are dragged into the TransparentPanel.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.TransparentPanel_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
+<member name="M:PDFCropper.FormMain.TransparentPanel_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
  <summary>
  This sub is triggered when something are dropped into the TransparentPanel.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:PDF.Cropper.FormMain.CropPDF">
+<member name="M:PDFCropper.FormMain.CropPDF">
  <summary>
  This sub is used to crop the PDF files which are in the "PDFFilePool".
  </summary>
 </member>
-<member name="M:PDF.Cropper.FormMain.GetPDFRectangles(System.String,System.Int32)">
+<member name="M:PDFCropper.FormMain.GetPDFRectangles(System.String,System.Int32)">
  <summary>
  This function is used to get the rectangle list from the output string of the GhostScript.
  </summary>
@@ -338,7 +338,7 @@ PDF.Cropper
  <param name="MarginWidth">The width of margin which you want to keep.</param>
  <returns>The return is an ArrayList. Assuming that there are N pages in the PDF file, the length of the ArrayList is N.</returns>
 </member>
-<member name="M:PDF.Cropper.FormMain.GetPDFRectangle(System.String)">
+<member name="M:PDFCropper.FormMain.GetPDFRectangle(System.String)">
  <summary>
  This function is used to get the rectangle from the BoundingBox string.
  For example, the BoundingBox string is "0 0 100 100", this function will return a new rectangle with these for parameters.
@@ -346,7 +346,7 @@ PDF.Cropper
  <param name="BoundingBox">The string of BoundingBox.</param>
  <returns></returns>
 </member>
-<member name="M:PDF.Cropper.FormMain.GetPDFRectangle(System.String,System.Int32)">
+<member name="M:PDFCropper.FormMain.GetPDFRectangle(System.String,System.Int32)">
  <summary>
  This function is used to get the rectangle from the BoundingBox string.
  </summary>
@@ -354,20 +354,20 @@ PDF.Cropper
  <param name="MarginWidth">The width of margin which you want to keep.</param>
  <returns></returns>
 </member>
-<member name="T:PDF.Cropper.My.Resources.Resources">
+<member name="T:PDFCropper.My.Resources.Resources">
 <summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
+  一个强类型的资源类，用于查找本地化的字符串等。
 </summary>
 </member>
-<member name="P:PDF.Cropper.My.Resources.Resources.ResourceManager">
+<member name="P:PDFCropper.My.Resources.Resources.ResourceManager">
 <summary>
-  Returns the cached ResourceManager instance used by this class.
+  返回此类使用的缓存的 ResourceManager 实例。
 </summary>
 </member>
-<member name="P:PDF.Cropper.My.Resources.Resources.Culture">
+<member name="P:PDFCropper.My.Resources.Resources.Culture">
 <summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
+  使用此强类型资源类，为所有资源查找
+  重写当前线程的 CurrentUICulture 属性。
 </summary>
 </member>
 </members>

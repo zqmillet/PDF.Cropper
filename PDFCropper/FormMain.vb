@@ -467,7 +467,7 @@ Public Class FormMain
             Return False
         End If
 
-        For Each FileName In {"gswin64.exe", "gsdll64.dll"}
+        For Each FileName As String In {"gswin64.exe", "gsdll64.dll"}
             If Not My.Computer.FileSystem.FileExists(Path.Trim("\") & "\" & FileName) Then
                 Return False
             End If

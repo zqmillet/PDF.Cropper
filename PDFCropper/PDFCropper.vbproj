@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A3ED9140-E453-4EEA-8B13-6E606543A9BF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>PDF.Cropper.My.MyApplication</StartupObject>
-    <RootNamespace>PDF.Cropper</RootNamespace>
-    <AssemblyName>PDF.Cropper</AssemblyName>
+    <StartupObject>PDFCropper.My.MyApplication</StartupObject>
+    <RootNamespace>PDFCropper</RootNamespace>
+    <AssemblyName>PDFCropper</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -20,8 +20,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>PDF.Cropper.xml</DocumentationFile>
+    <OutputPath>..\Debug\</OutputPath>
+    <DocumentationFile>PDFCropper.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>PDF.Cropper.xml</DocumentationFile>
+    <DocumentationFile>PDFCropper.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -46,7 +46,7 @@
     <OptionStrict>Off</OptionStrict>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionInfer>On</OptionInfer>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
