@@ -51,6 +51,8 @@ Public Class FormMain
 
     Private MarginWidth As Double
     Private CurrentPDFFile As String = ""
+    Dim MainPath As String = "*\shell\PDFCropper"
+    Dim CommandPath As String = MainPath & "\command"
 
     ''' <summary>
     ''' This is the constructor of FormMain.
@@ -87,8 +89,6 @@ Public Class FormMain
         ' Initialize the ContextMenuStrip.
         InitializeContextMenuStrip()
         InitializeMainInterface()
-
-        ' AddItemIntoWindowsContextMenu()
     End Sub
 
     Private Sub InitializeContextMenuStrip()
@@ -106,6 +106,7 @@ Public Class FormMain
             .NewFileNamePrefix = Configuration.GetTagValue(.NewFileNamePrefixMenuItem.Name)
             .NewFileNameSuffix = Configuration.GetTagValue(.NewFileNameSuffixMenuItem.Name)
             .AutoOverwrite = Configuration.GetTagValue(.AutoOverwriteMenuItem.Name)
+            .ContextMenuForPDFFile = ExistItemInWindowsContextMenu()
 
             AddHandler .OpenFilesMenuItem_Click, AddressOf OpenFilesMenuItem_Click
             AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
@@ -120,6 +121,7 @@ Public Class FormMain
             AddHandler .NewFileNamePrefixMenuItem_TextChanged, AddressOf NewFileNamePrefixMenuItem_TextChanged
             AddHandler .NewFileNameSuffixMenuItem_TextChanged, AddressOf NewFileNameSuffixMenuItem_TextChanged
             AddHandler .AutoOverwriteMenuItem_Click, AddressOf AutoOverwriteMenuItem_Click
+            AddHandler .AddContextMenuForPDFFile_Click, AddressOf AddContextMenuForPDFFile_Click
         End With
     End Sub
 
@@ -147,28 +149,35 @@ Public Class FormMain
         AddHandler Me.KeyDown, AddressOf FormMain_KeyDown
     End Sub
 
-    Private Sub AddItemIntoWindowsContextMenu()
-        'Dim regmenu As Microsoft.Win32.RegistryKey
-        'Dim regcmd As Microsoft.Win32.RegistryKey
+    Private Function ExistItemInWindowsContextMenu() As Boolean
+        If Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(MainPath) Is Nothing Then
+            ContextMenuStrip.ContextMenuForPDFFile = False
+            Return False
+        End If
 
-        'Try
-        '    regmenu = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("HKEY_CLASSES_ROOT\*\shell\your custom app")
-        '    regmenu.SetValue("", "23333")
-        '    regmenu.SetValue("AppliesTo", ".pdf")
-        '    regcmd = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("HKEY_CLASSES_ROOT\*\shell\your custom app\command")
-        '    regcmd.SetValue("", "cmd")
-        'Catch ex As Exception
-        '    MessageBox.Show(Me, ex.ToString())
-        'Finally
-        '    If Not regmenu Is Nothing Then
-        '        regmenu.Close()
-        '    End If
-        '    If Not regcmd Is Nothing Then
-        '        regcmd.Close()
-        '    End If
-        'End Try
-    End Sub
+        If Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(CommandPath) Is Nothing Then
+            ContextMenuStrip.ContextMenuForPDFFile = False
+            Return False
+        End If
 
+        Dim ValueNames() As String = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(MainPath).GetValueNames
+        For Each ValueName As String In {"", "AppliesTo"}
+            If Not ValueNames.Contains(ValueName) Then
+                ContextMenuStrip.ContextMenuForPDFFile = False
+                Return False
+            End If
+        Next
+
+        ValueNames = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(CommandPath).GetValueNames
+        For Each ValueName As String In {""}
+            If Not ValueNames.Contains(ValueName) Then
+                ContextMenuStrip.ContextMenuForPDFFile = False
+                Return False
+            End If
+        Next
+
+        Return True
+    End Function
 
     Private Sub FormMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
         Dim KeyCode As New Keys
@@ -480,6 +489,28 @@ Public Class FormMain
         End If
     End Sub
 
+    Private Sub AddContextMenuForPDFFile_Click(sender As Object)
+        If ContextMenuStrip.ContextMenuForPDFFile Then
+            AddItemInWindowsContextMenu()
+        Else
+            Dim Process As New Process
+            With Process
+                .StartInfo.FileName = Application.StartupPath & "\WindowsContextMenu.exe"
+                .StartInfo.Arguments = "RemoveWindowsContextMenu"
+                .StartInfo.CreateNoWindow = True
+                '.StartInfo.UseShellExecute = False
+                '.StartInfo.RedirectStandardError = True
+                .StartInfo.Verb = "runas"
+                .Start()
+            End With
+        End If
+    End Sub
+
+
+    Private Sub AddItemInWindowsContextMenu()
+
+    End Sub
+
     ''' <summary>
     ''' This sub is triggered when something are dropped into the TransparentPanel.
     ''' </summary>
@@ -561,7 +592,7 @@ Public Class FormMain
     Private Sub CropPDF()
         ' If the bin folder is not correct, show the message, and exit the sub.
         If Not IsGhostScripBinFolder(GhostScriptBinFolder) Then
-            DisplayMessage(MessageType.GhostScriptBinFolderIsNotCorrect)
+            Me.Invoke(DisplayMessageForInvocation, MessageType.GhostScriptBinFolderIsNotCorrect)
             Exit Sub
         End If
 

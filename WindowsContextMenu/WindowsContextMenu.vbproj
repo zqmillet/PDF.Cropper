@@ -4,13 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A3ED9140-E453-4EEA-8B13-6E606543A9BF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <StartupObject>PDF.Cropper.My.MyApplication</StartupObject>
-    <RootNamespace>PDF.Cropper</RootNamespace>
-    <AssemblyName>PDF.Cropper</AssemblyName>
+    <ProjectGuid>{12FF6FE9-0C5C-4DA2-AC44-CC8ED17AB45A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>WindowsContextMenu.WindowsContextMenu</StartupObject>
+    <RootNamespace>WindowsContextMenu</RootNamespace>
+    <AssemblyName>WindowsContextMenu</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -20,10 +20,9 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>PDF.Cropper.xml</DocumentationFile>
+    <OutputPath>..\PDF.Cropper\bin\Debug\</OutputPath>
+    <DocumentationFile>WindowsContextMenu.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,9 +31,8 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>PDF.Cropper.xml</DocumentationFile>
+    <DocumentationFile>WindowsContextMenu.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -58,14 +56,9 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="itextsharp">
-      <HintPath>.\itextsharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,49 +71,13 @@
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
-    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ComboBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\Configuration.vb" />
-    <Compile Include="Controls\RichTextBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ContextMenuStrip.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ToolStripTextBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ToolStripMarginWidthTextBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TransparentPanel.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\WaterMarkTextBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FormMain.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMain.Designer.vb">
-      <DependentUpon>FormMain.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormTest.Designer.vb">
-      <DependentUpon>FormTest.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormTest.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="WindowsContextMenu.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -138,12 +95,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormMain.resx">
-      <DependentUpon>FormMain.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormTest.resx">
-      <DependentUpon>FormTest.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

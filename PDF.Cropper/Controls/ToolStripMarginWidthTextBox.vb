@@ -30,7 +30,7 @@
 
         Public Sub New()
             MyBase.New(New ControlPanel)
-
+            Me.Width = 250
             With CType(Me.Control, ControlPanel)
                 AddHandler .ValueChanged, AddressOf Me_ValueChanged
             End With
@@ -107,7 +107,7 @@
                 End With
 
                 With Label
-                    .Text = "Margin Width"
+                    .Text = "Margin Width of New File"
                     .AutoSize = True
                     .Height = Me.Height
                     .TextAlign = ContentAlignment.MiddleLeft
