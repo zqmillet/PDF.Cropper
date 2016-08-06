@@ -24,7 +24,7 @@
 
         Public Sub New()
             MyBase.New(New ControlPanel)
-            Me.Width = 250
+            Me.Width = 270
             With CType(Me.Control, ControlPanel)
                 AddHandler .TextChanged, AddressOf Me_TextChanged
             End With

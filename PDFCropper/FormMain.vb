@@ -106,7 +106,7 @@ Public Class FormMain
             .NewFileNamePrefix = Configuration.GetTagValue(.NewFileNamePrefixMenuItem.Name)
             .NewFileNameSuffix = Configuration.GetTagValue(.NewFileNameSuffixMenuItem.Name)
             .AutoOverwrite = Configuration.GetTagValue(.AutoOverwriteMenuItem.Name)
-            .ContextMenuForPDFFile = ExistItemInWindowsContextMenu()
+            .ExistContextMenuForPDFFile = ExistItemInWindowsContextMenu()
 
             AddHandler .OpenFilesMenuItem_Click, AddressOf OpenFilesMenuItem_Click
             AddHandler .TopMostMenuItem_Click, AddressOf TopMostMenuItem_Click
@@ -121,7 +121,7 @@ Public Class FormMain
             AddHandler .NewFileNamePrefixMenuItem_TextChanged, AddressOf NewFileNamePrefixMenuItem_TextChanged
             AddHandler .NewFileNameSuffixMenuItem_TextChanged, AddressOf NewFileNameSuffixMenuItem_TextChanged
             AddHandler .AutoOverwriteMenuItem_Click, AddressOf AutoOverwriteMenuItem_Click
-            AddHandler .AddContextMenuForPDFFile_Click, AddressOf AddContextMenuForPDFFile_Click
+            AddHandler .ContextMenuForPDFFile_Click, AddressOf ContextMenuForPDFFile_Click
         End With
     End Sub
 
@@ -151,19 +151,19 @@ Public Class FormMain
 
     Private Function ExistItemInWindowsContextMenu() As Boolean
         If Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(MainPath) Is Nothing Then
-            ContextMenuStrip.ContextMenuForPDFFile = False
+            ContextMenuStrip.ExistContextMenuForPDFFile = False
             Return False
         End If
 
         If Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(CommandPath) Is Nothing Then
-            ContextMenuStrip.ContextMenuForPDFFile = False
+            ContextMenuStrip.ExistContextMenuForPDFFile = False
             Return False
         End If
 
         Dim ValueNames() As String = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(MainPath).GetValueNames
         For Each ValueName As String In {"", "AppliesTo"}
             If Not ValueNames.Contains(ValueName) Then
-                ContextMenuStrip.ContextMenuForPDFFile = False
+                ContextMenuStrip.ExistContextMenuForPDFFile = False
                 Return False
             End If
         Next
@@ -171,7 +171,7 @@ Public Class FormMain
         ValueNames = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(CommandPath).GetValueNames
         For Each ValueName As String In {""}
             If Not ValueNames.Contains(ValueName) Then
-                ContextMenuStrip.ContextMenuForPDFFile = False
+                ContextMenuStrip.ExistContextMenuForPDFFile = False
                 Return False
             End If
         Next
@@ -489,25 +489,30 @@ Public Class FormMain
         End If
     End Sub
 
-    Private Sub AddContextMenuForPDFFile_Click(sender As Object)
-        If ContextMenuStrip.ContextMenuForPDFFile Then
-            AddItemInWindowsContextMenu()
+    Private Sub ContextMenuForPDFFile_Click(sender As Object)
+        Dim Process As New Process
+        With Process
+            .StartInfo.FileName = Application.StartupPath & "\Toolkit.exe"
+            .StartInfo.CreateNoWindow = True
+            '.StartInfo.UseShellExecute = False
+            '.StartInfo.RedirectStandardError = True
+            .StartInfo.Verb = "runas"
+        End With
+
+        If ContextMenuStrip.ExistContextMenuForPDFFile Then
+            Process.StartInfo.Arguments = "RemoveWindowsContextMenu"
         Else
-            Dim Process As New Process
-            With Process
-                .StartInfo.FileName = Application.StartupPath & "\WindowsContextMenu.exe"
-                .StartInfo.Arguments = "RemoveWindowsContextMenu"
-                .StartInfo.CreateNoWindow = True
-                '.StartInfo.UseShellExecute = False
-                '.StartInfo.RedirectStandardError = True
-                .StartInfo.Verb = "runas"
-                .Start()
-            End With
+            Process.StartInfo.Arguments = "AddWindowsContextMenu"
         End If
-    End Sub
 
 
-    Private Sub AddItemInWindowsContextMenu()
+        Try
+            Process.Start()
+            Process.WaitForExit()
+        Catch ex As Exception
+        End Try
+
+        ContextMenuStrip.ExistContextMenuForPDFFile = ExistItemInWindowsContextMenu()
 
     End Sub
 

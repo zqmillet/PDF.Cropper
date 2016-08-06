@@ -5,12 +5,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{12FF6FE9-0C5C-4DA2-AC44-CC8ED17AB45A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>WindowsContextMenu.WindowsContextMenu</StartupObject>
-    <RootNamespace>WindowsContextMenu</RootNamespace>
-    <AssemblyName>WindowsContextMenu</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Toolkit.FormHide</StartupObject>
+    <RootNamespace>Toolkit</RootNamespace>
+    <AssemblyName>Toolkit</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -22,7 +22,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\Debug\</OutputPath>
-    <DocumentationFile>WindowsContextMenu.xml</DocumentationFile>
+    <DocumentationFile>Toolkit.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>WindowsContextMenu.xml</DocumentationFile>
+    <DocumentationFile>Toolkit.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -60,11 +60,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -78,7 +79,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WindowsContextMenu.vb" />
+    <Compile Include="FormHide.Designer.vb">
+      <DependentUpon>FormHide.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormHide.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

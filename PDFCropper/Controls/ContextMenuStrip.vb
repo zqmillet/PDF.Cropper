@@ -44,7 +44,7 @@
         Public NewFileNameSuffixMenuItem As PDFCropper.ToolStripTextBox
         Public GhostScriptPathMenuItem As ToolStripMenuItem
         Public AutoOverwriteMenuItem As ToolStripMenuItem
-        Public AddContextMenuForPDFFile As ToolStripMenuItem
+        Public ContextMenuForPDFFile As ToolStripMenuItem
 #End Region
         ''' <summary>
         ''' This is a string array to store the alternative color names.
@@ -95,7 +95,7 @@
         Public Event NewFileNamePrefixMenuItem_TextChanged(sender As Object)
         Public Event NewFileNameSuffixMenuItem_TextChanged(sender As Object)
         Public Event AutoOverwriteMenuItem_Click(sender As Object)
-        Public Event AddContextMenuForPDFFile_Click(sender As Object)
+        Public Event ContextMenuForPDFFile_Click(sender As Object)
 #End Region
 
 #Region "Menu Properties"
@@ -271,12 +271,13 @@
             End Set
         End Property
 
-        Public Property ContextMenuForPDFFile As Boolean
+        Public Property ExistContextMenuForPDFFile As Boolean
             Get
-                Return AddContextMenuForPDFFile.Checked
+                Return ContextMenuForPDFFile.Tag
             End Get
             Set(Value As Boolean)
-                AddContextMenuForPDFFile.Checked = Value
+                ContextMenuForPDFFile.Tag = Value
+                ContextMenuForPDFFile.Text = If(Value, "Remove", "Add") & " Context Menu for PDF File"
             End Set
         End Property
 #End Region
@@ -438,11 +439,11 @@
                 AddHandler .Click, AddressOf Me_Click
             End With
 
-            AddContextMenuForPDFFile = New ToolStripMenuItem
-            With AddContextMenuForPDFFile
-                .Name = NameOf(AddContextMenuForPDFFile)
-                .Text = "Add Context Menu for PDF File"
-                .CheckOnClick = True
+            ContextMenuForPDFFile = New ToolStripMenuItem
+            With ContextMenuForPDFFile
+                .Name = NameOf(ContextMenuForPDFFile)
+                .Text = "Context Menu for PDF File"
+                .Image = Image.FromFile(Application.StartupPath & "\Icon\Shield.ico")
                 .ShortcutKeys = Keys.Control Or Keys.Q
                 AddHandler .Click, AddressOf Me_Click
             End With
@@ -466,7 +467,7 @@
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(GhostScriptPathMenuItem)
                 .Items.Add(New ToolStripSeparator)
-                .Items.Add(AddContextMenuForPDFFile)
+                .Items.Add(ContextMenuForPDFFile)
                 .Items.Add(New ToolStripSeparator)
                 .Items.Add(ExitMenuItem)
             End With
@@ -570,8 +571,8 @@
                 Exit Sub
             End If
 
-            If sender Is AddContextMenuForPDFFile Then
-                RaiseEvent AddContextMenuForPDFFile_Click(sender)
+            If sender Is ContextMenuForPDFFile Then
+                RaiseEvent ContextMenuForPDFFile_Click(sender)
                 Exit Sub
             End If
         End Sub

@@ -71,7 +71,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -87,6 +86,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Controls\ComboBox.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -116,12 +116,6 @@
       <DependentUpon>FormMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormTest.Designer.vb">
-      <DependentUpon>FormTest.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormTest.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -141,9 +135,6 @@
   <ItemGroup>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormTest.resx">
-      <DependentUpon>FormTest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
