@@ -51,8 +51,7 @@ Public Class FormMain
 
     Private MarginWidth As Double
     Private CurrentPDFFile As String = ""
-    Dim MainPath As String = "*\shell\PDFCropper"
-    Dim CommandPath As String = MainPath & "\command"
+    Private AutoExit As Boolean = False
 
     ''' <summary>
     ''' This is the constructor of FormMain.
@@ -89,6 +88,24 @@ Public Class FormMain
         ' Initialize the ContextMenuStrip.
         InitializeContextMenuStrip()
         InitializeMainInterface()
+        CheckArguments()
+    End Sub
+
+    Private Sub CheckArguments()
+        Dim Arguments() As String = Environment.GetCommandLineArgs
+
+        For Index As Integer = 1 To Arguments.Length - 1
+            If Not My.Computer.FileSystem.FileExists(Arguments(Index)) Then
+                Continue For
+            End If
+
+            PDFFilePool.Add(Arguments(Index))
+        Next
+
+        If Arguments.Length > 1 Then
+            AutoExit = True
+            StartPDFCropThread()
+        End If
     End Sub
 
     Private Sub InitializeContextMenuStrip()
@@ -150,6 +167,9 @@ Public Class FormMain
     End Sub
 
     Private Function ExistItemInWindowsContextMenu() As Boolean
+        Dim MainPath As String = "*\shell\PDFCropper"
+        Dim CommandPath As String = MainPath & "\command"
+
         If Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(MainPath) Is Nothing Then
             ContextMenuStrip.ExistContextMenuForPDFFile = False
             Return False
@@ -258,7 +278,7 @@ Public Class FormMain
 
         ' Update the location of the FormMain.
         Me.Location = New Point(Me.Location.X - Me.MouseDownLocation.X + e.Location.X,
-                                Me.Location.Y - Me.MouseDownLocation.Y + e.Location.Y)
+                            Me.Location.Y - Me.MouseDownLocation.Y + e.Location.Y)
     End Sub
 
     ''' <summary>
@@ -467,13 +487,7 @@ Public Class FormMain
             Return False
         End If
 
-        For Each FileName As String In {"gswin64.exe", "gsdll64.dll"}
-            If Not My.Computer.FileSystem.FileExists(Path.Trim("\") & "\" & FileName) Then
-                Return False
-            End If
-        Next
-
-        Return True
+        Return System.IO.Directory.GetFiles(Path, "gswin??c.exe").Length > 0
     End Function
 
     ''' <summary>
@@ -504,7 +518,6 @@ Public Class FormMain
         Else
             Process.StartInfo.Arguments = "AddWindowsContextMenu"
         End If
-
 
         Try
             Process.Start()
@@ -538,21 +551,7 @@ Public Class FormMain
             PDFFilePool.Add(FilePath)
         Next
 
-        ' If there does not exist the CropPDFThread, create a new one, start it, and exit the sub.
-        If CropPDFThread Is Nothing Then
-            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
-            CropPDFThread.Start()
-            Exit Sub
-        End If
-
-        ' If the CropPDFThread has stopped, create a new one, start it, and exit the sub.
-        If CropPDFThread.ThreadState = Threading.ThreadState.Stopped Then
-            CropPDFThread = New Threading.Thread(AddressOf CropPDF)
-            CropPDFThread.Start()
-            Exit Sub
-        End If
-
-        ' If the CropPDFThread is running, do nothing.
+        StartPDFCropThread()
     End Sub
 
     Private Sub OpenFilesMenuItem_Click()
@@ -573,6 +572,10 @@ Public Class FormMain
             PDFFilePool.Add(FileName)
         Next
 
+        StartPDFCropThread()
+    End Sub
+
+    Private Sub StartPDFCropThread()
         ' If there does not exist the CropPDFThread, create a new one, start it, and exit the sub.
         If CropPDFThread Is Nothing Then
             CropPDFThread = New Threading.Thread(AddressOf CropPDF)
@@ -588,6 +591,18 @@ Public Class FormMain
         End If
 
         ' If the CropPDFThread is running, do nothing.
+    End Sub
+
+
+    Public Sub NewArgumentsReceived(ByVal Arguments() As String)
+        For Each Argument As String In Arguments
+            If Not My.Computer.FileSystem.FileExists(Argument) Then
+                Continue For
+            End If
+
+            PDFFilePool.Add(Argument)
+        Next
+        StartPDFCropThread()
     End Sub
 
 
@@ -661,6 +676,10 @@ Public Class FormMain
             ' Show the message.
             Me.Invoke(DisplayMessageForInvocation, MessageType.PDFFileIsCropped)
         End While
+
+        If AutoExit Then
+            ExitMenuItem_Click(Nothing)
+        End If
     End Sub
 
     ''' <summary>
@@ -710,9 +729,9 @@ Public Class FormMain
         Dim Parameters() As String = BoundingBox.Trim.Split(" ")
         If Parameters.Length = 4 Then
             Return New PdfRectangle(Parameters(0) - MarginWidth,
-                                    Parameters(1) - MarginWidth,
-                                    Parameters(2) + MarginWidth,
-                                    Parameters(3) + MarginWidth)
+                                Parameters(1) - MarginWidth,
+                                Parameters(2) + MarginWidth,
+                                Parameters(3) + MarginWidth)
         Else
             Return New PdfRectangle(0, 0, 0, 0)
         End If
@@ -760,7 +779,7 @@ Public Class FormMain
             Case MessageType.NewFileNameChanged
                 ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" & ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
             Case MessageType.AutoOverwritingModeChanged
-                ShowMessage("Auto overwriting mode is turned" & If(ContextMenuStrip.AutoOverwriteMenuItem.Checked, "on", "off") & ".")
+                ShowMessage("Auto overwriting mode is turned " & If(ContextMenuStrip.AutoOverwriteMenuItem.Checked, "on", "off") & ".")
             Case MessageType.PleaseSelectPDFFile
                 ShowMessage("Please select the PDF files that you want to crop.")
             Case MessageType.NothingSelected
@@ -794,5 +813,3 @@ Public Class FormMain
         PDFFileIsCropped
     End Enum
 End Class
-
-
