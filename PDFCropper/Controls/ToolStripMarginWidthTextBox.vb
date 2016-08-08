@@ -1,9 +1,23 @@
 ﻿Namespace PDFCropper
+    ''' <summary>
+    ''' This class inherits ToolStripControlHost, which can be added into the item list of a MenuScript.
+    ''' There are a Label, a TextBox, and a ComboBox in this class.
+    ''' So, this class allow user to change a TextBox and a ComboBox in MenuScript.
+    ''' </summary>
     Public Class ToolStripMarginWidthTextBox
         Inherits ToolStripControlHost
 
+        ''' <summary>
+        ''' If the value of the TextBox, or the ComboBox is changed, this event will be triggered.
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
         Public Event ValueChanged(sender As Object, e As EventArgs)
 
+        ''' <summary>
+        ''' This is a double which represents the value without unit.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Value As Double
             Get
                 Return CType(Me.Control, ControlPanel).Value
@@ -13,12 +27,20 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' This is a string which represents the unit of margin width.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Unit As String
             Get
                 Return CType(Me.Control, ControlPanel).Unit
             End Get
         End Property
 
+        ''' <summary>
+        ''' This is a string which represents the selected index of the ComboBox.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property UnitIndex As Integer
             Get
                 Return CType(Me.Control, ControlPanel).UnitIndex
@@ -28,6 +50,9 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' This is the constructor.
+        ''' </summary>
         Public Sub New()
             MyBase.New(New ControlPanel)
             Me.Width = 270
@@ -36,29 +61,49 @@
             End With
         End Sub
 
+        ''' <summary>
+        ''' This sub is triggered when the value of the TextBox or the ComboBox is changed.
+        ''' </summary>
         Public Sub Me_ValueChanged()
             RaiseEvent ValueChanged(Me, Nothing)
         End Sub
 
-        Public ReadOnly Property ControlPanelControl() As ControlPanel
-            Get
-                Return CType(Me.Control, ControlPanel)
-            End Get
-        End Property
-
+        ''' <summary>
+        ''' This function is used to obtain the value of margin width, the unit is pt.
+        ''' </summary>
+        ''' <returns></returns>
         Public Function GetValue() As Double
             Return CType(Me.Control, ControlPanel).GetValue()
         End Function
 
+        ''' <summary>
+        ''' This class is the panel which contains the Label, the TextBox, and the ComboBox.
+        ''' </summary>
         Public Class ControlPanel
             Inherits Panel
 
+            ''' <summary>
+            ''' This is the TextBox.
+            ''' </summary>
             Friend WithEvents TextBox As New PDFCropper.WaterMarkTextBox
+            ''' <summary>
+            ''' This is the Label.
+            ''' </summary>
             Friend WithEvents Label As New Label
+            ''' <summary>
+            ''' This is the ComboBox.
+            ''' </summary>
             Friend WithEvents ComboBox As New PDFCropper.ComboBox
 
+            ''' <summary>
+            ''' This event is triggered when the value of the TextBox, or the ComboBox is changed.
+            ''' </summary>
             Public Event ValueChanged()
 
+            ''' <summary>
+            ''' This is a double which is the value of margin width without unit.
+            ''' </summary>
+            ''' <returns></returns>
             Public Property Value As Double
                 Get
                     If Not IsNumeric(TextBox.Text) Then
@@ -76,6 +121,10 @@
                 End Set
             End Property
 
+            ''' <summary>
+            ''' This is a string which represents the selected index of the ComboBox.
+            ''' </summary>
+            ''' <returns></returns>
             Public Property UnitIndex As Integer
                 Get
                     Return ComboBox.SelectedIndex
@@ -85,6 +134,10 @@
                 End Set
             End Property
 
+            ''' <summary>
+            ''' This is a string which represents the unit of margin width.
+            ''' </summary>
+            ''' <returns></returns>
             Public ReadOnly Property Unit As String
                 Get
                     If ComboBox.SelectedIndex < 0 Then
@@ -95,9 +148,11 @@
                 End Get
             End Property
 
+            ''' <summary>
+            ''' This is the constructor.
+            ''' </summary>
             Public Sub New()
-                Dim ToolTip As System.Windows.Forms.ToolTip = New System.Windows.Forms.ToolTip()
-
+                ' Initialize the panel.
                 With Me
                     .BackColor = Color.Transparent
                     .Height = 20
@@ -106,6 +161,7 @@
                     .Margin = New Padding(0)
                 End With
 
+                ' Initialize the Label.
                 With Label
                     .Text = "Margin Width of New File"
                     .AutoSize = True
@@ -119,6 +175,7 @@
                     .Margin = New Padding(0)
                 End With
 
+                ' Initialize the ComboBox.
                 With ComboBox
                     .Width = 50
                     .Height = Me.Height
@@ -130,13 +187,14 @@
                     For Each Unit As String In UnitList
                         .Items.Add(Unit)
                     Next
+
                     AddHandler .SelectedIndexChanged, AddressOf Control_ValueChanged
-                    'AddHandler .MouseLeave, AddressOf Control_MouseLeave
-                    'AddHandler .MouseEnter, AddressOf Control_MouseEnter
+                    AddHandler .MouseLeave, AddressOf Control_MouseLeave
                 End With
 
+                ' Initialize the TextBox.
                 With TextBox
-                    .WaterMark = "0"
+                    .WaterMarkText = "0"
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Top
                     .AutoSize = False
                     .Width = Me.Width - Label.Width - 12 - ComboBox.Width - 4
@@ -146,13 +204,19 @@
                     .Text = ""
                     .Parent = Me
                     .Margin = New Padding(0)
+
                     AddHandler .MouseLeave, AddressOf Control_MouseLeave
-                    AddHandler .MouseEnter, AddressOf Control_MouseEnter
+                    AddHandler .MouseEnter, AddressOf TextBox_MouseEnter
                     AddHandler .TextChanged, AddressOf Control_ValueChanged
                 End With
-
             End Sub
 
+            ''' <summary>
+            ''' This sub is triggered when mouse leaves the TextBox, or the ComboBox.
+            ''' This sub is used to let the TextBox and ComboBox loss its focus automatically.
+            ''' </summary>
+            ''' <param name="sender"></param>
+            ''' <param name="e"></param>
             Private Sub Control_MouseLeave(sender As Object, e As EventArgs)
                 With CType(sender, Control)
                     Dim TabStop As Boolean = .TabStop
@@ -163,24 +227,32 @@
                 End With
             End Sub
 
-            Private Sub Control_MouseEnter(sender As Object, e As EventArgs)
-                If sender Is TextBox Then
-                    TextBox.Focus()
-                    TextBox.SelectAll()
-                End If
-
-                If sender Is ComboBox Then
-                    ComboBox.Focus()
-                End If
+            ''' <summary>
+            ''' This sub is triggered when mouse enters the TextBox.
+            ''' If this sub is triggered, the text of the TextBox will be selected.
+            ''' </summary>
+            ''' <param name="sender"></param>
+            ''' <param name="e"></param>
+            Private Sub TextBox_MouseEnter(sender As Object, e As EventArgs)
+                TextBox.Focus()
+                TextBox.SelectAll()
             End Sub
 
+            ''' <summary>
+            ''' This sub is triggered when the value of the TextBox, or the ComboBox is changed.
+            ''' This sub will raise the event ValueChanged.
+            ''' </summary>
             Private Sub Control_ValueChanged()
                 RaiseEvent ValueChanged()
             End Sub
 
+            ''' <summary>
+            ''' This function is used to get the value of margin width with the unit pt.
+            ''' </summary>
+            ''' <returns></returns>
             Public Function GetValue() As Double
-                ' UnitList = {"pt", "mm", "cm", "inch"}
-                Dim Proportion() As Double = {1, 0.352777778, 0.0352777778, 0.013888888888889}
+                ' UnitList                 = {"pt",         "mm",          "cm",       "inch"}
+                Dim Proportion() As Double = {1.0F, 0.352777779F, 0.0352777764F, 0.013888889F}
 
                 If Not IsNumeric(TextBox.Text) Then
                     Return 0

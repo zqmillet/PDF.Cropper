@@ -46,11 +46,11 @@
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemUnitIndex</TagName>
-    <TagValue>0</TagValue>
+    <TagValue>2</TagValue>
   </Configuration>
   <Configuration>
     <TagName>MarginWidthMenuItemValue</TagName>
-    <TagValue>10</TagValue>
+    <TagValue>0</TagValue>
   </Configuration>
   <Configuration>
     <TagName>NewFileNamePrefixMenuItem</TagName>

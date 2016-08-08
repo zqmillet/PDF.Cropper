@@ -5,73 +5,50 @@ Imports System.Windows.Forms
 Imports System.Drawing
 
 Namespace PDFCropper
+    ''' <summary>
+    ''' This class inherits System.Windows.Forms.TextBox.
+    ''' Comparing with System.Windows.Forms.TextBoxthe, this WaterMarkTextBox can show a water mark when it is empty.
+    ''' </summary>
     Class WaterMarkTextBox
-        Inherits TextBox
-        Private waterMarkTextEnabled As Boolean = False
+        Inherits System.Windows.Forms.TextBox
 
-#Region "Attributes"
-
-        Private WaterMarkText As String = """"
-        Public Property WaterMark() As String
-            Get
-                Return WaterMarkText
-            End Get
-            Set
-                WaterMarkText = Value
-                Invalidate()
-            End Set
-        End Property
+#Region "Member Variables"
+        ''' <summary>
+        ''' This is the water mark which is shown when the WaterMarkTextBox's text is empty.
+        ''' </summary>
+        Public WaterMarkText As String = ""
 #End Region
 
-        'Default constructor
+#Region "Member Methods"
+        ''' <summary>
+        ''' This is the constructor.
+        ''' </summary>
         Public Sub New()
-            JoinEvents(True)
+            AddHandler Me.TextChanged, AddressOf Me.WaterMark_Toggel
+            AddHandler Me.LostFocus, AddressOf Me.WaterMark_Toggel
             Multiline = False
-        End Sub
-
-        'Override OnCreateControl ... thanks to  "lpgray .. codeproject guy"
-        Protected Overrides Sub OnCreateControl()
-            MyBase.OnCreateControl()
             WaterMark_Toggel(Nothing, Nothing)
         End Sub
 
-        'Override OnPaint
+        ''' <summary>
+        ''' Override OnPaint.
+        ''' </summary>
+        ''' <param name="args"></param>
         Protected Overrides Sub OnPaint(args As PaintEventArgs)
             ' Draw Text or WaterMark
             Dim Graphics As Graphics = Me.CreateGraphics
             Graphics.DrawString(WaterMarkText, (New ToolStripMenuItem).Font, SystemBrushes.GrayText, New Point(0, 0))
-            ' MyBase.OnPaint(args)
         End Sub
 
-        Private Sub JoinEvents(join As [Boolean])
-            If join Then
-                AddHandler Me.TextChanged, AddressOf Me.WaterMark_Toggel
-                AddHandler Me.LostFocus, AddressOf Me.WaterMark_Toggel
-            End If
-        End Sub
-
+        ''' <summary>
+        ''' This sub is triggered when text is changed or focus is lost.
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="args"></param>
         Private Sub WaterMark_Toggel(sender As Object, args As EventArgs)
-            If Me.Text.Length <= 0 Then
-                EnableWaterMark()
-            Else
-                DisbaleWaterMark()
-            End If
-        End Sub
-
-        Private Sub EnableWaterMark()
-            'Save current font until returning the UserPaint style to false (NOTE: It is a try and error advice)
-            'oldFont = New System.Drawing.Font(Font.FontFamily, Font.Size, Font.Style, Font.Unit)
-            'Enable OnPaint event handler
-            Me.SetStyle(ControlStyles.UserPaint, True)
-            Me.waterMarkTextEnabled = True
-            'Triger OnPaint immediatly
+            Me.SetStyle(ControlStyles.UserPaint, Me.Text.Length <= 0)
             Refresh()
         End Sub
-
-        Private Sub DisbaleWaterMark()
-            'Disbale OnPaint event handler
-            Me.waterMarkTextEnabled = False
-            Me.SetStyle(ControlStyles.UserPaint, False)
-        End Sub
+#End Region
     End Class
 End Namespace

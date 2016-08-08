@@ -6,6 +6,36 @@ Toolkit
 </name>
 </assembly>
 <members>
+<member name="T:Toolkit.FormHide">
+ <summary>
+ This is a console program, but the console program can not hide its own windows, so in this project, I use a transparent form to replace it.
+ </summary>
+</member>
+<member name="F:Toolkit.FormHide.RootPath">
+ <summary>
+ This is the root path of the registry.
+ </summary>
+</member>
+<member name="F:Toolkit.FormHide.MainName">
+ <summary>
+ This is the name of new key.
+ </summary>
+</member>
+<member name="M:Toolkit.FormHide.#ctor">
+ <summary>
+ This is the constructor of this form.
+ </summary>
+</member>
+<member name="M:Toolkit.FormHide.AddWindowsContextMenu">
+ <summary>
+ This sub is used to add the Windows context menu item for PDF file.
+ </summary>
+</member>
+<member name="M:Toolkit.FormHide.RemoveWindowsContextMenu">
+ <summary>
+ This sub is used to remove the Windows context menu item for PDF file.
+ </summary>
+</member>
 <member name="T:Toolkit.My.Resources.Resources">
 <summary>
   一个强类型的资源类，用于查找本地化的字符串等。

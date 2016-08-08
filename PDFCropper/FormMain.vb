@@ -1,9 +1,10 @@
 ﻿Imports System.IO
-Imports iTextSharp.text
 Imports iTextSharp.text.pdf
 
+''' <summary>
+''' The instance of this class is the main form of this program.
+''' </summary>
 Public Class FormMain
-
     ''' <summary>
     ''' This RichTextBox is used to show the message of the software.
     ''' </summary>
@@ -46,11 +47,31 @@ Public Class FormMain
     ''' </summary>
     Private CropPDFThread As Threading.Thread
 
+    ''' <summary>
+    ''' This delegation is used to display message on the RichTextBox from another thread.
+    ''' </summary>
+    ''' <param name="Message"></param>
     Private Delegate Sub DelegateDisplayMessage(ByVal Message As MessageType)
+    ''' <summary>
+    ''' This is an instance of DelegateDisplayMessage, and it is used to be invoked by Me.
+    ''' </summary>
     Private DisplayMessageForInvocation As New DelegateDisplayMessage(AddressOf DisplayMessage)
 
+    ''' <summary>
+    ''' The width of white space which will be left in the new PDF file.
+    ''' </summary>
     Private MarginWidth As Double
+    ''' <summary>
+    ''' This variable is used to save the path of the PDF file which is being crpped.
+    ''' </summary>
     Private CurrentPDFFile As String = ""
+    '''' <summary>
+    '''' If this flag is true, the auto overwriting mode is turned on, else the auto overwriting mode is turn off.
+    '''' In the auto overwriting mode, if there exist a PDF file with same file name, the program will overwrite it without any message.
+    '''' </summary>
+    ''' <summary>
+    ''' If this flag is true, after cropping the PDF files which are in the PDFFilePool, the program will exit.
+    ''' </summary>
     Private AutoExit As Boolean = False
 
     ''' <summary>
@@ -85,15 +106,27 @@ Public Class FormMain
             Exit Sub
         End If
 
-        ' Initialize the ContextMenuStrip.
+        ' Read the configuration file and initialize the ContextMenuStrip.
         InitializeContextMenuStrip()
+
+        ' Read the configureation file and initialize the inferace of the FormMain.
         InitializeMainInterface()
+
+        ' Check the running arguments, if there are arguments, it means that the program is call by Windows context menu, and there is no other instance of this program.
+        ' So, in this case, the program crops all PDF files which is in the arguments, and auto exit.
         CheckArguments()
     End Sub
 
+    ''' <summary>
+    ''' This sub first check whether there are running arguments.
+    ''' If there is no running argument, exit this sub directly.
+    ''' If there are running arguments, add this arguments into the PDFFilePool, assign the flag AutoExit to true, and start the PDFCropThread.
+    ''' </summary>
     Private Sub CheckArguments()
+        ' Obtain the running arguments.
         Dim Arguments() As String = Environment.GetCommandLineArgs
 
+        ' Add the running arguments into the PDFFilePool.
         For Index As Integer = 1 To Arguments.Length - 1
             If Not My.Computer.FileSystem.FileExists(Arguments(Index)) Then
                 Continue For
@@ -102,12 +135,16 @@ Public Class FormMain
             PDFFilePool.Add(Arguments(Index))
         Next
 
+        ' If there are running arguments, assign the flag AutoExit to true, and start the PDFCropThread.
         If Arguments.Length > 1 Then
             AutoExit = True
             StartPDFCropThread()
         End If
     End Sub
 
+    ''' <summary>
+    ''' This sub is used to configurate the ContextMenuString of FormMain according to the configuration file.
+    ''' </summary>
     Private Sub InitializeContextMenuStrip()
         ContextMenuStrip = New PDFCropper.ContextMenuStrip
         With ContextMenuStrip
@@ -142,30 +179,41 @@ Public Class FormMain
         End With
     End Sub
 
+    ''' <summary>
+    ''' This sub is used to configurate the interface of the FormMain according to the configuration file.
+    ''' </summary>
     Private Sub InitializeMainInterface()
-        With ContextMenuStrip
-            Me.TopMost = .FormMainTopMost
-            Me.Opacity = .FormMainOpacity
-            RichTextBox.ForeColor = .FormMainForeColor
-            RichTextBox.BackColor = .FormMainBackColor
-            RichTextBox.Font = New System.Drawing.Font(.FormMainFontName, .FormMainFontSize)
-        End With
-
+        ' Configurate the FromMain.
         With Me
+            .TopMost = ContextMenuStrip.FormMainTopMost
+            .Opacity = ContextMenuStrip.FormMainOpacity
             .FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
             .Controls.Add(TransparentPanel)
             .Controls.Add(RichTextBox)
             .Text = "PDF Cropper"
             .Icon = New Icon(Application.StartupPath & "\Icon\FormMain.ico")
             .PDFFilePool = New ArrayList
+            .KeyPreview = True
+            AddHandler .KeyDown, AddressOf FormMain_KeyDown
         End With
 
+        ' Configurate the RichTextBox.
+        With RichTextBox
+            .ForeColor = ContextMenuStrip.FormMainForeColor
+            .BackColor = ContextMenuStrip.FormMainBackColor
+            .Font = New System.Drawing.Font(ContextMenuStrip.FormMainFontName, ContextMenuStrip.FormMainFontSize)
+        End With
+
+        ' Assign the variable MarginWidth.
         MarginWidth = ContextMenuStrip.MarginWidthMenuItem.GetValue
+        ' Assign the variable GhostScriptBinFolder.
         GhostScriptBinFolder = Configuration.GetTagValue(ContextMenuStrip.GhostScriptPathMenuItem.Name)
-        Me.KeyPreview = True
-        AddHandler Me.KeyDown, AddressOf FormMain_KeyDown
     End Sub
 
+    ''' <summary>
+    ''' This sub is used to check whether there exist Windows context menu item for PDF file according to the registry.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function ExistItemInWindowsContextMenu() As Boolean
         Dim MainPath As String = "*\shell\PDFCropper"
         Dim CommandPath As String = MainPath & "\command"
@@ -199,6 +247,12 @@ Public Class FormMain
         Return True
     End Function
 
+    ''' <summary>
+    ''' Because the shotcut of context menu can not be triggered, this sub is used to capture the key down event of the FormMain.
+    ''' This sub first check which menu item is triggered, then call the corresponding sub.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub FormMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs)
         Dim KeyCode As New Keys
         If e.Control Then
@@ -436,6 +490,10 @@ Public Class FormMain
         End With
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when MarginWidthMenuItem of the ContextMenuStrip is changed.
+    ''' </summary>
+    ''' <param name="sender"></param>
     Private Sub MarginWidthMenuItem_ValueChanged(sender As Object)
         Configuration.SetTagValue(sender.Name & "Value", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).Value)
         Configuration.SetTagValue(sender.Name & "UnitIndex", CType(sender, PDFCropper.ToolStripMarginWidthTextBox).UnitIndex)
@@ -443,16 +501,28 @@ Public Class FormMain
         DisplayMessage(MessageType.MarginWidthChanged)
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when NewFileNamePrefixMenuItem of the ContextMenuStrip is changed.
+    ''' </summary>
+    ''' <param name="sender"></param>
     Private Sub NewFileNamePrefixMenuItem_TextChanged(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
         DisplayMessage(MessageType.NewFileNameChanged)
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when NewFileNameSuffixMenuItem of the ContextMenuStrip is changed.
+    ''' </summary>
+    ''' <param name="sender"></param>
     Private Sub NewFileNameSuffixMenuItem_TextChanged(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, PDFCropper.ToolStripTextBox).Text)
         DisplayMessage(MessageType.NewFileNameChanged)
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when AutoOverwriteMenuItem of the ContextMenuStrip is clicked.
+    ''' </summary>
+    ''' <param name="sender"></param>
     Private Sub AutoOverwriteMenuItem_Click(sender As Object)
         Configuration.SetTagValue(sender.Name, CType(sender, ToolStripMenuItem).Checked)
         DisplayMessage(MessageType.AutoOverwritingModeChanged)
@@ -491,7 +561,7 @@ Public Class FormMain
     End Function
 
     ''' <summary>
-    ''' This sub is triggered when something are dragged into the TransparentPanel.
+    ''' This event is triggered when something are dragged into the TransparentPanel.
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -503,16 +573,21 @@ Public Class FormMain
         End If
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when ContextMenuForPDFFile of the ContextMenuStrip is clicked.
+    ''' This sub calls the Toolkit.exe with different parameters to add or remove the context menu for PDF file.
+    ''' </summary>
+    ''' <param name="sender"></param>
     Private Sub ContextMenuForPDFFile_Click(sender As Object)
+        ' Initialize a process, and run it with administrator right.
         Dim Process As New Process
         With Process
             .StartInfo.FileName = Application.StartupPath & "\Toolkit.exe"
             .StartInfo.CreateNoWindow = True
-            '.StartInfo.UseShellExecute = False
-            '.StartInfo.RedirectStandardError = True
             .StartInfo.Verb = "runas"
         End With
 
+        ' If there exists context menu item for PDF file, remove the menu item, else add the menu item.
         If ContextMenuStrip.ExistContextMenuForPDFFile Then
             Process.StartInfo.Arguments = "RemoveWindowsContextMenu"
         Else
@@ -523,14 +598,18 @@ Public Class FormMain
             Process.Start()
             Process.WaitForExit()
         Catch ex As Exception
+            ' The exception occurs when user do not allow the process run with the administrator right.
+            ' Just do nothing.
         End Try
 
+        ' Update the display of ExistContextMenuForPDFFile of ContextMenuStrip.
         ContextMenuStrip.ExistContextMenuForPDFFile = ExistItemInWindowsContextMenu()
-
     End Sub
 
     ''' <summary>
     ''' This sub is triggered when something are dropped into the TransparentPanel.
+    ''' This sub first obtains the path of each file, then pulls them into the PDFFilePool.
+    ''' At last, it starts the PDFCrop thread.
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -554,6 +633,11 @@ Public Class FormMain
         StartPDFCropThread()
     End Sub
 
+    ''' <summary>
+    ''' This event is triggered when OpenFilesMenuItem of the ContextMenuStrip is clicked.
+    ''' If user selects some PDF files, this sub pulls them into the PDFFilePool.
+    ''' At last, it starts the PDFCrop thread.
+    ''' </summary>
     Private Sub OpenFilesMenuItem_Click()
         Dim OpenFileDialog As New OpenFileDialog
         With OpenFileDialog
@@ -575,6 +659,9 @@ Public Class FormMain
         StartPDFCropThread()
     End Sub
 
+    ''' <summary>
+    ''' This sub is used to start the PDFCrop thread.
+    ''' </summary>
     Private Sub StartPDFCropThread()
         ' If there does not exist the CropPDFThread, create a new one, start it, and exit the sub.
         If CropPDFThread Is Nothing Then
@@ -593,7 +680,11 @@ Public Class FormMain
         ' If the CropPDFThread is running, do nothing.
     End Sub
 
-
+    ''' <summary>
+    ''' This sub is triggered when MyApplication_StartupNextInstance in ApplicationEvents.vb is triggered.
+    ''' This sub pulls the new arguments in to the PDFFilePool, then starts the PDFCrop thread.
+    ''' </summary>
+    ''' <param name="Arguments"></param>
     Public Sub NewArgumentsReceived(ByVal Arguments() As String)
         For Each Argument As String In Arguments
             If Not My.Computer.FileSystem.FileExists(Argument) Then
@@ -607,7 +698,7 @@ Public Class FormMain
 
 
     ''' <summary>
-    ''' This sub is used to crop the PDF files which are in the "PDFFilePool".
+    ''' This sub is used to crop the PDF files which are in the PDFFilePool.
     ''' </summary>
     Private Sub CropPDF()
         ' If the bin folder is not correct, show the message, and exit the sub.
@@ -665,7 +756,7 @@ Public Class FormMain
             Dim NewFileName As String = GetNewFileName(CurrentPDFFile)
             If Not ContextMenuStrip.AutoOverwrite Then
                 If My.Computer.FileSystem.FileExists(NewFileName) Then
-                    If Not MsgBox("Thie file" & vbCrLf & """" & NewFileName & """" & vbCrLf & "does exist. Do you want to overwrite it?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                    If Not MsgBox("Thie file """ & NewFileName & """ does exist." & vbCrLf & vbCrLf & "Do you want to overwrite it?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
                         Continue While
                     End If
                 End If
@@ -690,7 +781,7 @@ Public Class FormMain
     ''' <returns>The return is an ArrayList. Assuming that there are N pages in the PDF file, the length of the ArrayList is N.</returns>
     Private Function GetPDFRectangles(ByVal OutputString As String, Optional ByVal MarginWidth As Integer = 0) As ArrayList
         Dim Rectangles As New ArrayList
-        Dim FlagString As String = "%%HiResBoundingBox:"
+        Dim FlagString As String = "%%HiResBoundingBox: "
         Dim StringList() As String = OutputString.Split(vbLf)
 
         For Each Line As String In StringList
@@ -737,6 +828,11 @@ Public Class FormMain
         End If
     End Function
 
+    ''' <summary>
+    ''' This function is used to get the nuew file name with prefix and suffix.
+    ''' </summary>
+    ''' <param name="FileFullPath"></param>
+    ''' <returns></returns>
     Private Function GetNewFileName(ByVal FileFullPath As String) As String
         Dim IllegalCharacters As String = "\/:*?""<>|"
         For Each c As Char In ContextMenuStrip.NewFileNamePrefix & ContextMenuStrip.NewFileNameSuffix
@@ -745,15 +841,15 @@ Public Class FormMain
             End If
         Next
 
-        Dim Directory As String = FileFullPath.Remove(FileFullPath.LastIndexOf("\")) & "\"
-        Dim FileName As String = FileFullPath
-        FileName = FileName.Remove(0, FileName.LastIndexOf("\") + 1)
-        FileName = FileName.Remove(FileName.LastIndexOf("."))
-        Dim Extension As String = FileFullPath.Remove(0, FileFullPath.LastIndexOf("."))
-
-        Return Directory & ContextMenuStrip.NewFileNamePrefix & FileName & ContextMenuStrip.NewFileNameSuffix & Extension
+        FileFullPath = FileFullPath.Insert(FileFullPath.LastIndexOf("\") + 1, ContextMenuStrip.NewFileNamePrefix)
+        FileFullPath = FileFullPath.Insert(FileFullPath.LastIndexOf("."), ContextMenuStrip.NewFileNameSuffix)
+        Return FileFullPath
     End Function
 
+    ''' <summary>
+    ''' This sub is used to display message on the RichTextBox according to the MessageType.
+    ''' </summary>
+    ''' <param name="MessageType"></param>
     Private Sub DisplayMessage(ByVal MessageType As MessageType)
         Select Case MessageType
             Case MessageType.FormLocationChanged
@@ -777,7 +873,7 @@ Public Class FormMain
             Case MessageType.GhostScriptBinFolderChanged
                 ShowMessage("The Bin folder of the GhostScript is change to """ & GhostScriptBinFolder & """. And it is " & If(ContextMenuStrip.GhostScriptPathMenuItem.Checked, "", "not ") & "the Bin Folder of the GhostScript.")
             Case MessageType.NewFileNameChanged
-                ShowMessage("The new file name is """ & ContextMenuStrip.NewFileNamePrefixMenuItem.Text & "File Name" & ContextMenuStrip.NewFileNameSuffixMenuItem.Text & """.")
+                ShowMessage("The new file name is """ & GetNewFileName("FileName.pdf") & """.")
             Case MessageType.AutoOverwritingModeChanged
                 ShowMessage("Auto overwriting mode is turned " & If(ContextMenuStrip.AutoOverwriteMenuItem.Checked, "on", "off") & ".")
             Case MessageType.PleaseSelectPDFFile
@@ -793,6 +889,9 @@ Public Class FormMain
         End Select
     End Sub
 
+    ''' <summary>
+    ''' This enumeration is message type which is used to control the sub DisplayMessage to show different messages.
+    ''' </summary>
     Private Enum MessageType
         FormLocationChanged
         FormTopMostChanged

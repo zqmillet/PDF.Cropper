@@ -22,9 +22,130 @@ PDFCropper
   重写当前线程的 CurrentUICulture 属性。
 </summary>
 </member>
+<member name="T:PDFCropper.PDFCropper.ComboBox">
+ <summary>
+ This ComboBox inherits from System.Windows.Forms.ComboBox.
+ Comparing with the System.Windows.Forms.ComboBox, this ComboBox can set its height and padding independently.
+ So, the base line of its text can overlap with the base line of the TextBox's text.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ComboBox.ItemFont">
+ <summary>
+ This variable is used to replace the member variable Font.
+ The member variable Font is just used to control the height of this ComboBox.
+ This variable is used to draw the text of this ComboBox.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ComboBox.#ctor">
+ <summary>
+ This is the constructor of the ComboBox.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ComboBox.Me_DrawItem(System.Object,System.Windows.Forms.DrawItemEventArgs)">
+ <summary>
+ This sub is used to draw the items in the ComboBox.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="T:PDFCropper.PDFCropper.Configuration">
+ <summary>
+ This class is used to read and save the configuration of this program.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.Configuration.DataSet">
+ <summary>
+ The configuration is saved in a DataTable of a DataSet.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.Configuration.DataTable">
+ <summary>
+ This is the DataTable.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.Configuration.Name">
+ <summary>
+ This name is the DataTable's name.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.Configuration.Path">
+ <summary>
+ This variable is used to save the configuration file path.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.Configuration.#ctor">
+ <summary>
+ This is the constructor of this class.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.Configuration.Load(System.String)">
+ <summary>
+ This function is used to load the configuration from a file.
+ If the loading process is successful, return true, else, return false.
+ </summary>
+ <param name="Path"></param>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.Configuration.GetTagValue(System.String)">
+ <summary>
+ This function is used to get the value of a tag name.
+ If there is no the tag name, return an empty string.
+ </summary>
+ <param name="TagName"></param>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.Configuration.SetTagValue(System.String,System.String)">
+ <summary>
+ This sub is used to set the value of a tag name.
+ </summary>
+ <param name="TagName"></param>
+ <param name="TagValue"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.Configuration.Save">
+ <summary>
+ This sub is used to save the configuration into a file.
+ </summary>
+</member>
+<member name="T:PDFCropper.PDFCropper.RichTextBox">
+ <summary>
+ This RichTextBox inherits from ystem.Windows.Forms.RichTextBox.
+ This RichTextBox fix the font bug of System.Windows.Forms.RichTextBox.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.RichTextBox.LockWindowUpdate(System.Int32)">
+ <summary>
+ This function is used to lock update of the RichTextBox.
+ </summary>
+ <param name="hWnd"></param>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.RichTextBox.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.RichTextBox.OnTextChanged(System.EventArgs)">
+ <summary>
+ Overrides the event TextChanged.
+ </summary>
+ <param name="e"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.RichTextBox.TextFontUpdate">
+ <summary>
+ There is a font bug of System.Windows.Forms.RichTextBox which is dscribed as follows.
+ If there exists a character and it is not in the Me.Font, the System.Windows.Forms.RichTextBox will assign this character's font with other font.
+ But, the font of the characters behinds this character is not Me.Font. It looks strange.
+ This sub is used to fix this font bug.
+ </summary>
+</member>
 <member name="T:PDFCropper.PDFCropper.ContextMenuStrip">
  <summary>
  This class is the menu which will be shown when the right button of mouse is clicked.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.OpenFilesMenuItem">
+ <summary>
+ This is a menu item which is used to open a dialog to select the PDF files which user want to crop.
  </summary>
 </member>
 <member name="F:PDFCropper.PDFCropper.ContextMenuStrip.TopMostMenuItem">
@@ -67,80 +188,203 @@ PDFCropper
  This is a menu item which is used to choose the margin width of the output PDF file.
  </summary>
 </member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNamePrefixMenuItem">
+ <summary>
+ This is a menu item which is used to set the prefix of the new file name.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNameSuffixMenuItem">
+ <summary>
+ This is a menu item which is used to set the suffix of the new file name.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.GhostScriptPathMenuItem">
+ <summary>
+ This is a menu item which is used to open a dialog to select the Bin folder of the GhostScript.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.AutoOverwriteMenuItem">
+ <summary>
+ This is a menu item which is used to tuen the auto overwriting mode on/off.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.ContextMenuForPDFFile">
+ <summary>
+ This is a menu item which is used to add/remove the Windows context menu item for PDF file.
+ </summary>
+</member>
 <member name="F:PDFCropper.PDFCropper.ContextMenuStrip.ColorList">
  <summary>
  This is a string array to store the alternative color names.
  </summary>
 </member>
+<member name="F:PDFCropper.PDFCropper.ContextMenuStrip.FontSizeList">
+ <summary>
+ This is a integer array to store the alternative font size.
+ </summary>
+</member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.TopMostMenuItem_Click">
  <summary>
- This is a event which will be triggered when "TopMostMenuItem" is clicked.
+ This is a event which will be triggered when TopMostMenuItem is clicked.
  </summary>
- <param name="sender">It is "TopMostMenuItem" itself.</param>
+ <param name="sender">It is TopMostMenuItem itself.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.ExitMenuItem_Click">
  <summary>
- This is a event which will be triggered when "ExitMenuItem" is clicked.
+ This is a event which will be triggered when ExitMenuItem is clicked.
  </summary>
- <param name="sender">It is "ExitMenuItem" itself.</param>
+ <param name="sender">It is ExitMenuItem itself.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.OpacityMenuItem_Click">
  <summary>
- This is a event which will be triggered when the sub item of "OpacityMenuItem" is clicked.
+ This is a event which will be triggered when the sub item of OpacityMenuItem is clicked.
  </summary>
- <param name="sender">It is the sub item of "OpacityMenuItem".</param>
+ <param name="sender">It is the sub item of OpacityMenuItem.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.BackColorMenuItem_Click">
  <summary>
- This is a event which will be triggered when the sub item of "BackColorMenuItem" is clicked.
+ This is a event which will be triggered when the sub item of BackColorMenuItem is clicked.
  </summary>
- <param name="sender">It is the sub item of "BackColorMenuItem".</param>
+ <param name="sender">It is the sub item of BackColorMenuItem.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.ForeColorMenuItem_Click">
  <summary>
- This is a event which will be triggered when the sub item of "ForeColorMenuItem" is clicked.
+ This is a event which will be triggered when the sub item of ForeColorMenuItem is clicked.
  </summary>
- <param name="sender">It is the sub item of "ForeColorMenuItem".</param>
+ <param name="sender">It is the sub item of ForeColorMenuItem.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.FontSizeMenuItem_Click">
  <summary>
- This is a event which will be triggered when the sub item of "FontSizeMenuItem" is clicked.
+ This is a event which will be triggered when the sub item of FontSizeMenuItem is clicked.
  </summary>
- <param name="sender">It is the sub item of "FontSizeMenuItem".</param>
+ <param name="sender">It is the sub item of FontSizeMenuItem.</param>
 </member>
 <member name="E:PDFCropper.PDFCropper.ContextMenuStrip.FontNameMenuItem_Click">
  <summary>
- This is a event which will be triggered when the sub item of "FontNameMenuItem" is clicked.
+ This is a event which will be triggered when the sub item of FontNameMenuItem is clicked.
  </summary>
- <param name="sender">It is the sub item of "FontNameMenuItem".</param>
+ <param name="sender">It is the sub item of FontNameMenuItem.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.GhostScriptPathMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the item GhostScriptPathMenuItem is clicked.
+ </summary>
+ <param name="sender">It is the item GhostScriptPathMenuItem itself.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.MarginWidthMenuItem_ValueChanged">
+ <summary>
+ This is a event which will be triggered when the value of item MarginWidthMenuItem is changed.
+ </summary>
+ <param name="sender">It is the item MarginWidthMenuItem itself.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNamePrefixMenuItem_TextChanged">
+ <summary>
+ This is a event which will be triggered when the text of item NewFileNamePrefixMenuItem is changed.
+ </summary>
+ <param name="sender">It is the item NewFileNamePrefixMenuItem itself.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNameSuffixMenuItem_TextChanged">
+ <summary>
+ This is a event which will be triggered when the text of item NewFileNameSuffixMenuItem is changed.
+ </summary>
+ <param name="sender">It is the item NewFileNameSuffixMenuItem itself.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.AutoOverwriteMenuItem_Click">
+ <summary>
+ This is a event which will be triggered when the item AutoOverwriteMenuItem is clicked.
+ </summary>
+ <param name="sender">It is the item AutoOverwriteMenuItem itself.</param>
+</member>
+<member name="E:PDFCropper.PDFCropper.ContextMenuStrip.ContextMenuForPDFFile_Click">
+ <summary>
+ This is a event which will be triggered when the item ContextMenuForPDFFile is clicked.
+ </summary>
+ <param name="sender">It is the item ContextMenuForPDFFile itself.</param>
 </member>
 <member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainTopMost">
  <summary>
- This is a writeonly boolean to represent whether the FormMain is topmost.
+ This is a boolean to represent whether the FormMain is topmost.
  When it is assigned a value, its checked state is changed.
- Then raise the event "TopMostMenuItem_Click".
+ Then raise the event TopMostMenuItem_Click.
  </summary>
 </member>
 <member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainOpacity">
  <summary>
- This is a writeonly double to represent the opacity of the FormMain.
+ This is a double to represent the opacity of the FormMain.
  When it is assigned a value, checked states of the corresponding sub items are changed.
- Then raise the event "OpacityMenuItem_Click".
+ Then raise the event OpacityMenuItem_Click.
  </summary>
 </member>
 <member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainBackColor">
  <summary>
- This is a writeonly color to represent the back color of the FormMain.
+ This is a color to represent the back color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
- Then raise the event "BackColorMenuItem_Click".
+ Then raise the event BackColorMenuItem_Click.
  </summary>
 </member>
 <member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainForeColor">
  <summary>
- This is a writeonly color to represent the fore color of the FormMain.
+ This is a color to represent the fore color of the FormMain.
  When it is assigned a value, the image of this item will be assigned the image of its sub item, whose color is equal to the value.
- Then raise the event "ForeColorMenuItem_Click".
+ Then raise the event ForeColorMenuItem_Click.
  </summary>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainFontSize">
+ <summary>
+ This is a integer to represent the font size of the FormMain.
+ When it is assigned a value, checked states of the corresponding sub items are changed.
+ Then raise the event FontSizeMenuItem_Click.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.FormMainFontName">
+ <summary>
+ This is a string to represent the font name of the FormMain.
+ When it is assigned a value, checked states of the corresponding sub items are changed.
+ Then raise the event FontNameMenuItem_Click.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.GhostScriptBinFolder">
+ <summary>
+ This is a boolean to represent whether the Bin folder of the GhostScript is assgined.
+ </summary>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.MarginWidthValue">
+ <summary>
+ This is a double to represent the margin width of new PDF file.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.MarginWidthUnitIndex">
+ <summary>
+ This is an integer to represent the selected index of the ComboBox in the MarginWidthMenuItem.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNamePrefix">
+ <summary>
+ This is a string to represent the prefix of new PDF file name.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.NewFileNameSuffix">
+ <summary>
+ This is a string to represent the suffix of new PDF file name.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.AutoOverwrite">
+ <summary>
+ This is a boolean to represent whether the auto overwriting mode is on or off.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ContextMenuStrip.ExistContextMenuForPDFFile">
+ <summary>
+ This is a boolean to represent whether there exists the Windows context menu item for PDF file.
+ </summary>
+ <returns></returns>
 </member>
 <member name="M:PDFCropper.PDFCropper.ContextMenuStrip.#ctor">
  <summary>
@@ -161,10 +405,212 @@ PDFCropper
  <param name="sender">This is the sender of the event.</param>
  <param name="e">This is the arguments of the event.</param>
 </member>
+<member name="T:PDFCropper.PDFCropper.ToolStripTextBox">
+ <summary>
+ This class inherits ToolStripControlHost, which can be added into the item list of a MenuScript.
+ There are a Label, and a TextBox in this class.
+ So, this class allow user to change a TextBox in MenuScript.
+ </summary>
+</member>
+<member name="E:PDFCropper.PDFCropper.ToolStripTextBox.TextChanged">
+ <summary>
+ If the text of the TextBox is changed, this event will be triggered.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripTextBox.LabelText">
+ <summary>
+ This is a string which represents the text of the Label.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripTextBox.Text">
+ <summary>
+ This is a string which represents the text of the TextBox.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.Me_TextChanged">
+ <summary>
+ This sub is triggered when the text of the TextBox is changed.
+ </summary>
+</member>
+<member name="T:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel">
+ <summary>
+ This class is the panel which contains the Label, and the TextBox.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel._TextBox">
+ <summary>
+ This is the TextBox.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel._Label">
+ <summary>
+ This is the Label.
+ </summary>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.LabelText">
+ <summary>
+ This is a string which represents the text of the Label.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.Text">
+ <summary>
+ This is a string which represents the text of the TextBox.
+ </summary>
+ <returns></returns>
+</member>
+<member name="E:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.TextChanged">
+ <summary>
+ This sub is triggered when the text of the TextBox is changed.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="T:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox">
+ <summary>
+ This class inherits ToolStripControlHost, which can be added into the item list of a MenuScript.
+ There are a Label, a TextBox, and a ComboBox in this class.
+ So, this class allow user to change a TextBox and a ComboBox in MenuScript.
+ </summary>
+</member>
+<member name="E:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ValueChanged">
+ <summary>
+ If the value of the TextBox, or the ComboBox is changed, this event will be triggered.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.Value">
+ <summary>
+ This is a double which represents the value without unit.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.Unit">
+ <summary>
+ This is a string which represents the unit of margin width.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.UnitIndex">
+ <summary>
+ This is a string which represents the selected index of the ComboBox.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.Me_ValueChanged">
+ <summary>
+ This sub is triggered when the value of the TextBox or the ComboBox is changed.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.GetValue">
+ <summary>
+ This function is used to obtain the value of margin width, the unit is pt.
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel">
+ <summary>
+ This class is the panel which contains the Label, the TextBox, and the ComboBox.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel._TextBox">
+ <summary>
+ This is the TextBox.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel._Label">
+ <summary>
+ This is the Label.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel._ComboBox">
+ <summary>
+ This is the ComboBox.
+ </summary>
+</member>
+<member name="E:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.ValueChanged">
+ <summary>
+ This event is triggered when the value of the TextBox, or the ComboBox is changed.
+ </summary>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Value">
+ <summary>
+ This is a double which is the value of margin width without unit.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.UnitIndex">
+ <summary>
+ This is a string which represents the selected index of the ComboBox.
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Unit">
+ <summary>
+ This is a string which represents the unit of margin width.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Control_MouseLeave(System.Object,System.EventArgs)">
+ <summary>
+ This sub is triggered when mouse leaves the TextBox, or the ComboBox.
+ This sub is used to let the TextBox and ComboBox loss its focus automatically.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.TextBox_MouseEnter(System.Object,System.EventArgs)">
+ <summary>
+ This sub is triggered when mouse enters the TextBox.
+ If this sub is triggered, the text of the TextBox will be selected.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Control_ValueChanged">
+ <summary>
+ This sub is triggered when the value of the TextBox, or the ComboBox is changed.
+ This sub will raise the event ValueChanged.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.GetValue">
+ <summary>
+ This function is used to get the value of margin width with the unit pt.
+ </summary>
+ <returns></returns>
+</member>
 <member name="T:PDFCropper.PDFCropper.TransparentPanel">
  <summary>
  This class is a panel which is tansparent.
  This class is used to cover the other control, which should be click by mouse.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.TransparentPanel.#ctor">
+ <summary>
+ This is the constructor.
  </summary>
 </member>
 <member name="P:PDFCropper.PDFCropper.TransparentPanel.CreateParams">
@@ -181,6 +627,40 @@ PDFCropper
  We override the sub OnPaintBackground to prevent the background of this panel from being painted.
  </summary>
  <param name="e"></param>
+</member>
+<member name="T:PDFCropper.PDFCropper.WaterMarkTextBox">
+ <summary>
+ This class inherits System.Windows.Forms.TextBox.
+ Comparing with System.Windows.Forms.TextBoxthe, this WaterMarkTextBox can show a water mark when it is empty.
+ </summary>
+</member>
+<member name="F:PDFCropper.PDFCropper.WaterMarkTextBox.WaterMarkText">
+ <summary>
+ This is the water mark which is shown when the WaterMarkTextBox's text is empty.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.WaterMarkTextBox.#ctor">
+ <summary>
+ This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.WaterMarkTextBox.OnPaint(System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ Override OnPaint.
+ </summary>
+ <param name="args"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.WaterMarkTextBox.WaterMark_Toggel(System.Object,System.EventArgs)">
+ <summary>
+ This sub is triggered when text is changed or focus is lost.
+ </summary>
+ <param name="sender"></param>
+ <param name="args"></param>
+</member>
+<member name="T:PDFCropper.FormMain">
+ <summary>
+ The instance of this class is the main form of this program.
+ </summary>
 </member>
 <member name="F:PDFCropper.FormMain.RichTextBox">
  <summary>
@@ -233,10 +713,67 @@ PDFCropper
  This Thread is used to crop the PDF files which are in the "PDFFilePool".
  </summary>
 </member>
+<member name="T:PDFCropper.FormMain.DelegateDisplayMessage">
+ <summary>
+ This delegation is used to display message on the RichTextBox from another thread.
+ </summary>
+ <param name="Message"></param>
+</member>
+<member name="F:PDFCropper.FormMain.DisplayMessageForInvocation">
+ <summary>
+ This is an instance of DelegateDisplayMessage, and it is used to be invoked by Me.
+ </summary>
+</member>
+<member name="F:PDFCropper.FormMain.MarginWidth">
+ <summary>
+ The width of white space which will be left in the new PDF file.
+ </summary>
+</member>
+<member name="F:PDFCropper.FormMain.CurrentPDFFile">
+ <summary>
+ This variable is used to save the path of the PDF file which is being crpped.
+ </summary>
+</member>
+<member name="F:PDFCropper.FormMain.AutoExit">
+ <summary>
+ If this flag is true, after cropping the PDF files which are in the PDFFilePool, the program will exit.
+ </summary>
+</member>
 <member name="M:PDFCropper.FormMain.#ctor">
  <summary>
  This is the constructor of FormMain.
  </summary>
+</member>
+<member name="M:PDFCropper.FormMain.CheckArguments">
+ <summary>
+ This sub first check whether there are running arguments.
+ If there is no running argument, exit this sub directly.
+ If there are running arguments, add this arguments into the PDFFilePool, assign the flag AutoExit to true, and start the PDFCropThread.
+ </summary>
+</member>
+<member name="M:PDFCropper.FormMain.InitializeContextMenuStrip">
+ <summary>
+ This sub is used to configurate the ContextMenuString of FormMain according to the configuration file.
+ </summary>
+</member>
+<member name="M:PDFCropper.FormMain.InitializeMainInterface">
+ <summary>
+ This sub is used to configurate the interface of the FormMain according to the configuration file.
+ </summary>
+</member>
+<member name="M:PDFCropper.FormMain.ExistItemInWindowsContextMenu">
+ <summary>
+ This sub is used to check whether there exist Windows context menu item for PDF file according to the registry.
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.FormMain.FormMain_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+ <summary>
+ Because the shotcut of context menu can not be triggered, this sub is used to capture the key down event of the FormMain.
+ This sub first check which menu item is triggered, then call the corresponding sub.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
 </member>
 <member name="M:PDFCropper.FormMain.TransparentPanel_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
  <summary>
@@ -314,6 +851,30 @@ PDFCropper
  </summary>
  <param name="sender"></param>
 </member>
+<member name="M:PDFCropper.FormMain.MarginWidthMenuItem_ValueChanged(System.Object)">
+ <summary>
+ This event is triggered when MarginWidthMenuItem of the ContextMenuStrip is changed.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDFCropper.FormMain.NewFileNamePrefixMenuItem_TextChanged(System.Object)">
+ <summary>
+ This event is triggered when NewFileNamePrefixMenuItem of the ContextMenuStrip is changed.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDFCropper.FormMain.NewFileNameSuffixMenuItem_TextChanged(System.Object)">
+ <summary>
+ This event is triggered when NewFileNameSuffixMenuItem of the ContextMenuStrip is changed.
+ </summary>
+ <param name="sender"></param>
+</member>
+<member name="M:PDFCropper.FormMain.AutoOverwriteMenuItem_Click(System.Object)">
+ <summary>
+ This event is triggered when AutoOverwriteMenuItem of the ContextMenuStrip is clicked.
+ </summary>
+ <param name="sender"></param>
+</member>
 <member name="M:PDFCropper.FormMain.ShowMessage(System.String)">
  <summary>
  This sub is used to show message on the RichTextBox.
@@ -329,21 +890,49 @@ PDFCropper
 </member>
 <member name="M:PDFCropper.FormMain.TransparentPanel_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
  <summary>
- This sub is triggered when something are dragged into the TransparentPanel.
+ This event is triggered when something are dragged into the TransparentPanel.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
+</member>
+<member name="M:PDFCropper.FormMain.ContextMenuForPDFFile_Click(System.Object)">
+ <summary>
+ This event is triggered when ContextMenuForPDFFile of the ContextMenuStrip is clicked.
+ This sub calls the Toolkit.exe with different parameters to add or remove the context menu for PDF file.
+ </summary>
+ <param name="sender"></param>
 </member>
 <member name="M:PDFCropper.FormMain.TransparentPanel_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
  <summary>
  This sub is triggered when something are dropped into the TransparentPanel.
+ This sub first obtains the path of each file, then pulls them into the PDFFilePool.
+ At last, it starts the PDFCrop thread.
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
 </member>
+<member name="M:PDFCropper.FormMain.OpenFilesMenuItem_Click">
+ <summary>
+ This event is triggered when OpenFilesMenuItem of the ContextMenuStrip is clicked.
+ If user selects some PDF files, this sub pulls them into the PDFFilePool.
+ At last, it starts the PDFCrop thread.
+ </summary>
+</member>
+<member name="M:PDFCropper.FormMain.StartPDFCropThread">
+ <summary>
+ This sub is used to start the PDFCrop thread.
+ </summary>
+</member>
+<member name="M:PDFCropper.FormMain.NewArgumentsReceived(System.String[])">
+ <summary>
+ This sub is triggered when MyApplication_StartupNextInstance in ApplicationEvents.vb is triggered.
+ This sub pulls the new arguments in to the PDFFilePool, then starts the PDFCrop thread.
+ </summary>
+ <param name="Arguments"></param>
+</member>
 <member name="M:PDFCropper.FormMain.CropPDF">
  <summary>
- This sub is used to crop the PDF files which are in the "PDFFilePool".
+ This sub is used to crop the PDF files which are in the PDFFilePool.
  </summary>
 </member>
 <member name="M:PDFCropper.FormMain.GetPDFRectangles(System.String,System.Int32)">
@@ -369,6 +958,24 @@ PDFCropper
  <param name="BoundingBox">The string of BoundingBox.</param>
  <param name="MarginWidth">The width of margin which you want to keep.</param>
  <returns></returns>
+</member>
+<member name="M:PDFCropper.FormMain.GetNewFileName(System.String)">
+ <summary>
+ This function is used to get the nuew file name with prefix and suffix.
+ </summary>
+ <param name="FileFullPath"></param>
+ <returns></returns>
+</member>
+<member name="M:PDFCropper.FormMain.DisplayMessage(PDFCropper.FormMain.MessageType)">
+ <summary>
+ This sub is used to display message on the RichTextBox according to the MessageType.
+ </summary>
+ <param name="MessageType"></param>
+</member>
+<member name="T:PDFCropper.FormMain.MessageType">
+ <summary>
+ This enumeration is message type which is used to control the sub DisplayMessage to show different messages.
+ </summary>
 </member>
 </members>
 </doc>
