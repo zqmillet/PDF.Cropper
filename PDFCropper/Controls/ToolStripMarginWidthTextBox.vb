@@ -173,6 +173,8 @@
                     .Parent = Me
                     .Padding = New Padding(0, 2, 0, 0)
                     .Margin = New Padding(0)
+
+                    AddHandler .SizeChanged, AddressOf Label_SizeChanged
                 End With
 
                 ' Initialize the ComboBox.
@@ -197,9 +199,7 @@
                     .WaterMarkText = "0"
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Top
                     .AutoSize = False
-                    .Width = Me.Width - Label.Width - 12 - ComboBox.Width - 4
                     .Height = Me.Height
-                    .Location = New Point(Label.Width + 12, 2)
                     .Font = (New ToolStripMenuItem).Font
                     .Text = ""
                     .Parent = Me
@@ -208,6 +208,13 @@
                     AddHandler .MouseLeave, AddressOf Control_MouseLeave
                     AddHandler .MouseEnter, AddressOf TextBox_MouseEnter
                     AddHandler .TextChanged, AddressOf Control_ValueChanged
+                End With
+            End Sub
+
+            Private Sub Label_SizeChanged()
+                With TextBox
+                    .Width = Me.Width - Label.Width - 4 - ComboBox.Width - 4
+                    .Location = New Point(Label.Width + 4, 2)
                 End With
             End Sub
 

@@ -478,6 +478,28 @@ PDFCropper
  This is the constructor.
  </summary>
 </member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.TextBox_MouseLeave(System.Object,System.EventArgs)">
+ <summary>
+ This sub is triggered when mouse leaves the TextBox.
+ This sub is used to let the TextBox loss its focus automatically.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.TextBox_MouseEnter(System.Object,System.EventArgs)">
+ <summary>
+ This sub is triggered when mouse enters the TextBox.
+ If this sub is triggered, the text of the TextBox will be selected.
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.TextBox_TextChanged">
+ <summary>
+ This sub is triggered when the value of the TextBox is changed.
+ This sub will raise the event ValueChanged.
+ </summary>
+</member>
 <member name="T:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox">
  <summary>
  This class inherits ToolStripControlHost, which can be added into the item list of a MenuScript.
