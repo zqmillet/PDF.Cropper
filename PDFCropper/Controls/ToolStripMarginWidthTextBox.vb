@@ -211,6 +211,12 @@
                 End With
             End Sub
 
+            ''' <summary>
+            ''' This sub is triggered when the size of Label is changed.
+            ''' This sub is used to fix the bug of size of Label. The description of this bug is shown as follows.
+            ''' The size of Label is not fixed before the Label is rendered.
+            ''' So if we want to used the size of Label, we must obtain the size after the Label is rendered.
+            ''' </summary>
             Private Sub Label_SizeChanged()
                 With TextBox
                     .Width = Me.Width - Label.Width - 4 - ComboBox.Width - 4

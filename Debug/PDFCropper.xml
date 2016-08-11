@@ -500,6 +500,14 @@ PDFCropper
  This sub will raise the event ValueChanged.
  </summary>
 </member>
+<member name="M:PDFCropper.PDFCropper.ToolStripTextBox.ControlPanel.Label_SizeChanged">
+ <summary>
+ This sub is triggered when the size of Label is changed.
+ This sub is used to fix the bug of size of Label. The description of this bug is shown as follows.
+ The size of Label is not fixed before the Label is rendered.
+ So if we want to used the size of Label, we must obtain the size after the Label is rendered.
+ </summary>
+</member>
 <member name="T:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox">
  <summary>
  This class inherits ToolStripControlHost, which can be added into the item list of a MenuScript.
@@ -594,6 +602,14 @@ PDFCropper
 <member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.#ctor">
  <summary>
  This is the constructor.
+ </summary>
+</member>
+<member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Label_SizeChanged">
+ <summary>
+ This sub is triggered when the size of Label is changed.
+ This sub is used to fix the bug of size of Label. The description of this bug is shown as follows.
+ The size of Label is not fixed before the Label is rendered.
+ So if we want to used the size of Label, we must obtain the size after the Label is rendered.
  </summary>
 </member>
 <member name="M:PDFCropper.PDFCropper.ToolStripMarginWidthTextBox.ControlPanel.Control_MouseLeave(System.Object,System.EventArgs)">

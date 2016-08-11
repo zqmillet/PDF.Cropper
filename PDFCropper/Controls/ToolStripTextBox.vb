@@ -126,14 +126,14 @@
                     .Margin = New Padding(0)
                     .Anchor = AnchorStyles.Top Or AnchorStyles.Left
                     .Parent = Me
+
+                    AddHandler .SizeChanged, AddressOf Label_SizeChanged
                 End With
 
                 ' Initialize the TextBox.
                 With TextBox
                     .AutoSize = False
-                    .Width = 50
                     .Height = (New ComboBox).Height
-                    .Location = New Point(Me.Width - .Width, 0)
                     .Anchor = AnchorStyles.Left Or AnchorStyles.Top Or AnchorStyles.Right
                     .Margin = New Padding(0)
                     .Font = (New ToolStripMenuItem).Font
@@ -177,6 +177,19 @@
             ''' </summary>
             Private Sub TextBox_TextChanged()
                 RaiseEvent TextChanged()
+            End Sub
+
+            ''' <summary>
+            ''' This sub is triggered when the size of Label is changed.
+            ''' This sub is used to fix the bug of size of Label. The description of this bug is shown as follows.
+            ''' The size of Label is not fixed before the Label is rendered.
+            ''' So if we want to used the size of Label, we must obtain the size after the Label is rendered.
+            ''' </summary>
+            Private Sub Label_SizeChanged()
+                With TextBox
+                    .Width = Me.Width - Label.Width - 4
+                    .Location = New Point(Me.Width - .Width, 0)
+                End With
             End Sub
         End Class
     End Class
