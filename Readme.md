@@ -43,8 +43,10 @@ For more details about manual of PDFCropper, please see [Manual].
 
 ## ToDo
 
-- Auto Updating, and
-- Manual.
+- Fix the Interface bug in the Widows XP,
+- fix the toolkit bug in the Windows XP,
+- add the function auto Updating, and
+- finish the manual.
 
 ## License
 This project is licensed under the MIT License. See the [License.md] file for details.
